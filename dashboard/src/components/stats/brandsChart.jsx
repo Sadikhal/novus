@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { RiBarChartGroupedLine } from "react-icons/ri";
 import { FaChartArea, FaChartLine } from "react-icons/fa";
 import {
@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { ChevronDown } from "lucide-react";
 import {Loader} from "../ui/Loaders";
 import { BsGraphUpArrow } from "react-icons/bs";
+import { useChartData } from "../../hooks/useChartData";
 
 const brandColors = [
   '#206783', '#4d8076', '#8f3f7f', '#2c5f2d',
@@ -32,12 +33,57 @@ const brandColors = [
 
 const BrandsPerformanceChart = () => {
   const [timeFrame, setTimeFrame] = useState("daily");
-  const [chartType, setChartType] = useState("area");
+  const [chartType, setChartType] = useState("bar");
   const [dateRange, setDateRange] = useState([null, null]);
-  const [chartData, setChartData] = useState([]);
-  const [brands, setBrands] = useState([]);
 
-  const { data: apiData, loading, error } = useChartData("/stats/brands", params, [timeFrame, dateRange]);
+  // Calculate timeRange parameter
+  const timeRange = useMemo(() => {
+    const [startDate, endDate] = dateRange;
+    return startDate && endDate 
+      ? `${startDate.toISOString()}_${endDate.toISOString()}`
+      : undefined;
+  }, [dateRange]);
+
+  // Prepare API parameters
+  const chartParams = useMemo(() => ({
+    ...(timeRange ? { timeRange } : { period: timeFrame })
+  }), [timeFrame, timeRange]);
+
+  // Fetch data using custom hook
+  const { data: rawData, loading, error: fetchError } = 
+    useChartData('/stats/brands', chartParams, [timeFrame, timeRange]);
+
+  // Transform data for charting
+  const { chartData, brands, dataError } = useMemo(() => {
+    if (!rawData || !Array.isArray(rawData)) {
+      return { 
+        chartData: [], 
+        brands: [], 
+        dataError: fetchError || 'Invalid data format received from server' 
+      };
+    }
+
+    const transformed = rawData.reduce((acc, { date, brand, revenue }) => {
+      const dateKey = new Date(date).toISOString().split('T')[0];
+      const existingEntry = acc.find(e => e.date === dateKey);
+      
+      if (existingEntry) {
+        existingEntry[brand] = (existingEntry[brand] || 0) + revenue;
+      } else {
+        acc.push({ 
+          date: dateKey, 
+          [brand]: revenue 
+        });
+      }
+      return acc;
+    }, []);
+
+    return {
+      chartData: transformed.sort((a, b) => new Date(a.date) - new Date(b.date)),
+      brands: [...new Set(rawData.map(item => item.brand))],
+      dataError: ""
+    };
+  }, [rawData, fetchError]);
 
   const formatDate = (date) => {
     const dateObj = new Date(date);
@@ -291,14 +337,12 @@ const BrandsPerformanceChart = () => {
         <div className="flex-1 flex items-center justify-center">
           <Loader className="w-12 h-12" />
         </div>
-      ) : error ? (
+      ) : dataError ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-          <span className="material-icons text-red-500 text-4xl mb-4">error</span>
-          <p className="text-red-500 font-medium">{error}</p>
+          <ErrorFallback message = {error}/>
         </div>
       ) : chartData.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <span className="material-icons text-gray-400 text-4xl mb-4">inventory_2</span>
           <p className="text-gray-500 font-medium">No revenue data for selected period</p>
         </div>
       ) : (
