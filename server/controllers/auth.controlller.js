@@ -131,6 +131,7 @@ export const login = async (req,res ,next) => {
       isVerified: user.isVerified
      });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
