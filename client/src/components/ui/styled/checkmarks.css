@@ -1,0 +1,35 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+   
+}
+.left {
+    display: flex;
+    ;
+}
+
+.img_wrap {
+    height: 80;
+    border: 1px solid #eee;
+    cursor: pointer;
+}
+.img_wrap img {
+    width: 70px;
+    height: 60px;
+    object-fit: cover;
+}
+.left_2 {
+max-height: 400px;  
+width: 500px;
+}
+.left_2 img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    z-index: 0;
+    
+}
+.active {
+    border: 2px solid #2b7b9d;
+}

@@ -1,0 +1,123 @@
+
+export const testimonial = [
+  
+  {
+    id:1,
+    name : "Shafeek",
+    brand : "Comfold",
+    desc : "Working with Novus has been a game-changer for our business. Their strategic approach and attention to detail have significantly boosted our online presence. They truly understand our brand and audience, delivering exceptional results. We highly recommend their services to anyone looking to elevate their  marketing efforts.",
+    color:'#e5f6f2'
+
+  },
+  {
+    id:3,
+    name : "arjun",
+    brand : "Cbeeso",
+    desc : " I can't speak highly enough about Novus. From the initial consultation to the ongoing campaign management, their creative approach has helped us achieve remarkable ROI on our digital marketing investments. If you're looking for a partner to take your online presence to the next level, look no further than Novus.",
+    color: '#FFEBF0'
+  },
+  {
+    id:1,
+    name : "arnold",
+    brand : "Invex",
+    desc : "Working with Novus has been a game-changer for our business. Their strategic approach and attention to detail have significantly boosted our online presence. They truly understand our brand and audience that exceeded our expectations. We highly recommend their services to anyone looking to elevate their digital  efforts.",
+    color:'#ffeee8'
+  },
+]
+
+
+export const brandBanner = [
+   {
+    id: 8,
+    title : "carousal 1",
+           img : "/banner/seller41.png"
+
+  },
+   {
+    id: 13,
+    title : "carousal 1",
+    img : "/banner/seller44.png"
+
+  },
+ 
+  {
+    id: 3,
+    title : "carousal 1",
+    img : "/banner/seller48.png"
+
+  },
+   {
+    id: 1,
+    title : "carousal 1",
+    img : "/banner/seller50.png"
+  },
+  {
+    id: 6,
+    title : "carousal 1",
+       img : "/banner/seller26.png"
+
+  },
+  {
+    id: 14,
+    title : "carousal 1",
+    img : "/banner/seller45.png"
+  },
+]
+
+
+
+export const social =  [
+ 
+  {
+    name: 'linkedin',
+    url: '/linkedin.svg',
+    href : 'https://www.linkedin.com/company/mybrandfirst/?viewAsMember=true'
+  },
+  {
+    name: 'instagram',
+    url: '/instagram.svg',
+    href : 'https://www.instagram.com/mybrandfirst/?next=%2F'
+  },
+  {
+    name: 'facebook',
+    url: '/facebook.svg',
+    href:   'https://www.facebook.com/profile.php?id=61557053963977'
+  },
+];
+
+export const HomeExplores = [{
+  id: 1,
+  title : "perfumes",
+  img: "/perfumes/perfume1.jpg"
+},
+{
+  id: 81,
+  title : "kids",
+  img: "/kids/kid3.jpg"
+},
+{
+  id: 14,
+  title : "men",
+  img: "/men/m2.jpg"
+},
+{
+  id: 13,
+  title : "shoes",
+  img: "/shoes/sh5.jpg"
+},
+{
+  id: 11,
+  title : "women",
+  img: "/women/w9.jpg"
+},
+{
+  id: 12,
+  title : "mobiles",
+  img: "/mobiles/mob2.jpg"
+},
+{
+  id: 10,
+  title : "bicycle",
+  img: "/cycles/b3.jpg"
+},
+]

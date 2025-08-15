@@ -1,0 +1,120 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { 
+  addToWishlist, 
+  removeFromWishlist 
+} from '../redux/wishlistSlice';
+import { 
+  addToCart, 
+  setTempOrder,
+} from '../redux/cartSlice';
+import { apiRequest } from '../lib/apiRequest';
+import { toast } from '../redux/useToast';
+
+export const useUserActions = (product) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentUser } = useSelector((state) => state.user);
+  const wishlist = useSelector((state) => state.wishlist.items);
+  
+  const isInWishlist = wishlist.some(item => item._id === product?._id);
+
+  const requireAuth = (action) => {
+    if (!currentUser) {
+      navigate('/login', { state: { from: location }, replace: true });
+      return false;
+    }
+    return action();
+  };
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    const action = () => {
+      dispatch(addToCart({
+        id: product._id,
+        name: product.name,
+        price: product.sellingPrice || product.actualPrice,
+        actualPrice: product.actualPrice,
+        offer: product.discount,
+        image: product.image[0],
+        deliveryDays: product.deliveryDays,
+        quantity: 1,
+      }));
+      toast({
+        variant: "secondary",
+        title: "Added to cart",
+        description: "Item added to your cart!",
+      });
+    };
+    
+    return requireAuth(action);
+  };
+
+  const handleWishlist = () => {
+    if (!product) return;
+    
+    const action = () => {
+      if (isInWishlist) {
+        dispatch(removeFromWishlist(product._id));
+      } else {
+        dispatch(addToWishlist(product));
+      }
+      toast({
+        variant: "secondary",
+        title: isInWishlist ? "Removed from wishlist" : "Added to wishlist",
+        description: isInWishlist ? "Item removed from your wishlist." : "Item added to your wishlist.",
+      });
+    };
+    
+    return requireAuth(action);
+  };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+    
+    const action = () => {
+      dispatch(setTempOrder({
+        id: product._id,
+        name: product.name,
+        price: product.sellingPrice || product.actualPrice,
+        image: product.image[0],
+        quantity: 1,
+      }));
+      navigate(`/dashboard/checkout/${product._id}`);
+    };
+    
+    return requireAuth(action);
+  };
+
+  const handleMessageSubmit = async () => {
+    if (!product) return;
+    
+    const action = async () => {
+      try {
+        const response = await apiRequest.post("/conversation", {
+          receiverId: product.userId
+        });
+        navigate(`/dashboard/chat/${response.data.conversation._id}`);
+      } catch (error) {
+        console.error("Error creating conversation:", error);
+        toast({
+          variant: "destructive",
+          title: "Failed to start conversation",
+          description: error.response?.data?.message || "Please try again later.",
+        });
+      }
+    };
+    
+    return requireAuth(action);
+  };
+
+  return {
+    isInWishlist,
+    handleAddToCart,
+    handleWishlist,
+    handleBuyNow,
+    handleMessageSubmit
+  };
+};
