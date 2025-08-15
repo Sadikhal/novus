@@ -14,7 +14,7 @@ import Profile from './routes/Profile';
 import Orders from './routes/Orders';
 import AddProduct from './routes/AddProduct';
 import CategoryList from './routes/CategoryList';
-import ProtectedRoute from './components/layout/protectedRoute';
+import ProtectedRoute from "./components/layout/ProtectedRoute"
 import UnauthorizedPage from './routes/UnauthorizedPage';
 import SellerDashbaord from './routes/SellerDashboard';
 import HomeBanner from './routes/HomeBanner';

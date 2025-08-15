@@ -59,7 +59,7 @@ const Orders = () => {
           ):
           (
             <div className="w-full h-[700px]">
-              <BrandPerformanceChart  brandId = {currentUser.brand._id}/>
+              <BrandPerformanceChart  brandId = {currentUser?.brand?._id}/>
             </div>
           )
         }
