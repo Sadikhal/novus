@@ -2,6 +2,7 @@ import { cn } from '../../lib/utils';
 import { HomeExplores } from '../../lib/data';
 import { useFetchCategoriesAndBrands } from '../../hooks/useCategoriesAndBrands';
 import { Loader } from '../ui/Loaders';
+import { ErrorFallback } from '../sections/ErrorFallback';
 
 const HomeExplore = () => {
     const { 
