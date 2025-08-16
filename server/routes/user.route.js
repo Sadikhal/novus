@@ -22,7 +22,7 @@ router.post("/address", verifyToken, addAddress);
 router.put("/address/:addressId", verifyToken, updateAddress);
 router.delete("/address/:addressId", verifyToken, deleteAddress);
 
-router.put('/update/:id', updateUser);
+router.put('/update/:id',verifyToken, updateUser);
 router.delete("/:id", verifyUser, deleteUser);
 router.get("/profile", verifyToken, getUser);
 
