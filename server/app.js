@@ -23,14 +23,18 @@ import bannerRoute from "./routes/banner.route.js";
 
 import { app, server } from "./lib/socket.js";
 import { connect } from './lib/db.js';
-import corsMiddleware from './lib/corsConfig.js';
 
 dotenv.config();
 
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(corsMiddleware);
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL,process.env.DASHBOARD_URL],
+    credentials: true,
+  })
+);
 
 mongoose.set("strictQuery", true);
 
