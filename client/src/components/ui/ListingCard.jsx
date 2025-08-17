@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AiFillHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import { addToWishlist, removeFromWishlist } from '../../redux/wishlistSlice';
 
 const ListingCard = ({ data, showWishlist, type }) => { 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const wishlistItems = useSelector((state) => state.wishlist.items);  
   const isInWishlist = wishlistItems.some((item) => item?._id === data?._id);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -33,9 +34,12 @@ const ListingCard = ({ data, showWishlist, type }) => {
     }
   };
 
-   return type === 'category' ? (
-    <Link to={data?.url} className='flex flex-col gap-1 items-center cursor-pointer group col-span-1 py-3 h-full'>
-      <div className='relative overflow-hidden   w-full transition duration-0'>
+
+  return type === 'category' ? (
+    <Link to= {data?.url} 
+      className='flex flex-col gap-1 items-center cursor-pointer group col-span-1 py-3 h-full'
+    >
+      <div className='relative overflow-hidden w-full transition duration-0'>
         <img 
           className="aspect-square object-cover w-full duration-500 transition-transform group-hover:scale-110"
           src={data?.image || "/no-image.png"}

@@ -1,5 +1,5 @@
 import './styled/button.css'
-const Buttons = ({name}) => {
+const Buttons = () => {
   return (
     <div class="container-buttons">
     <div class="hover bt-1"></div>

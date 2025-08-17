@@ -2,6 +2,9 @@ import AdProducts from "./AdProducts";
 import HomeTrending from "./HomeTrending";
 import { GridSkeletonLoader, SkeletonLoader } from "../ui/Loaders";
 import { transformCategoryData } from "../../lib/extractBanners";
+import { Button } from "../ui/Button";
+
+
 
 export const BannerSection = ({ 
   loading, 
@@ -46,17 +49,29 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
       {loading ? (
         <SkeletonLoader type='category' count={4} />
       ) : (
-        <div className='lg:flex-1 pr-6 mt-1'>
-          <AdProducts img='/mobiles/mob1.jpg' />
+        <div className='lg:flex-1 pr-6 mt-1 hidden lg:block'>
+         <AdProducts />
         </div>
+        
       )}
     </div>
     
     {loading ? (
       <SkeletonLoader type='category' count={4} />
     ) : (
-      <div className='lg:hidden pr-6 mt-1'>
-        <AdProducts img='/mobiles/mob1.jpg' />
+      <div className='lg:hidden px-3 mt-1 relative  h-full max-h-[300px] w-full block'>
+        <img src="/banner/ban3.jpg" className="object-cover h-full max-h-[300px] w-full" alt="ban" />
+       <div className="absolute inset-0  bg-opacity-50 flex  left-10 top-20 flex-col gap-2">
+        <div className="text-white text-2xl font-assistant font-extrabold capitalize  ">Unveil the Essence of Elegance</div>
+        <div className='text-white text-base font-poppins font-medium  capitalize'>
+         Timeless & Modern choices
+        </div>
+      </div>
+      <div className="absolute bottom-9 left-16">
+        <Button className="border-slate-50 text-lamaWhite bg-transparent border-2 hover:bg-transparent font-bold">
+          Shop Now
+        </Button>
+      </div>
       </div>
     )}
   </>
@@ -94,6 +109,18 @@ export const GridSection = ({ loading, banners }) => (
             listings={banners.secondaryProducts[2].products.slice(0,4).map(p => p.productId)} 
           />
         )}
+
+        <div className='flex lg:hidden flex-col gap-3 w-full'> 
+          {loading ? (
+            <GridSkeletonLoader count={4} />
+          ) : banners.secondaryProducts[0] && (
+            <HomeTrending 
+              title={banners.secondaryProducts[0].title}
+              listings={banners.secondaryProducts[0].products.slice(0,4).map(p => p.productId)} 
+              loading={false}
+            />
+          )}
+        </div>
       </>
     )}
   </div>

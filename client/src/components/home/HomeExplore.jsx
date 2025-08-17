@@ -7,15 +7,13 @@ import { ErrorFallback } from '../sections/ErrorFallback';
 const HomeExplore = () => {
     const { 
       categories, 
-      isLoading, 
        error
     } = useFetchCategoriesAndBrands();
 
    if (error) return <div className="w-full flex  h-full items-center justify-center">
       <ErrorFallback error={error} />
     </div>;
-    if (isLoading) return <Loader />;
-
+   
   return (
     <div className='w-full flex flex-col gap-5 px-10'>
       <div>

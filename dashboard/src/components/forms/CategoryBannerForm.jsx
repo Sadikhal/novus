@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,66 +7,72 @@ import { Button } from '../../components/ui/Button';
 import ImageCropModal from '../../components/ImageCropper';
 import { apiRequest } from '../../lib/apiRequest';
 import { toast } from '../../redux/useToast';
+import { useNavigate } from 'react-router-dom';
 
 const bannerSchema = z.object({
-  title: z.string().min(1, "Title is required").min(3, "Title must be at least 3 characters"),
+  title: z.string().min(1, 'Title is required').min(3, 'Title must be at least 3 characters'),
   type: z.enum(['primary', 'secondary', 'tertiary']),
   isActive: z.boolean(),
-  categories: z.array(z.object({
-    categoryId: z.string(),
-    name: z.string(),
-    image: z.string().min(1, "Image URL is required"),
-    url: z.string().min(1, "URL is required"),
-    title: z.string().min(1, "Title is required"),
-    title2: z.string().min(1, "Subtitle is required"),
-  })).superRefine((categories, ctx) => {
-    const type = ctx.path[0]?.type;
-    
-    if (type === 'primary' && (categories.length < 8 || categories.length > 14)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Primary banners require 8-14 categories",
-      });
-    }
-    
-    if (type === 'secondary' && categories.length !== 4) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Secondary banners require exactly 4 categories",
-      });
-    }
-    
-    if (type === 'tertiary' && (categories.length < 4 || categories.length > 10)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Tertiary banners require 4-10 categories",
-      });
-    }
-  })
+  categories: z
+    .array(
+      z.object({
+        categoryId: z.string(),
+        name: z.string(),
+        image: z.string().min(1, 'Image URL is required'),
+        url: z.string().min(1, 'URL is required'),
+        title: z.string().min(1, 'Title is required'),
+        title2: z.string().min(1, 'Subtitle is required'),
+      })
+    )
+    .superRefine((categories, ctx) => {
+      const type = ctx.parent?.type;
+
+      if (type === 'primary' && (categories.length < 8 || categories.length > 14)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Primary banners require 8-14 categories',
+        });
+      }
+
+      if (type === 'secondary' && categories.length !== 4) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Secondary banners require exactly 4 categories',
+        });
+      }
+
+      if (type === 'tertiary' && (categories.length < 4 || categories.length > 10)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Tertiary banners require 4-10 categories',
+        });
+      }
+    }),
 });
 
 const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors, isValid },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors,isValid },
     watch,
     setValue,
-    trigger
+    trigger,
   } = useForm({
     resolver: zodResolver(bannerSchema),
     defaultValues: {
       title: initialData.title || '',
       type: initialData.type || 'secondary',
       isActive: initialData.isActive !== undefined ? initialData.isActive : true,
-      categories: initialData.categories || []
+      categories: initialData.categories || [],
     },
-    mode: 'onChange'
+    mode: 'onChange',
   });
 
   const type = watch('type');
+  const navigate = useNavigate();
   const categories = watch('categories');
-  
+
   const [allCategories, setAllCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -86,33 +92,40 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
         setIsLoading(false);
       }
     };
-    
+
     fetchCategories();
   }, []);
 
   const handleAddCategory = (category) => {
+    const image =
+      Array.isArray(category.image) && category.image.length > 0
+        ? category.image[0]
+        : typeof category.image === 'string'
+        ? category.image
+        : '/images/placeholder.jpg';
+
     const newCategories = [
-      ...categories, 
-      { 
+      ...categories,
+      {
         categoryId: category._id,
         name: category.name,
-        image: category.image?.[0] || '/images/placeholder.jpg',
-        url: `/products?category=${category.slug}`,
+        image,
+        url: category?.url || `/products?category=${category.men}` ,
         title: category.name,
-        title2: category.description || ''
-      }
+        title2: category.description || '',
+      },
     ];
-    
+
     setValue('categories', newCategories, { shouldValidate: true });
     trigger();
     toast({
-      variant: "secondary",
-      title: 'Category added'
+      variant: 'secondary',
+      title: 'Category added',
     });
   };
 
   const handleRemoveCategory = (categoryId) => {
-    const newCategories = categories.filter(c => c.categoryId !== categoryId);
+    const newCategories = categories.filter((c) => c.categoryId !== categoryId);
     setValue('categories', newCategories, { shouldValidate: true });
     trigger();
   };
@@ -121,9 +134,9 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
     const updatedCategories = [...categories];
     updatedCategories[index] = {
       ...updatedCategories[index],
-      [field]: value
+      [field]: value,
     };
-    
+
     setValue('categories', updatedCategories, { shouldValidate: true, shouldDirty: true });
     trigger();
   };
@@ -159,11 +172,11 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
 
   const getCategoryRequirements = () => {
     switch (type) {
-      case 'primary': 
+      case 'primary':
         return { min: 8, max: 14, text: '8-14 categories' };
-      case 'secondary': 
+      case 'secondary':
         return { min: 4, max: 4, text: 'exactly 4 categories' };
-      case 'tertiary': 
+      case 'tertiary':
         return { min: 4, max: 10, text: '4-10 categories' };
       default:
         return { min: 0, max: 0, text: 'categories' };
@@ -171,7 +184,8 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
   };
 
   const requirements = getCategoryRequirements();
-  const isValidCategoryCount = categories.length >= requirements.min &&  categories.length <= requirements.max;
+  const isValidCategoryCount = categories.length >= requirements.min && categories.length <= requirements.max;
+
 
   return (
     <>
@@ -400,7 +414,7 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
         <div className="flex justify-end gap-3">
           <Button
             type="button"
-            onClick={() => window.history.back()}
+            onClick={() => navigate('/admin/banner')}
             className="px-4 py-2 cursor-pointer border border-slate-200 rounded-md hover:bg-[#c3b0b0]"
             disabled={loading}
           >
@@ -409,7 +423,7 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
           <Button
             type="submit"
             className="px-4 py-2 cursor-pointer bg-[#264e6e] text-white rounded-md hover:bg-[#385c5d]"
-            disabled={loading || !isValid || !isValidCategoryCount}
+             disabled={loading || !isValid || !isValidCategoryCount}
           >
             {loading ? 'Saving...' : 'Save Banner'}
           </Button>

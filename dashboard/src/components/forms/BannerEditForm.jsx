@@ -5,6 +5,8 @@ import { IoClose } from 'react-icons/io5';
 import { Button } from '../ui/Button';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
+
 
 const bannerSchema = z.object({
   title: z.string().min(1, "Title is required").min(3, "Title must be at least 3 characters"),
@@ -15,7 +17,7 @@ const bannerSchema = z.object({
     url: z.string().min(1, "URL is required"),
     image: z.string().optional()
   })).superRefine((products, ctx) => {
-    const type = ctx.path[0]?.type;
+    const type = ctx.parent?.type;
 
     if (type === 'primary' && (products.length < 8 || products.length > 14)) {
       ctx.addIssue({
@@ -56,6 +58,7 @@ const ProductBannerForm = ({ initialData = {}, onSubmit, loading }) => {
     mode: 'onChange'
   });
 
+  const navigate = useNavigate();
   const type = watch('type');
   const products = watch('products');
 
@@ -307,7 +310,7 @@ const ProductBannerForm = ({ initialData = {}, onSubmit, loading }) => {
       <div className="flex justify-end gap-3">
         <Button
           type="button"
-          onClick={() => window.history.back()}
+           onClick={() => navigate('/admin/banner')}
           className="px-4 py-2 cursor-pointer border border-slate-200 rounded-md hover:bg-[#c3b0b0]"
           disabled={loading}
         >

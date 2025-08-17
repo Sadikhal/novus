@@ -96,7 +96,9 @@
   top: -250%;
   transform: translate(-50%, 0);
   font-size: 34px;
-  color: #f19c2b;
+  color: #ffffff;
+  font-weight: 900;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 buttons {
@@ -105,14 +107,15 @@ buttons {
   width: 185px;
   height: 47px;
   background: transparent;
-  /* font-size:; */
-  font-weight: 900;
-  border: 3px solid #f39923;
+  cursor: pointer;
+  font-weight: 300;
+  border: 3px solid #ecf1ef;
   border-radius: 12px;
   transition: all 0.3s ease-in-out;
 }
 
 buttons::before {
+  cursor: pointer;
   content: "";
   position: absolute;
   top: 50%;
@@ -120,14 +123,16 @@ buttons::before {
   transform: translate(-50%, -50%);
   width: 185px;
   height: 47px;
-  background-color: #f5ae51;
   border-radius: 12px;
   transition: all 0.3s ease-in-out;
   z-index: -1;
 }
 
 buttons::after {
-  content: "Click";
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  content: "Shop Now";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -135,13 +140,17 @@ buttons::after {
   height: 47px;
   background-color: transparent;
   font-size: 17px;
-  font-weight: 900;
+  font-weight: 500;
   line-height: 47px;
   color: #ffffff;
+  font-family: poppins, sans-serif;
   border: none;
   border-radius: 12px;
   transition: all 0.3s ease-in-out;
   z-index: 2;
+  white-space: nowrap; 
+  width: auto;
+  padding: 0 10px;
 }
 
 @keyframes shake {

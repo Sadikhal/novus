@@ -8,6 +8,7 @@ import { persistor, store } from './redux/store';
 import { SocketContextProvider } from './lib/SocketContext';
 import { Toaster } from './components/ui/Toaster.jsx'
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
@@ -18,5 +19,5 @@ createRoot(document.getElementById('root')).render(
     </PersistGate>
      </Provider>
     <Toaster />
-  </StrictMode>,
+ </StrictMode>,
 )

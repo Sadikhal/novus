@@ -77,7 +77,7 @@ const Home = () => {
         loading={loading}
         banners={bannerData}
       />
-      
+
       {/* Grid section */}
       <GridSection 
         loading={loading}

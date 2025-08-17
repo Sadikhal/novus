@@ -1,4 +1,3 @@
-// lib/extractBanners.js
 export const extractBanners = (products = [], categories = []) => {
   const activeProducts = products.filter(banner => banner.isActive);
   const activeCategories = categories.filter(banner => banner.isActive);
