@@ -28,10 +28,15 @@ export const createBrand = async (req, res, next) => {
       email:user.email,
       ...req.body,
     });
-    const savedBrand = await brand.save();
-    res.status(201).json(savedBrand);
-  } catch(error) {
 
+    const savedBrand = await brand.save();
+
+    if (user.role !== "seller") {
+      user.role = "seller";
+      await user.save();
+    }
+    res.status(201).json({ brand: savedBrand, user });
+  } catch(error) {
     console.log(error)
     next(error);
   }

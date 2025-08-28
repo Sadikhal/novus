@@ -53,10 +53,9 @@ const CustomerList = () => {
     loading,
     handleSearchCustomers,
     handleSort,
-    handleDelete
+    handleDeleteCustomer :handleDelete
   } = useCustomerData();
   const { currentUser } = useSelector((state) => state.user);
-  const role = currentUser?.role;
  
 
 

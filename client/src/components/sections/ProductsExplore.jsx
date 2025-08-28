@@ -1,18 +1,18 @@
 import { cn } from '../../lib/utils';
 
-const ProductsExplore = ({ categories }) => {
+const ProductsExplore = ({ categories,onCategoryClick }) => {
   return (
     <div className='w-full flex flex-col gap-5 px-1 h-full '>
-      <div className="carousel flex flex-row lg:gap-7 w-full gap-2 md:gap-5 justify-between">
+      <div className="carousel flex flex-row lg:gap-5 w-full gap-2 md:gap-4 justify-between pt-2">
         {categories.map((category) => (
-          <div 
+           <div 
             key={category._id} 
+            onClick={() => onCategoryClick(category?.name)}
             className="carousel-item border-none outline-none h-full flex flex-col items-center justify-center group cursor-pointer"
           >
             <div className='bg-transparent rounded-full flex items-center justify-center duration-500'>
-              <div 
-                className="md:h-24 md:w-24 sm:w-20 sm:h-20 w-[72px] h-[72px] bg-cover bg-center bg-[#ffff] rounded-full" 
-                style={{ backgroundImage: `url(${category.image[1]})` }}
+              <img src={category.image[1]}
+                className="sm:w-20 sm:h-20 w-16 h-16 2xl:w-28 2xl:h-28  object-cover bg-center bg-[#ffff] rounded-full" 
               />
             </div> 
             <div className='relative'>

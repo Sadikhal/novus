@@ -33,7 +33,7 @@ export default function HomeCarousal({ loading, banner, transformData }) {
             key={carousel._id} 
             className="h-full w-full bg-cover bg-center" 
             style={{ 
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${carousel?.image})`,
+              backgroundImage: ` url(${carousel?.image})`,
               borderRadius: '10px',
               backgroundSize: 'cover',
               backgroundPosition: 'center',

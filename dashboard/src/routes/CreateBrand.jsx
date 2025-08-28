@@ -6,6 +6,8 @@ import ImageCropModal from '../components/ImageCropper';
 import { useToast } from '../redux/useToast';
 import { Button } from '../components/ui/Button'; 
 import BrandFormIntro from '../components/BrandFormIntro';
+import { updateUser } from '../redux/userSlice';
+import { useDispatch } from 'react-redux';
 
 const CreateBrand = () => {
   const [uploadQueue, setUploadQueue] = useState([]);
@@ -16,6 +18,7 @@ const CreateBrand = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { toast } = useToast();
+  const dispatch = useDispatch();
   const { register, setValue, handleSubmit, formState: { errors }, reset } = useForm();
 
   const handleImageUploadComplete = (url) => {
@@ -31,7 +34,7 @@ const CreateBrand = () => {
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
-    const remainingSlots = 5 - uploadedImages.length;
+    const remainingSlots = 3 - uploadedImages.length;
     
     if (files.length > remainingSlots) {
       toast({
@@ -55,13 +58,16 @@ const CreateBrand = () => {
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      await apiRequest.post('/brand', { ...formData });
+      const res = await apiRequest.post('/brand', { ...formData });
+      if (res.data?.user) {
+      dispatch(updateUser({ ...res.data.user, brand: res.data.brand }));
+    }
       toast({
-        variant : "secondary",
+        variant : "success",
         title: "Brand created successfully",
         description: "Redirecting to dashboard..."
       });
-      window.location.href = process.env.REACT_APP_DASHBOARD_LINK;
+      navigate('/seller/dashboard');
       reset();
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
@@ -75,6 +81,8 @@ const CreateBrand = () => {
       setLoading(false);
     }
   };
+
+
 
   useEffect(() => {
     if (uploadQueue.length === 0 && showCropModal) {

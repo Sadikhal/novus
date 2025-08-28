@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
@@ -62,7 +63,9 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: false,
     },
-  pushToken: String,
+   pushToken: {
+     type: String,
+   },
 
     role: {
       type: String,
@@ -76,7 +79,7 @@ const userSchema = new mongoose.Schema(
     defaultAddress: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User.addresses", 
-      required: false,
+      default : null,
     },
     addresses: [addressSchema],
     image: {
@@ -93,12 +96,21 @@ const userSchema = new mongoose.Schema(
 		},
 		isVerified: {
 			type: Boolean,
-			default: false,
+			default: false
 		},
-		resetPasswordToken: String,
-		resetPasswordExpiresAt: Date,
-		verificationToken: String,
-		verificationTokenExpiresAt: Date,
+		resetPasswordToken: {
+      type: String
+    },
+		resetPasswordExpiresAt: {
+      type: Date,
+    },
+		verificationToken: {
+      type : String
+    },
+		verificationTokenExpiresAt: 
+    {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

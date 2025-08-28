@@ -13,14 +13,15 @@ export const useAuth = () => {
   const [sellerBrand, setSellerBrand] = useState(null);
   const [BrandLoading, setBrandLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const {currentUser} = useSelector((state) => state.user)
+
 
   
   const register = async (formData) => {
     dispatch(loginStart());
     try {
-      const res = await apiRequest.post('/auth/register', {...formData,role:"seller"});
-      dispatch(loginSuccess(res.data));
+      const res = await apiRequest.post('/auth/register', formData);
+      dispatch(loginSuccess(res.data.user));
+      console.log(res.data);
       toast({
         variant: "secondary",
         title: "Registration Successful",
@@ -29,7 +30,7 @@ export const useAuth = () => {
       navigate('/verify-email');
       return res.data;
     } catch (err) {
-      dispatch(loginFailure(err.response?.data?.message || "Registration failed"));
+      dispatch(loginFailure(err.res?.data?.message || "Registration failed"));
       toast({
       variant: "destructive",
       title: "Registration Failed",
@@ -43,21 +44,24 @@ export const useAuth = () => {
     try {
       const res = await apiRequest.post('/auth/login', formData);
       dispatch(loginSuccess(res.data));
+      console.log(res.data);
       toast({
         variant: "secondary",
         title: "Login Successful",
         description: "Welcome back! You have been logged in.",
       });
-      navigate(`/${res.data.role}/dashboard`);
-
+       res.data.role === 'user' ?
+       navigate("/") :
+       navigate(`/${res.data.role}/dashboard`);
       return res.data;
     } catch (err) {
+      console.log(err);
       dispatch(loginFailure(err.response?.data?.message || "Login failed"));
       toast({
-  variant: "destructive",
-  title: "Login Failed",
-  description: err.response?.data?.message || "Invalid credentials or server error. Please try again.",
-});
+      variant: "destructive",
+      title: "Login Failed",
+      description: err.response?.data?.message || "Invalid credentials or server error. Please try again.",
+    });
     }
   };
 
@@ -66,6 +70,7 @@ export const useAuth = () => {
     try {
       const res = await apiRequest.post('/auth/verify-email', { code });
       dispatch(updateVerificationStatus(true));
+      console.log(res.data);
       toast({
         variant: "secondary",
         title: "Email Verified",

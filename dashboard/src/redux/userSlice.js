@@ -8,6 +8,8 @@ const initialState = {
   error : false
 }
 
+
+
 export const userSlice = createSlice({
   name : 'user',
   initialState,
@@ -17,11 +19,14 @@ export const userSlice = createSlice({
       state.error = false;
     },
     loginSuccess : (state , action) => {
+       const isActualAdmin = action.payload._id === import.meta.env.VITE_ADMIN_ID;
+
       state.currentUser = {
         ...action.payload,
          role: action.payload.role,
-        isAdmin: action.payload.role === 'admin',
+        isAdmin: action.payload.role === 'admin' && isActualAdmin ,
         isSeller: action.payload.role === 'seller',
+        isCustomer: action.payload.role === 'user',
         brand: action.payload.brand || null
       };
       state.loading = false;
@@ -34,10 +39,14 @@ export const userSlice = createSlice({
     logout : (state) => {
      state.currentUser = null;
      state.loading = false;
-     state.error = false;
+     state.error = null;
     },
     updateUser: (state, action) => {
-      state.currentUser = action.payload;
+     state.currentUser = {
+        ...state.currentUser,
+        ...action.payload,
+        brand: action.payload.brand || state.currentUser?.brand || null,
+      };
       state.loading = false;
       state.error = null;
     },

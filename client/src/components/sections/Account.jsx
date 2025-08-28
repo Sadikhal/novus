@@ -5,23 +5,23 @@ import { Link } from "react-router-dom";
 import { logout } from "../../redux/userSlice";
 import { useNavigate } from 'react-router-dom';
 import { getMenuItems } from "../../lib/utils";
+import { useAuth } from "../../hooks/useAuth";
 
 const Account = () => {
-const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
+  const { logoutUser } = useAuth();
   
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
+  
+ const handleLogout = async () => {
+  await logoutUser();
+ }
 
   const menuItems = getMenuItems(currentUser, handleLogout);
 
   return (
     <div>
-       <HoverCard>
-      <HoverCardTrigger className="md:w-[130px] xl:w-[180px] flex flex-row gap-2 items-center text-slate-800 cursor-pointer">
+       <HoverCard className="z-100">
+      <HoverCardTrigger className="md:w-[130px] xl:w-[180px] flex flex-row gap-2 items-center text-slate-800 cursor-pointer z-100">
         {currentUser ? (
           <>
             <div className="font-poppins text-base font-medium overflow-hidden text-nowrap">
@@ -44,7 +44,7 @@ const dispatch = useDispatch();
       </HoverCardTrigger>
       <HoverCardContent className="px-1 p-2 w-[180px] bg-[#fff]">
         {menuItems.map((item, index) => (
-          <div key={index} className="bg-lamaWhite hover:bg-[#577569] px-4 rounded-md">
+          <div key={index} className="bg-lamaWhite hover:bg-[#577569] px-4 rounded-md z-100">
             {item.path ? (
               <Link to={item.path} className="block py-1 text-sm text-slate-800 font-medium hover:text-lamaWhite font-poppins">
                 {item.text}

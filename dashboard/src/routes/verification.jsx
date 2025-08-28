@@ -13,21 +13,26 @@ const EmailVerificationPage = () => {
 
   const handleChange = (index, value) => {
     const newCode = [...code];
-    if (value.length > 1) {
-      const pastedCode = value.slice(0, 6).split("");
-      for (let i = 0; i < 6; i++) {
-        newCode[i] = pastedCode[i] || "";
-      }
-      setCode(newCode);
-      const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
-      const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
-      inputRefs.current[focusIndex].focus();
-    } else {
-      newCode[index] = value;
-      setCode(newCode);
-      if (value && index < 5) {
-        inputRefs.current[index + 1].focus();
-      }
+    newCode[index] = value.slice(-1);
+    setCode(newCode);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text").slice(0, 6).split("");
+    const newCode = [...code];
+    pasteData.forEach((char, i) => {
+      newCode[i] = char;
+    });
+    setCode(newCode);
+
+    const lastFilledIndex = pasteData.length - 1;
+    if (lastFilledIndex >= 0 && inputRefs.current[lastFilledIndex]) {
+      inputRefs.current[lastFilledIndex].focus();
     }
   };
 
@@ -73,6 +78,7 @@ const EmailVerificationPage = () => {
                   value={digit}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={handlePaste}  // ✅ paste handler added
                   className='md:w-12 md:h-12 w-9 h-9 border border-gray-300 text-center 
                     text-lg text-slate-900 bg-white focus:outline-none 
                     focus:border-[#577b1d] rounded-sm transition-colors'

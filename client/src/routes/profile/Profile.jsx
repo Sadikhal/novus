@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { format, parseISO } from 'date-fns';
 import { AiFillEdit } from 'react-icons/ai';
@@ -7,7 +7,6 @@ import { apiRequest } from '../../lib/apiRequest';
 import { updateUser } from '../../redux/userSlice';
 import ImageCropModal from '../../components/ui/ImageCropper';
 import { cn } from '../../lib/utils';
-import { Variable } from 'lucide-react';
 import { toast } from '../../redux/useToast';
 
 const Profile = () => {
@@ -88,14 +87,19 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await apiRequest.put(
-        `/users/update/${currentUser._id}`,
-        {
-          ...formData,
-          image: uploadedImage,
-          age: undefined 
-        }
-      );
+       
+      const updateData = {
+        ...formData,
+        image: uploadedImage,
+      }
+
+        if (!updateData.defaultAddress) {
+        delete updateData.defaultAddress;
+      }
+        const res = await apiRequest.put(
+          `/users/update/${currentUser._id}`,
+          updateData
+        )
       dispatch(updateUser(res.data));
       toast({
         Variant : "secondary",

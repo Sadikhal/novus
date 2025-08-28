@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React, { Suspense, lazy } from 'react';
 import { Loader } from "./ui/Loaders";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/Dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "./ui/Dialog";
 
 const SellerForm = lazy(() => import('./forms/SellerForm'));
 const CustomerForm = lazy(() => import('./forms/CustomerForm'));
@@ -114,6 +114,13 @@ const FormModal = ({
         )}
       </DialogTrigger>
       <DialogContent className={`bg-[#fff] rounded-md max-h-[90vh] ${dialogSize}`}>
+        <DialogTitle className="text-lg items-center flex justify-center font-semibold capitalize hidden">
+          {type === "delete"
+            ? `Delete ${table}`
+            : type === "create"
+            ? `Create ${table}`
+            : `Update ${table}`}
+        </DialogTitle>
         {renderForm()}
       </DialogContent>
     </Dialog>

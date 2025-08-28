@@ -69,7 +69,7 @@ const ProductsList = () => {
 
   const renderRow = (item) => (
     <tr
-      key={item._id}
+      key={item?._id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight items-center"
     >
       <td className="flex items-center gap-4 p-4">{item?.name}</td>
@@ -77,17 +77,17 @@ const ProductsList = () => {
       <td className="px-3">{item?._id}</td>
       <td className="px-2 flex gap-1 items-center  flex-row text-nowrap">
         {item.category?.map((data) => (
-          <div key={data._id} className="px-1">{data}</div>
+          <div key={data?._id} className="px-1">{data}</div>
         ))}
       </td>
       <td className="px-5 md:px-0">{item?.sellingPrice}</td>
       <td className="hidden px-2 md:flex flex-row">
         {item?.color ? (
-          Array.isArray(item.color) ? 
+          Array.isArray(item?.color) ? 
             item.color.map((data, index) => (
               <div key={index} className="px-1">{data}</div>
             )) : 
-            <div className="px-1">{item.color}</div>
+            <div className="px-1">{item?.color}</div>
         ) : 'N/A'}
       </td>
       <td className="hidden md:table-cell pl-5">
@@ -95,15 +95,15 @@ const ProductsList = () => {
       </td>
       <td className="flex items-stretch gap-1 pl-2">     
         <div className="flex items-center gap-2">
-          <Link to={`/${role}/product/${item._id}`}>
+          <Link to={`/${role}/product/${item?._id}`}>
             <button 
               className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky cursor-pointer"
-              aria-label={`View product ${item.name}`}
+              aria-label={`View product ${item?.name}`}
             >
               <GrView className="text-lamaWhite" />
             </button>
           </Link>
-         <Link to = {`/${role}/update-product/${item._id}`}
+         <Link to = {`/${role}/update-product/${item?._id}`}
             className= 'w-7 h-7 flex items-center justify-center rounded-full cursor-pointer bg-cyan-700'
           >
             <img 
@@ -114,9 +114,9 @@ const ProductsList = () => {
           </Link>
           <FormModal 
             table="productDetail"  
-            handleDelete={() => handleDelete(item._id)} 
+            handleDelete={() => handleDelete(item?._id)} 
             type="delete" 
-            id={item._id} 
+            id={item?._id} 
           />
         </div>
       </td>
@@ -186,16 +186,16 @@ const ProductsList = () => {
         </div>
        
       </div>
-       ) : (
+       ) : currentUser.isSeller ? (
       <div className="flex flex-col gap-6 mt-6">
         <div className="w-full h-[700px]">
-          <BrandProductRevenuePerformance brandId = {currentUser.brand._id}/>
+          <BrandProductRevenuePerformance brandId = {currentUser?.brand?._id}/>
           </div>
           <div className="w-full h-[700px]">
-              <BrandProductsSalesChart brandId = {currentUser.brand._id}/>
+            <BrandProductsSalesChart brandId = {currentUser?.brand?._id}/>
           </div>
          </div> 
-       )}
+       ) : null }
     </div>
   );
 };

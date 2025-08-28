@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { apiRequest } from "../lib/apiRequest";
 import { filteredItems } from "../lib/utils";
 import { toast } from "../redux/useToast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../redux/userSlice";
 
 export default function useSellerData() {
   // State for brand list
@@ -25,7 +26,7 @@ export default function useSellerData() {
   const [loading, setLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("newest");
   const {currentUser} = useSelector((state) => state.user)
-
+  const dispatch = useDispatch();
 
    useEffect(() => {
   const fetchBrands = async () => {
@@ -126,6 +127,7 @@ export default function useSellerData() {
     setFilteredOrders(prev => prev.filter(order => order._id !== orderId));
   };
 
+
   const createBrand = async (brandData) => {
     try {
       setLoading(true);
@@ -133,6 +135,9 @@ export default function useSellerData() {
       setBrands(prev => [res.data?.brand, ...prev]);
       setFilteredBrands(prev => [res.data?.brand, ...prev]);
       
+      if (res.data?.user) {
+        dispatch(updateUser(res.data.user));
+      }
       toast({
         variant: "success",
         title: "Brand created successfully",

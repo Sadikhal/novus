@@ -8,9 +8,11 @@ import { generateTokenAndSetCookie } from "../lib/generateTokenAndSetCookie.js";
 import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
 import crypto from "crypto";
 
+
+
 export const register = async (req, res, next) => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name  } = req.body;
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -33,7 +35,6 @@ export const register = async (req, res, next) => {
 
       return res.status(200).json({
         success: true,
-        token,
         message: "New verification email sent",
         user: {
           ...existingUser._doc,
@@ -60,7 +61,6 @@ export const register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      token,
       user: {
         ...user._doc,
         password: undefined,
@@ -118,6 +118,7 @@ export const login = async (req,res ,next) => {
       generateTokenAndSetCookie(res, user);
       user.lastLogin = new Date();
       await user.save();
+
       let brand = null;
       if (user.role === 'seller') {
         brand = await Brand.findOne({ sellerId: user._id });

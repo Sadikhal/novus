@@ -6,9 +6,18 @@ import TestimonialSlider from "../components/Testimonial";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MobileBrandNav from "../components/MobileBrandNav";
+import { useAuth } from "../hooks/useAuth";
+
 
 const BecomeSeller = () => {
   const { currentUser } = useSelector((state) => state.user);
+  
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  }
+  
   const sellingSteps = [
     {
       id: 1,
@@ -110,20 +119,33 @@ const BecomeSeller = () => {
         </div>
 
         <div className='items-center justify-end w-[30%] hidden lg:flex'>
-          {currentUser ? (
-            <Link to={`/${currentUser.role}/dashboard`} className="">
+          {currentUser && (
+          <Button onClick={handleLogout}  className="w-28 h-full border border-[#26858c] text-[#ffff] rounded-sm flex    flex-row gap-2 bg-[#26858c] hover:bg-lamaWhite hover:text-[#26858c] mx-2">
+            Logout
+          </Button>
+          )}
+          
+          {(currentUser && !currentUser.isCustomer) ? (
+            <Link to={`/${currentUser?.role}/dashboard`} >
               <Button className="w-full h-full border border-[#26858c] text-[#26858c] rounded-sm flex flex-row gap-2 hover:bg-[#26858c] hover:text-white">
                 Dashboard
               </Button>
             </Link>
-          ) : (
+          ) :
+          (currentUser && currentUser.isCustomer) ? (
+           <Link to= "/create-brand">
+              <Button className="w-full h-full border border-[#26858c] text-[#26858c] rounded-sm flex flex-row gap-2 hover:bg-[#26858c] hover:text-white">
+                Becomer seller
+              </Button>
+            </Link>
+            ) : (
             <div className="flex items-center justify-center gap-1">
-              <Link to="/register" className="">
+              <Link to="/register">
                 <Button className="w-full h-full border border-[#26858c] text-[#ffff] rounded-sm flex flex-row gap-2 bg-[#26858c] hover:bg-lamaWhite hover:text-[#26858c]">
                   Register
                 </Button>
               </Link>
-              <Link to="/login" className="">
+              <Link to="/login">
                 <Button className="w-full h-full border border-[#26858c] text-[#26858c] rounded-sm flex flex-row gap-2 hover:bg-[#26858c] hover:text-white">
                   Login
                 </Button>

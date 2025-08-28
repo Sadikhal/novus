@@ -28,7 +28,7 @@ function Product() {
   } = useUserActions(product);
 
   return (
-    <div className='flex flex-col bg-lamaWhite px-5 h-full w-full md:px-7 xl:px-4 pt-5 min-h-screen'>
+    <div className='flex flex-col bg-lamaWhite px-3 h-full w-full md:px-7 xl:px-4 pt-5 min-h-screen'>
       {loading ? (
         <div className='flex justify-center items-center h-[56vh] md:h-[80vh]'>
           <Loader />

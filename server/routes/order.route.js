@@ -4,14 +4,14 @@ import { intent, confirm, customerWiseOrders, SellerWiseOrders, getOrderProduct,
 
 const router = express.Router();
 
-router.get("/user/:userId", verifyUser, customerWiseOrders);
+router.get("/user/:userId", verifyToken,verifyUser, customerWiseOrders);
 router.get("/:orderId", verifyToken, getOrderProduct);
-router.get("/seller/:id", verifySeller, SellerWiseOrders);
+router.get("/seller/:id", verifyToken,verifySeller, SellerWiseOrders);
 router.post("/create-payment-intent", verifyToken, intent);
 router.put("/confirm", verifyToken, confirm);
-router.delete("/:id", verifyTokenAndAdmin, deleteOrders);
-router.get("/", verifyTokenAndAdmin, getOrders);
-router.put("/:id", verifySeller, updateOrder);
+router.delete("/:id", verifyToken,verifyTokenAndAdmin, deleteOrders);
+router.get("/", verifyToken,verifyTokenAndAdmin, getOrders);
+router.put("/:id", verifyToken,verifySeller, updateOrder);
 
 export default router;
 

@@ -4,7 +4,6 @@ import { filteredItems } from "../lib/utils";
 import { toast } from "../redux/useToast";
 
 export default function useCustomerData() {
-  // State for customer data
   const [customer, setCustomer] = useState(null);
   const [orders, setOrders] = useState([]);
   const [stats, setStats] = useState(null);
@@ -12,7 +11,6 @@ export default function useCustomerData() {
   const [customers, setCustomers] = useState([]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   
-  // Common state
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("newest");
@@ -125,6 +123,33 @@ export default function useCustomerData() {
     }
   };
 
+
+  const handleDeleteCustomer = async (id) => {
+    try{
+      setLoading(true);
+      await apiRequest.delete(`/users/${id}`);
+      setCustomers(prev => prev.filter(cust => cust._id !== id));
+      setFilteredCustomers(prev => prev.filter(cust => cust._id !== id));
+      toast({
+        variant: "success",
+        title: "Customer deleted successfully",
+        description: "The customer has been removed"
+      });
+      return true;
+    }catch(err){
+     setError(err.response?.data?.message || err.message || "Delete failed");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: err.response?.data?.message || err.message
+      });
+      return false;
+    }  finally {
+      setLoading(false);
+    }
+  }
+
+
   return {
     filteredCustomers,
     customer,
@@ -141,6 +166,7 @@ export default function useCustomerData() {
     setSortOrder,
     updateCustomer,
     updateLocalOrder,
-    deleteLocalOrder
+    deleteLocalOrder,
+    handleDeleteCustomer
   };
 }

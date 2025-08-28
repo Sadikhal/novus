@@ -26,6 +26,11 @@ const columns = [
     accessor: "sellerId",
     className: "px-2",
   },
+    {
+    header: "Seller",
+    accessor: "seller",
+    className: "px-2",
+  },
   {
     header: "Email",
     accessor: "email",
@@ -75,6 +80,7 @@ const BrandListPage = () => {
       </td>
       <td className="px-2">{item._id}</td>
       <td className="px-2">{item?.sellerId || "N/A"}</td>
+      <td className="px-2 ml-2 text-nowrap capitalize">{item?.sellerName || "N/A"}</td>
       <td className="px-2">{item?.email || "N/A"}</td>
       <td className="px-2">{item?.number || "N/A"}</td>
       <td>

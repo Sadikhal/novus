@@ -5,6 +5,7 @@ import Order from "../models/order.model.js";
 
 
 export const updateUser = async (req, res, next) => {
+  
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -19,6 +20,8 @@ export const updateUser = async (req, res, next) => {
     const { password, ...safeUserData } = updatedUser._doc;
     res.status(200).json(safeUserData);
   } catch (err) {
+      console.log("e",err);
+
     next(err);
   }
 };
@@ -33,28 +36,25 @@ export const deleteUser = async (req, res, next) => {
 };
 
 
-
 export const getUsers = async (req, res, next) => {
   try {
-    const {sort = "newest"} = req.query;
+    const { sort = "newest" } = req.query;
     const sortOptions = { createdAt: -1 };
-
 
     if (sort === "oldest") {
       sortOptions.createdAt = 1;
     }
-    const user = await User.find(
-      {
-        $or : [{
-        role: "user" },{role: "seller"} ]
-      }
-    ).sort(sortOptions);
-    res.status(200).json(user);
+
+    const users = await User.find({
+      $or: [{ role: "user" }, { role: "seller" }],
+      isVerified: true, 
+    }).sort(sortOptions);
+
+    res.status(200).json(users);
   } catch (err) {
     next(err);
   }
 };
-
 
 
 
@@ -198,7 +198,7 @@ export const createAddress = async (req, res, next) => {
 
 export const updateAddress = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.userId);
         if (!user) return next(createError(404, "User not found"));
 
         const address = user.addresses.id(req.params.addressId);
@@ -207,6 +207,7 @@ export const updateAddress = async (req, res, next) => {
         await user.save();
         res.status(200).json( address);
     } catch (err) {
+      console.log("e",err);
         next(err);
     }
 };

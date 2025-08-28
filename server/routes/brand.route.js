@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post('/', verifyToken, createBrand);
 router.get("/", getBrands);
-router.get("/seller", verifySeller, getSellerBrand); // Moved above :id route
-router.get("/:id", verifySeller,getSellerBrandDetails);
-router.put("/:id", verifySeller, updateBrand);
-router.delete("/:id", verifySeller, deleteBrand);
+router.get("/seller",verifyToken, verifySeller, getSellerBrand);
+router.get("/:id",verifyToken, verifySeller,getSellerBrandDetails);
+router.put("/:id",verifyToken, verifySeller, updateBrand);
+router.delete("/:id", verifyToken, verifySeller, deleteBrand);
 
 export default router;

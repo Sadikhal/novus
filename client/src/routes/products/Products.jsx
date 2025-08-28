@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import HomeExplore from '../../components/home/HomeExplore';
 import Filter from '../../components/sections/Filter';
 import MobileFilter from '../../components/sections/MobileFilter';
 import RightFilter from '../../components/sections/RightFilter';
@@ -91,6 +90,14 @@ function Products() {
     }));
   }, []);
 
+  const handleCategoryClick = useCallback((categoryName) => {
+    setFilters(prev => ({
+      ...prev,
+      category: [categoryName],
+      page: 1
+    }));
+  }, []);
+
   const handlePageChange = useCallback((newPage) => {
     setFilters(prev => ({ ...prev, page: newPage }));
   }, []);
@@ -135,7 +142,7 @@ function Products() {
   return (
     <div className="p-2 sm:px-2 md:px-4 lg:px-6 flex flex-col w-full bg-[#fff]">
       <div className="bg-[#ffffff]">
-        <ProductsExplore categories={categories} />
+        <ProductsExplore categories={categories} onCategoryClick={handleCategoryClick} />
       </div>
       
       <div className="flex w-full flex-col justify-between  pt-8 ">

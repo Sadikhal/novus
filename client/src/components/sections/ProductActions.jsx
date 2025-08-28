@@ -6,7 +6,7 @@ import { cn } from '../../lib/utils';
 
 
 export const SecondaryProductActions = ({ isInWishlist, onWishlist, onMessage }) => (
-  <div className='xl:pt-10 pt-7 flex flex-col sm:flex-row gap-5 items-center w-full'>
+  <div className='pt-7 flex flex-col sm:flex-row gap-5 items-center w-full'>
     <button 
       onClick={onWishlist}
       className={cn(
@@ -32,16 +32,16 @@ export const SecondaryProductActions = ({ isInWishlist, onWishlist, onMessage })
 
 export const PrimaryProductActions = ({ onAddToCart, onBuyNow }) => (
   <div className='pt-4 sm:pt-7 md:pt-5 xl:pt-12 flex sm:flex-row sm:gap-5 gap-2 flex-col items-center w-full xl:w-full sm:w-[90%]'>
-    <button 
+    <Button 
       onClick={onAddToCart} 
-      className='btn w-full bg-transparent border-2 border-[#116059] sm:btn-wide flex-1 uppercase text-[#206883] text-[18px] font-[700] cursor-pointer tracking-wide  hover:border-none font-helvetica flex flex-row gap-2 hover:bg-[#206883] hover:text-lamaWhite py-2'
+      className='bg-[#ffff] border-2 border-[#914d05] sm:flex-1 sm:w-auto w-full uppercase text-[#2b2820] text-[18px] font-[700] cursor-pointer tracking-wide  hover:border-none font-helvetica flex flex-row gap-2 hover:bg-[#233338] hover:text-lamaWhite h-auto min-h-12'
     >
       <span><TiShoppingCart /></span>
       <span>add to bag</span>
-    </button>
+    </Button>
     <Button 
       onClick={onBuyNow}
-      className='bg-[#208328] border-none flex-1 uppercase w-full text-lamaWhite text-[18px] font-[700] hover:bg-[#1d420c] h-auto min-h-12 font-helvetica flex flex-row gap-2 cursor-pointer'
+      className='bg-[#63420d] hover:text-[#63420d]  hover:border-2 border-[#63420d] sm:flex-1 sm:w-auto w-full uppercase text-lamaWhite text-[18px] font-[700] hover:bg-[#fff] h-auto min-h-12 font-helvetica flex flex-row gap-2 cursor-pointer'
     >
       <span><MdSell /></span>
       <span>Buy Now</span>

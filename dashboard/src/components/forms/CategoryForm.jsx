@@ -12,7 +12,7 @@ const categorySchema = z.object({
   name: z
     .string()
     .min(3, { message: "Category name must be at least 3 characters!" })
-    .max(8, { message: "Category name must be at most 8 characters!" }),
+    .max(25, { message: "Category name must be at most 25 characters!" }),
   image: z.array(z.string()).min(1, "At least one image is required").max(5, "Maximum 5 images allowed"),
 });
 

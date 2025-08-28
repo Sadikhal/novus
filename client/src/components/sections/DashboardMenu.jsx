@@ -8,11 +8,12 @@ import { ImProfile } from "react-icons/im";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import { FiShoppingCart } from "react-icons/fi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import { useAuth } from '../../hooks/useAuth';
 
 
 
 const DashboardMenu = () => {
-
+  const { logoutUser } = useAuth();
   const menuItems = [
     { icon: <RxDashboard />, text: 'Dashboard', path: '/dashboard' },
     { icon: <BiPurchaseTagAlt />, text: 'My Orders', path: '/dashboard/my-orders' },
@@ -24,9 +25,9 @@ const DashboardMenu = () => {
     { icon: <RiLogoutBoxRLine />, text: 'Logout', path: null, action: handleLogout }
   ];
 
-  function handleLogout() {
-    console.log('Logout clicked');
-  }
+  const handleLogout = async () => {
+  await logoutUser();
+ }
 
 
 return(

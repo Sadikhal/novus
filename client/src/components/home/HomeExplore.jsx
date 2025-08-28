@@ -1,7 +1,6 @@
 import { cn } from '../../lib/utils';
-import { HomeExplores } from '../../lib/data';
+import { Link } from 'react-router-dom';
 import { useFetchCategoriesAndBrands } from '../../hooks/useCategoriesAndBrands';
-import { Loader } from '../ui/Loaders';
 import { ErrorFallback } from '../sections/ErrorFallback';
 
 const HomeExplore = () => {
@@ -15,23 +14,24 @@ const HomeExplore = () => {
     </div>;
    
   return (
-    <div className='w-full flex flex-col gap-5 px-10'>
+    <div className='w-full flex flex-col gap-3 px-2 sm:px-3 md:px-5 lg:px-6 h-full '>
       <div>
-        <h1 className='text-[1.5rem] font-robotos font-bold leading-[32px] text-[#082133]'>
+        <h1 className='sm:text-[1.5rem] text-[1.3rem] font-robotos font-bold text-[#082133]'>
           Explore Popular categories
         </h1>
       </div>
     
-      <div className="carousel flex flex-row gap-3 h-full py-4 md:py-0">
+      <div className="carousel flex flex-row gap-6 justify-between h-full py-2 px-1">
         {categories?.map((category) => (
-          <div 
+          <Link 
+            to={`/products?category=${category?.name}`}
             key={category?.id} 
-            className="carousel-item border-none outline-none md:w-48 md:h-48 sm:w-40 sm:h-40 w-[130px] h-[130px] flex flex-col items-center justify-center group"
+            className="carousel-item border-none outline-none md:w-28 md:h-40 h-36 w-24 flex flex-col items-center justify-center group rounded-lg cursor-pointer"
           >
-            <div className='bg-transparent rounded-full w-40 h-40 flex items-center justify-center duration-500 group-hover:rotate-180 group-hover:-scale-100 transition-transform'>
-              <div 
-                className="h-32 w-32 bg-cover bg-center bg-[#ffff] rounded-full" 
-                style={{ backgroundImage: `url(${category?.image[0]})` }}
+            <div className='bg-transparent rounded-full w-full h-full flex items-center justify-center duration-500 group-hover:rotate-180 group-hover:-scale-100 transition-transform'>
+              <img src = {category?.image[0]}
+                className="md:h-28 md:w-28 h-24 w-24 object-cover bg-[#ffff] rounded-full" 
+                alt={category?.name}
               />
             </div> 
             <div className='relative'>
@@ -44,7 +44,7 @@ const HomeExplore = () => {
                 )}
               />
             </div>      
-          </div> 
+          </Link> 
         ))}
       </div>
     </div>

@@ -6,14 +6,14 @@ import { verifyToken, verifySeller } from '../middleware/verifyTokens.js';
 
 const router = express.Router();
 
-router.post('/',verifySeller,createProduct);
+router.post('/',verifyToken,verifySeller,createProduct);
 router.get("/",getProducts);
-router.get("/seller",verifySeller,getSellerProducts);
+router.get("/seller",verifyToken,verifySeller,getSellerProducts);
 router.get("/search/:keyword",searchProducts);
 router.get("/related-products",relatedProducts);
 router.get("/:productId",getProduct);
 router.put("/:id",verifyToken,updateProduct);
 router.delete("/:id",verifyToken,deleteProduct);
-router.get("/seller/:id",verifySeller,getSellerProduct);
+router.get("/seller/:id",verifyToken,verifySeller,getSellerProduct);
 
 export default router;
