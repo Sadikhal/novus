@@ -170,24 +170,24 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
   }, [activeImage, images]);
 
   return (
-    <div className="w-full h-auto md:h-[500px] lg:h-[600px] xl:h-[430px] flex flex-col md:flex-row lg:flex-col xl:flex-row gap-3">
+    <div className="w-full h-auto md:h-[500px] lg:h-[600px] xl:h-[430px] flex flex-col md:flex-row lg:flex-col xl:flex-row gap-3 relative items-center justify-center">
       {imageIndex !== null && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex justify-between items-center w-full h-full">
+        <div className="fixed inset-0 z-50 bg-black/90 flex justify-center items-center w-full h-full">
           {/* Left arrow */}
           <div
-            className="flex items-center justify-center z-50 px-4 cursor-pointer"
+            className="flex items-center absolute justify-center z-50  left-9 cursor-pointer"
             onClick={() => changeSlide("left")}
           >
             <img src="/icons/arrow.png" className="md:w-6 w-5 object-contain" alt="Previous" />
           </div>
 
           {/* Enlarged image area */}
-          <ScrollArea className="flex-10 flex items-center justify-center w-full h-full px-2 md:px-8">
+          <ScrollArea className="flex items-center justify-center w-full h-full px-2 md:px-8">
             <div
               className="
-                relative rounded-md border-2 border-slate-200 bg-black
-                w-[92vw] h-[80vh]
-                md:max-w-[90%] md:max-h-[90%] md:w-full md:h-full
+                relative rounded-md border-2 border-slate-200 bg-black flex items-center justify-center
+                w-[100vw] md:h-[90vh] h-[96vh]
+                md:max-w-[99%] md:max-h-[90%] md:w-full md:h-full
               "
             >
               <img
@@ -195,12 +195,7 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
                 className="w-full h-full object-cover"
                 alt="Enlarged view"
               />
-              <div
-                className="absolute right-2 top-2 cursor-pointer"
-                onClick={() => setImageIndex(null)}
-              >
-                <CgCloseO className="text-black text-3xl rounded-lg p-1 bg-lamaWhite" />
-              </div>
+              
             </div>
             {/* The ScrollArea component already renders a scrollbar.
                 Keep this extra one only if you want a visible vertical bar overlay. */}
@@ -209,9 +204,16 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
             <ScrollBar orientation="vertical" />
           </ScrollArea>
 
+          <div
+                className="absolute right-12 top-2 cursor-pointer"
+                onClick={() => setImageIndex(null)}
+              >
+                <CgCloseO className="text-black text-3xl rounded-lg p-1 bg-lamaWhite" />
+              </div>
+
           {/* Right arrow */}
           <div
-            className="flex items-center justify-center z-50 px-4 cursor-pointer"
+            className="flex absolute items-center  justify-center z-50 right-12  cursor-pointer"
             onClick={() => changeSlide("right")}
           >
             <img
