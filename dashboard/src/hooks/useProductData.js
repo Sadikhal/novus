@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { apiRequest } from "../lib/apiRequest";
 import { filteredItems } from "../lib/utils";
 import { toast } from "../redux/useToast";
+import { useSelector } from "react-redux";
+
 
 const formatProductData = (product) => {
   if (!product) return null;
@@ -33,13 +35,12 @@ export default function useProductData(role) {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [stats, setStats] = useState(null);
- 
-
+  const { currentUser } = useSelector((state) => state.user);
 
   const fetchAllProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const url = role === "admin" ? '/product' : '/product/seller';
+      const url = currentUser?.isAdmin? '/product' : '/product/seller';
       const res = await apiRequest.get(url, { 
         params: { sort: sortOrder } 
       });

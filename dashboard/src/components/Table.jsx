@@ -35,9 +35,9 @@ const Table = ({ columns, renderRow, data, error, loading,seller }) => {
           <table className="w-full mt-8">
             <thead>
               <tr className="text-left text-gray-500 text-sm">
-                {columns.map((col) => (
+                {columns.map((col,index) => (
                   <th 
-              key={col.accessor} 
+              key={index} 
               className={cn(
                 "text-nowrap",
                 col.className,

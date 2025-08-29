@@ -3,6 +3,7 @@ import { FaShareFromSquare } from 'react-icons/fa6';
 import SocialIcons from "../ui/SocialIcons"
 import ProductSpecs from './ProductSpecs';
 import { SecondaryProductActions } from './ProductActions';
+import { sanitizeConfig } from '../../lib/utils';
 
 export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) => (
   <div className='flex flex-col items-start'>
@@ -43,19 +44,19 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
       onMessage={onMessage}
     />
     
-    <div className='px-4 text-[#111111] text-[16px] font-medium font-helvetica tracking-wide pt-6'>
+    <div className='px-4 text-[#111111] text-[16px] font-medium font-helvetica tracking-wide pt-4'>
       <div className='flex flex-row gap-2'>
-        Colour Shown: {product.color.join(', ')}
+        <span className='font-medium font-robotos'>Colour Shown</span>: {product.color.join(', ')}
       </div>
       {product.size ? (
-        <div>Size: {product.size}</div>
+        <div><span className='font-medium font-robotos'>Size</span>: {product.size}</div>
       ) : (
         <div>Brand: {product.brand}</div>
       )}
     </div>
     
     <div 
-      className='quill-content text-[#111111] pt-3 text-[16px] font-[300] font-helvetica tracking-wide text-justify'
+      className='quill-content text-[#111111] text-[16px] font-[300] font-helvetica tracking-wide text-justify'
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.desc,sanitizeConfig) }}
     />
     
@@ -64,9 +65,3 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
 );
 
 
-  export const sanitizeConfig = {
-  ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
-    'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'span',
-    'img', 'pre', 'u', 'font', 'table', 'thead', 'tbody', 'tr', 'td', 'th'],
-  ALLOWED_ATTR: ['href', 'name', 'target', 'src', 'alt', 'style', 'class', 'width', 'height'],
-};

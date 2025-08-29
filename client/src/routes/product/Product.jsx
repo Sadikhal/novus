@@ -28,7 +28,7 @@ function Product() {
   } = useUserActions(product);
 
   return (
-    <div className='flex flex-col bg-lamaWhite px-3 h-full w-full md:px-7 xl:px-4 pt-5 min-h-screen'>
+    <div className='flex flex-col bg-lamaWhite px-3 h-full w-full md:px-7 lg:px-3 xl:px-4 pt-2 min-h-screen'>
       {loading ? (
         <div className='flex justify-center items-center h-[56vh] md:h-[80vh]'>
           <Loader />
@@ -41,8 +41,8 @@ function Product() {
         <ErrorFallback message={error} />
       ) : (
         <>
-          <div className="container flex flex-col xl:flex-row pt-3 bg-[#ffff] px-2 rounded-sm py-2 h-full w-full">
-            <div className="xl:sticky xl:top-12 xl:self-start xl:h-auto h-full xl:w-[55%]">
+          <div className="flex flex-col lg:flex-row pt-3 bg-[#ffff] rounded-sm py-2 h-full w-full">
+            <div className="lg:sticky lg:top-12 lg:self-start lg:h-auto h-full lg:w-[40%] xl:w-[43%]">
               <Slider 
                 images={product.image} 
                 imageIndex={imageIndex} 
@@ -55,13 +55,13 @@ function Product() {
               />
               
               <div className="flex flex-col gap-12 lg:mt-8">
-                <div className='hidden xl:flex w-full'>
+                <div className='hidden lg:flex w-full'>
                   <Services product={product} />
                 </div>
               </div>
             </div>
             
-            <div className="right xl:w-[45%] pt-6 md:pt-0 md:-mt-2 xl:mt-0 px-2 lg:ml-12 xl:ml-7">
+            <div className="right xl:w-[58%] pt-6  xl:mt-0 px-2 lg:ml-9 xl:ml-7 lg:w-[60%]">
               <ProductInfo  
                 product={product}
                 isInWishlist={isInWishlist}
@@ -71,7 +71,7 @@ function Product() {
             </div>
           </div>
 
-          <div className='xl:hidden block w-full mt-8 py-3 px-2 sm:px-3 md:px-5 bg-[#e4ddcc] rounded-md'>
+          <div className='lg:hidden block w-full mt-8 py-3 px-2 sm:px-3 md:px-5 bg-[#e4ddcc] rounded-md'>
             <Services product={product}/>
           </div>
           

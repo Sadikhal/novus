@@ -10,6 +10,7 @@ import OrderTable from '../components/OrderTable';
 import ProductDetailsTable from "../components/ProductDetailsTable"; import Performance from "../components/Perfomance";
 import { Loader, ErrorFallback } from "../components/ui/Loaders";
 import { ScrollArea } from '../components/ui/ScrollArea';
+import { useEffect } from 'react';
 
 const ProductSinglePage = () => {
   const { id } = useParams();
@@ -38,7 +39,7 @@ const ProductSinglePage = () => {
     handleDelete: apiHandleDelete
   } = useOrderData(role);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (id) {
       fetchProductData(id);
     }

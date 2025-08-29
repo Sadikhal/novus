@@ -106,3 +106,10 @@ export const getMenuItems = (currentUser, handleLogout) => {
     { text: 'Sign Up', path: '/register' }
   ];
 };
+
+  export const sanitizeConfig = {
+  ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+    'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'span',
+    'img', 'pre', 'u', 'font', 'table', 'thead', 'tbody', 'tr', 'td', 'th'],
+  ALLOWED_ATTR: ['href', 'name', 'target', 'src', 'alt', 'style', 'class', 'width', 'height'],
+};

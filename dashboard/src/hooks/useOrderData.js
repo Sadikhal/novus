@@ -24,7 +24,7 @@ export default function useOrderData(role) {
         });
         setOrderData(res.data.orders || []);
         setFilteredData(res.data.orders || []);
-        console.log('fvdxbvfcxbv',res.data.orders)
+        console.log('fvdxbvfcxbv',res?.data?.orders)
       } catch (err) {
         setError(err.message || "Error fetching order data");
       } finally {
