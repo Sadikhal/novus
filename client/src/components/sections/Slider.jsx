@@ -192,7 +192,7 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
             >
               <img
                 src={images[imageIndex]}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
                 alt="Enlarged view"
               />
               <div
@@ -204,6 +204,8 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
             </div>
             {/* The ScrollArea component already renders a scrollbar.
                 Keep this extra one only if you want a visible vertical bar overlay. */}
+            <ScrollBar orientation="horizontal" />
+
             <ScrollBar orientation="vertical" />
           </ScrollArea>
 
