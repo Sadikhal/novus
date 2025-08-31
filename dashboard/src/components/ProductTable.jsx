@@ -101,8 +101,8 @@ const ProductTable = ({
       key={item._id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight "
     >
-      <td className=" items-center  gap-4 p-4">{item?.name}</td>
-      <td className="items-center">{item?._id}</td>
+      <td className="text-nowrap w-full p-4">{item?.name}</td>
+      <td>{item?._id}</td>
       <td className="px-4 flex gap-1 items-center pt-5 flex-row text-nowrap">
         {item.category?.map((data) => (
           <div key={data._id} className="px-1">{data}</div>
@@ -112,11 +112,11 @@ const ProductTable = ({
       <td className="p-5 xl:p-0">{item.sellingPrice ? item.sellingPrice : actualPrice}</td>
       <td className="p-5 xl:p-0">{format(parseISO(item.createdAt), 'MM/dd/yyyy')}</td>
       <td className="p-5 xl:p-0">{item.size}</td>
-      <td className="px-2 flex flex-row">
+      <td className="p-3 flex flex-row items-center justify-center h-full">
         {item?.color ? (
           Array.isArray(item.color) ?
             item.color.map((data, index) => (
-              <div key={index} className="px-1">{data}</div>
+              <div key={index} className="p-2">{data}</div>
             )) :
             <div className="px-1">{item.color}</div>
         ) : 'N/A'}

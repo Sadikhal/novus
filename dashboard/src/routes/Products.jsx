@@ -16,36 +16,38 @@ const columns = [
   {
     header: "Product Name",
     accessor: "name",
-    className: "px-3"
+    className: "px-6"
   },
   {
     header: "Brand",
     accessor: "brand",
+    className: "px-4",
+
   },
   {
     header: "Product Id",
     accessor: "productId",
-    className: "pl-4",
+    className: "pl-2",
   },
   {
     header: "Category",
     accessor: "category",
-    className: "px-2",
+    className: "px-4",
   },
   {
     header: "Price",
     accessor: "price",
-    className: "pl-4 md:pl-0",
+    className: "px-3",
   },
   {
     header: "Color",
     accessor: "color",
-    className: "hidden px-3 md:flex",
+    className: "px-3 md:flex",
   },
   {
     header: "Ratings",
     accessor: "rating",
-    className: "hidden lg:table-cell px-2",
+    className: "px-2",
   },
   {
     header: "Actions",
@@ -72,16 +74,16 @@ const ProductsList = () => {
       key={item?._id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight items-center"
     >
-      <td className="flex items-center gap-4 p-4">{item?.name}</td>
-      <td className="px-2">{item?.brand}</td>
+      <td className="flex items-center text-nowrap p-6 pr-12 max-w-64 overflow-x-hidden">{item?.name}</td>
+      <td className="px-5">{item?.brand}</td>
       <td className="px-3">{item?._id}</td>
-      <td className="px-2 flex gap-1 items-center  flex-row text-nowrap">
+      <td className="px-4 flex gap-1 h-full items-center flex-row text-nowrap">
         {item.category?.map((data) => (
           <div key={data?._id} className="px-1">{data}</div>
         ))}
       </td>
-      <td className="px-5 md:px-0">{item?.sellingPrice}</td>
-      <td className="hidden px-2 md:flex flex-row">
+      <td className="px-3">{item?.sellingPrice}</td>
+      <td className="px-3 flex flex-row">
         {item?.color ? (
           Array.isArray(item?.color) ? 
             item.color.map((data, index) => (
@@ -90,7 +92,7 @@ const ProductsList = () => {
             <div className="px-1">{item?.color}</div>
         ) : 'N/A'}
       </td>
-      <td className="hidden md:table-cell pl-5">
+      <td className="px-3">
         {item?.rating?.toFixed(1) ?? 'N/A'}
       </td>
       <td className="flex items-stretch gap-1 pl-2">     
@@ -160,7 +162,7 @@ const ProductsList = () => {
         </div>
       </div>
 
-     <div className="overflow-x-scroll w-full">
+     <div className="w-full">
       <Table 
         columns={columns} 
         renderRow={renderRow} 

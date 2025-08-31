@@ -1214,7 +1214,7 @@ const SIZE_OPTIONS = ["S", "M", "L", "XL", "XXL", "Custom"];
 const MAX_IMAGES = 10;
 
 const productSchema = z.object({
-  name: z.string().min(3, { message: "Product name must be at least 3 characters!" }).max(50, { message: "Product name must be at most 50 characters!" }),
+  name: z.string().min(10, { message: "Product name must be at least 3 characters!" }).max(70, { message: "Product name must be at most 70 characters!" }),
   brandId: z.string().min(1, { message: "Brand is required" }),
   actualPrice: z.coerce.number().min(0.01, { message: "Invalid price!" }),
   sellingPrice: z.coerce.number().min(0.01).optional(),

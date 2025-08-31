@@ -46,7 +46,7 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
     
     <div className='px-4 text-[#111111] text-[16px] font-medium font-helvetica tracking-wide pt-4'>
       <div className='flex flex-row gap-2'>
-        <span className='font-medium font-robotos'>Colour Shown</span>: {product.color.join(', ')}
+        <span className='font-medium font-robotos text-nowrap'>Colour Shown</span>: {product.color.join(', ')}
       </div>
       {product.size ? (
         <div><span className='font-medium font-robotos'>Size</span>: {product.size}</div>
