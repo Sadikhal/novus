@@ -42,7 +42,7 @@ function Product() {
       ) : (
         <>
           <div className="flex flex-col lg:flex-row pt-3 bg-[#ffff] rounded-sm py-2 h-full w-full">
-            <div className="lg:sticky lg:top-12 lg:self-start lg:h-auto h-full lg:w-[40%] xl:w-[43%]">
+            <div className="lg:sticky xl:top-8 lg:top-6 lg:self-start lg:h-auto h-full lg:w-[40%] xl:w-[43%]">
               <Slider 
                 images={product.image} 
                 imageIndex={imageIndex} 
@@ -61,7 +61,7 @@ function Product() {
               </div>
             </div>
             
-            <div className="right xl:w-[58%] pt-6  xl:mt-0 px-2 lg:ml-9 xl:ml-7 lg:w-[60%]">
+            <div className="right xl:w-[58%] pt-6 lg:pt-2  px-2 lg:ml-9 xl:ml-7 lg:w-[60%]">
               <ProductInfo  
                 product={product}
                 isInWishlist={isInWishlist}
