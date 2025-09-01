@@ -56,7 +56,7 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
     </div>
     
     <div 
-      className='quill-content text-[#111111] text-[16px] font-[300] font-helvetica tracking-wide text-justify'
+      className='quill-content text-[#111111] text-[16px] font-[300] font-helvetica '
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.desc,sanitizeConfig) }}
     />
     
