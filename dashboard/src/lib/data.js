@@ -6,6 +6,7 @@ export const productDetailsData = [
 export const colors = [
   { name: 'Red', hex: '#F53f5e' },
   { name: 'Blue', hex: '#0099FF' },
+  { name: 'Jeans Blue', hex: '#3456BD' },
   { name: 'Green', hex: '#008080' },
   { name: 'yellow', hex: '#FFD700' },
   ,
