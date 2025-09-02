@@ -19,29 +19,28 @@ const ProductDetailsTable = ({ product, brand }) => {
     { label: "Seller ID", value: product?.userId },
     { label: "Brand", value: brand?.name },
     { label: "Brand ID", value: brand?._id },
-    { label: "Category", value: product.category },
-    { label: "Actual Price", value: product.actualPrice },
-    { label: "Selling Price", value: product.sellingPrice },
+    { label: "Category", value: product?.category?.join(", ") },
+    { label: "Actual Price", value: product?.actualPrice },
+    { label: "Selling Price", value: product?.sellingPrice },
     {
       label: "Discount Percentage",
-      value: product?.discountPercentage
-        ? `${product.discountPercentage}%`
+      value: product?.discount
+        ? `${product.discount}%`
         : "N/A",
     },
-    { label: "Size", value: product.size },
-    { label: "Color", value: product.color },
-    { label: "Rating", value: product.rating },
-    { label: "Total Reviews", value: product.numReviews },
+    { label: "Size", value: product?.size?.join(", ") },
+    { label: "Color", value: product?.color?.join(", ") },
+    { label: "Rating", value: product?.rating },
+    { label: "Total Reviews", value: product?.numReviews },
     {
       label: "Launch Date",
       value: product?.createdAt
         ? format(parseISO(product.createdAt), "MM/dd/yyyy")
         : "N/A",
     },
-    { label: "Delivery Days", value: product.deliveryDays },
+    { label: "Delivery Days", value: product?.deliveryDays },
   ];
 
-  // return just <tr> elements
   const renderRow = () =>
     details.map((detail, i) => (
       <tr
@@ -72,8 +71,6 @@ const ProductDetailsTable = ({ product, brand }) => {
           Product Details
         </h1>
       </div>
-
-      {/* Table component now works with proper rows */}
       <Table columns={columns} renderRow={renderRow} data={[product]} />
     </div>
   );

@@ -9,7 +9,7 @@ export const colors = [
   { name: 'Jeans Blue', hex: '#3456BD' },
   { name: 'Green', hex: '#008080' },
   { name: 'yellow', hex: '#FFD700' },
-  ,
+  { name: 'Rose', hex: '#FF1D8D' },
   { name: 'Black', hex: '#000000' },
   { name: 'White', hex: '#FFFFFF' },
   { name: 'Gray', hex: '#808080' },

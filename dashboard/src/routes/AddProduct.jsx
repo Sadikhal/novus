@@ -1,3 +1,5 @@
+
+
 // import  { useEffect, useState, useRef, useCallback } from 'react';
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { useFieldArray, useForm } from "react-hook-form";
@@ -17,14 +19,11 @@
 // import useCategoryData from '../hooks/useCategoryData';
 // import useSellerData from '../hooks/useSellerData';
 
-// const SIZE_OPTIONS = ["S", "M", "L", "XL", "XXL"];
+// const SIZE_OPTIONS = ["S", "M", "L", "XL", "XXL", "Custom"];
 // const MAX_IMAGES = 10;
 
 // const productSchema = z.object({
-//   name: z
-//     .string()
-//     .min(3, { message: "Product name must be at least 3 characters!" })
-//     .max(50, { message: "Product name must be at most 50 characters!" }),
+//   name: z.string().min(10, { message: "Product name must be at least 3 characters!" }).max(70, { message: "Product name must be at most 70 characters!" }),
 //   brandId: z.string().min(1, { message: "Brand is required" }),
 //   actualPrice: z.coerce.number().min(0.01, { message: "Invalid price!" }),
 //   sellingPrice: z.coerce.number().min(0.01).optional(),
@@ -71,6 +70,7 @@
 //   const [uploadedImages, setUploadedImages] = useState([]);
 //   const [editorImages, setEditorImages] = useState([]);
 //   const [isInitialized, setIsInitialized] = useState(false);
+//   const [customSize, setCustomSize] = useState(""); // 👈 state for custom size
 
 //   const uploadForRef = useRef(uploadFor);
 //   const fileInputRef = useRef(null);
@@ -221,7 +221,8 @@
 //       ) || [];
 //       const payload = {
 //         ...formData,
-//         features: cleanedFeatures
+//         features: cleanedFeatures,
+//         size: formData.size === "Custom" ? customSize : formData.size // 👈 use custom size if selected
 //       };
 //       if (id) {
 //         await updateProduct(id, payload);
@@ -242,6 +243,15 @@
 //       });
 //     }
 //   };
+
+//   const renderSizeOptions = () => (
+//     SIZE_OPTIONS.map((size) => (
+//       <SelectItem key={size} className="cursor-pointer" value={size}>
+//         {size}
+//       </SelectItem>
+//     ))
+//   );
+
 
 //   const renderColorOptions = () => (
 //     colors.filter(Boolean).map((color) => (
@@ -294,14 +304,6 @@
 //           {category.name}
 //         </span>
 //       </label>
-//     ))
-//   );
-
-//   const renderSizeOptions = () => (
-//     SIZE_OPTIONS.map((size) => (
-//       <SelectItem key={size} className="cursor-pointer" value={size}>
-//         {size}
-//       </SelectItem>
 //     ))
 //   );
 
@@ -385,26 +387,39 @@
 //             register={register}
 //             error={errors?.sellingPrice}
 //           />
-//           <div className="flex flex-col gap-2 w-full md:w-60">
-//             <label className="text-xs text-gray-500">Size</label>
-//             <Select
-//               value={selectedSize}
-//               onValueChange={(value) => setValue("size", value)}
-//             >
-//               <SelectTrigger className="border-gray-200 border rounded-md text-sm bg-white w-full flex flex-row items-center h-full p-2 cursor-pointer shadow-sm justify-between">
-//                 <SelectValue placeholder="Select size" />
-//                 <ChevronDown className="h-4 w-4" />
-//               </SelectTrigger>
-//               <SelectContent className="bg-white">
-//                 <SelectGroup>
-//                   {renderSizeOptions()}
-//                 </SelectGroup>
-//               </SelectContent>
-//             </Select>
-//             {errors.size?.message && (
-//               <p className="text-xs text-red-400">{errors.size.message.toString()}</p>
-//             )}
-//           </div>
+//            <div className="flex flex-col gap-2 w-full md:w-60">
+//           <label className="text-xs text-gray-500">Size</label>
+//           <Select
+//             value={selectedSize}
+//             onValueChange={(value) => {
+//               setValue("size", value);
+//               if (value !== "Custom") setCustomSize(""); // reset
+//             }}
+//           >
+//             <SelectTrigger className="border-gray-200 border rounded-md text-sm bg-white w-full flex flex-row items-center h-full p-2 cursor-pointer shadow-sm justify-between">
+//               <SelectValue placeholder="Select size" />
+//               <ChevronDown className="h-4 w-4" />
+//             </SelectTrigger>
+//             <SelectContent className="bg-white">
+//               <SelectGroup>{renderSizeOptions()}</SelectGroup>
+//             </SelectContent>
+//           </Select>
+//           {errors.size?.message && (
+//             <p className="text-xs text-red-400">{errors.size.message.toString()}</p>
+//           )}
+
+//           {selectedSize === "Custom" && (
+//             <InputField
+//               label="Custom Size"
+//               type="text"
+//               register={register}
+//               name="customSize" // not in schema
+//               value={customSize}
+//               onChange={(e) => setCustomSize(e.target.value)}
+//               error={customSize.trim() === "" ? { message: "Custom size is required!" } : null}
+//             />
+//           )}
+//         </div>
 //           <div className='flex-col flex lg:flex-row gap-16 w-full pt-5'>
 //             <div className="flex flex-col gap-2 lg:flex-1">
 //               <label className="text-xs text-gray-500">Categories</label>
@@ -579,7 +594,7 @@
 //           />
 //         </div>
 //         <button
-//           className="bg-teal-700 hover:bg-teal-700/90 text-white p-2 rounded-md"
+//           className="bg-teal-700 hover:bg-teal-700/90 text-white p-2 rounded-md cursor-pointer"
 //           type="submit"
 //           disabled={isSubmitting || (id && singleLoading)}
 //         >
@@ -591,6 +606,7 @@
 // }
 
 // export default AddProduct;
+
 
 
 
@@ -613,14 +629,11 @@
 // import useCategoryData from '../hooks/useCategoryData';
 // import useSellerData from '../hooks/useSellerData';
 
-// const SIZE_OPTIONS = ["S", "M", "L", "XL", "XXL"];
+// const SIZE_OPTIONS = ["S", "M", "L", "XL", "XXL", "Custom"];
 // const MAX_IMAGES = 10;
 
 // const productSchema = z.object({
-//   name: z
-//     .string()
-//     .min(3, { message: "Product name must be at least 3 characters!" })
-//     .max(50, { message: "Product name must be at most 50 characters!" }),
+//   name: z.string().min(10, { message: "Product name must be at least 3 characters!" }).max(70, { message: "Product name must be at most 70 characters!" }),
 //   brandId: z.string().min(1, { message: "Brand is required" }),
 //   actualPrice: z.coerce.number().min(0.01, { message: "Invalid price!" }),
 //   sellingPrice: z.coerce.number().min(0.01).optional(),
@@ -628,7 +641,7 @@
 //   isAvailable: z.boolean().default(true),
 //   desc: z.string().min(10, { message: "Description must be at least 10 characters!" }),
 //   deliveryDays: z.coerce.number().min(1, { message: "Delivery days must be at least 1!" }),
-//   size: z.string().min(1, { message: "Size is required!" }),
+//   size: z.array(z.string()).min(1, { message: "At least one size is required!" }),
 //   color: z.array(z.string()).min(1, { message: "At least one color is required!" }),
 //   image: z.array(z.string()).min(1, "At least one image is required").max(MAX_IMAGES, `Maximum ${MAX_IMAGES} images allowed`),
 //   features: z.array(
@@ -648,10 +661,10 @@
 //   isAvailable: true,
 //   desc: '',
 //   deliveryDays: 1,
-//   size: '',
+//   size: [],
 //   color: [],
 //   image: [],
-//   features: []
+//   features: [],
 // };
 
 // const AddProduct = () => {
@@ -667,6 +680,7 @@
 //   const [uploadedImages, setUploadedImages] = useState([]);
 //   const [editorImages, setEditorImages] = useState([]);
 //   const [isInitialized, setIsInitialized] = useState(false);
+//   const [customSizes, setCustomSizes] = useState([]); // 👉 multiple custom sizes
 
 //   const uploadForRef = useRef(uploadFor);
 //   const fileInputRef = useRef(null);
@@ -701,7 +715,7 @@
 //   const selectedColors = watch("color");
 //   const selectedCategories = watch("category");
 //   const selectedBrand = watch("brandId");
-//   const selectedSize = watch("size");
+//   const selectedSizes = watch("size");
 
 //   useEffect(() => {
 //     if (!id) {
@@ -717,8 +731,16 @@
 //             ...product,
 //             brandId: product.brandId?._id || product.brandId || '',
 //             category: product.category?.map(c => c._id || c) || [],
+//             size: product.size || [],
 //           };
 //           reset(formData);
+
+//           // if custom sizes exist, restore them
+//           const customOnly = (product.size || []).filter(s => !SIZE_OPTIONS.includes(s));
+//           if (customOnly.length > 0) {
+//             setCustomSizes(customOnly);
+//           }
+
 //           setUploadedImages(product.image || []);
 //         }
 //       } catch (error) {
@@ -738,15 +760,52 @@
 //     uploadForRef.current = uploadFor;
 //   }, [uploadFor]);
 
+//   // Update form size value when customSizes changes
+//   useEffect(() => {
+//     const currentSizes = getValues("size") || [];
+//     const hasCustomOption = currentSizes.includes("Custom");
+    
+//     if (hasCustomOption && customSizes.length > 0) {
+//       // Remove any existing custom sizes from the form
+//       const nonCustomSizes = currentSizes.filter(s => SIZE_OPTIONS.includes(s));
+//       // Add the updated custom sizes
+//       setValue("size", [...nonCustomSizes, ...customSizes]);
+//     }
+//   }, [customSizes, getValues, setValue]);
+
 //   const handleSkipCurrent = useCallback(() => {
-//   setUploadQueue(prev => prev.slice(1));
-// }, []);
+//     setUploadQueue(prev => prev.slice(1));
+//   }, []);
 
 //   const handleCheckboxChange = useCallback((fieldName, value) => {
 //     const currentValues = getValues(fieldName) || [];
-//     const newValues = currentValues.includes(value)
-//       ? currentValues.filter(item => item !== value)
-//       : [...currentValues, value];
+//     let newValues;
+    
+//     if (fieldName === "size") {
+//       // Special handling for size field
+//       if (value === "Custom") {
+//         // Toggle Custom option
+//         newValues = currentValues.includes("Custom")
+//           ? currentValues.filter(item => !SIZE_OPTIONS.includes(item)) // Remove all custom sizes when unchecking Custom
+//           : [...currentValues.filter(item => SIZE_OPTIONS.includes(item)), "Custom"];
+        
+//         // Reset custom sizes if Custom is unchecked
+//         if (!newValues.includes("Custom")) {
+//           setCustomSizes([]);
+//         }
+//       } else {
+//         // For standard sizes
+//         newValues = currentValues.includes(value)
+//           ? currentValues.filter(item => item !== value)
+//           : [...currentValues, value];
+//       }
+//     } else {
+//       // For other fields
+//       newValues = currentValues.includes(value)
+//         ? currentValues.filter(item => item !== value)
+//         : [...currentValues, value];
+//     }
+    
 //     setValue(fieldName, newValues);
 //   }, [getValues, setValue]);
 
@@ -815,10 +874,24 @@
 //       const cleanedFeatures = formData.features?.filter(f =>
 //         f.name.trim() && f.detail.trim()
 //       ) || [];
+
+//       // Get the final sizes - include custom sizes if Custom option is selected
+//       let finalSizes = [...formData.size];
+      
+//       // If Custom is selected, make sure to include the custom sizes
+//       if (finalSizes.includes("Custom")) {
+//         // Remove the "Custom" option itself as it's just a marker
+//         finalSizes = finalSizes.filter(s => s !== "Custom");
+//         // Add the actual custom sizes
+//         finalSizes = [...finalSizes, ...customSizes.filter(s => s.trim() !== "")];
+//       }
+
 //       const payload = {
 //         ...formData,
-//         features: cleanedFeatures
+//         features: cleanedFeatures,
+//         size: finalSizes
 //       };
+
 //       if (id) {
 //         await updateProduct(id, payload);
 //       } else {
@@ -838,6 +911,21 @@
 //       });
 //     }
 //   };
+
+//   const renderSizeOptions = () => (
+//     SIZE_OPTIONS.map((size) => (
+//       <label key={size} className="flex items-center gap-2 p-2 min-w-24 rounded-lg bg-gray-100">
+//         <input
+//           type="checkbox"
+//           value={size}
+//           checked={selectedSizes?.includes(size)}
+//           onChange={() => handleCheckboxChange("size", size)}
+//           className="w-4 h-4 accent-teal-700"
+//         />
+//         <span className="text-sm capitalize">{size}</span>
+//       </label>
+//     ))
+//   );
 
 //   const renderColorOptions = () => (
 //     colors.filter(Boolean).map((color) => (
@@ -890,14 +978,6 @@
 //           {category.name}
 //         </span>
 //       </label>
-//     ))
-//   );
-
-//   const renderSizeOptions = () => (
-//     SIZE_OPTIONS.map((size) => (
-//       <SelectItem key={size} className="cursor-pointer" value={size}>
-//         {size}
-//       </SelectItem>
 //     ))
 //   );
 
@@ -981,26 +1061,61 @@
 //             register={register}
 //             error={errors?.sellingPrice}
 //           />
-//           <div className="flex flex-col gap-2 w-full md:w-60">
-//             <label className="text-xs text-gray-500">Size</label>
-//             <Select
-//               value={selectedSize}
-//               onValueChange={(value) => setValue("size", value)}
-//             >
-//               <SelectTrigger className="border-gray-200 border rounded-md text-sm bg-white w-full flex flex-row items-center h-full p-2 cursor-pointer shadow-sm justify-between">
-//                 <SelectValue placeholder="Select size" />
-//                 <ChevronDown className="h-4 w-4" />
-//               </SelectTrigger>
-//               <SelectContent className="bg-white">
-//                 <SelectGroup>
-//                   {renderSizeOptions()}
-//                 </SelectGroup>
-//               </SelectContent>
-//             </Select>
+
+//           {/* 👉 SIZE ARRAY FIELD */}
+//           <div className="flex flex-col gap-2 w-full">
+//             <label className="text-xs text-gray-500">Sizes</label>
+//             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+//               {renderSizeOptions()}
+//             </div>
+
+//             {selectedSizes?.includes("Custom") && (
+//               <div className="flex flex-col gap-3 mt-3">
+//                 {customSizes.map((cs, idx) => (
+//                   <div key={idx} className="flex items-center gap-2">
+//                     <InputField
+//                       label={`Custom Size ${idx + 1}`}
+//                       type="text"
+//                       value={cs}
+//                       onChange={(e) => {
+//                         const newCustom = [...customSizes];
+//                         newCustom[idx] = e.target.value;
+//                         setCustomSizes(newCustom);
+//                       }}
+//                       error={cs.trim() === "" ? { message: "Custom size is required!" } : null}
+//                     />
+//                     <button
+//                       type="button"
+//                       onClick={() => {
+//                         const newCustomSizes = customSizes.filter((_, i) => i !== idx);
+//                         setCustomSizes(newCustomSizes);
+                        
+//                         // Also update the form value
+//                         const currentSizes = getValues("size") || [];
+//                         const updatedSizes = currentSizes.filter((_, i) => i !== currentSizes.indexOf(cs));
+//                         setValue("size", updatedSizes);
+//                       }}
+//                       className="text-red-500 text-sm mt-6"
+//                     >
+//                       Remove
+//                     </button>
+//                   </div>
+//                 ))}
+//                 <button
+//                   type="button"
+//                   onClick={() => setCustomSizes([...customSizes, ""])}
+//                   className="text-teal-700 text-sm self-start"
+//                 >
+//                   + Add Custom Size
+//                 </button>
+//               </div>
+//             )}
+
 //             {errors.size?.message && (
 //               <p className="text-xs text-red-400">{errors.size.message.toString()}</p>
 //             )}
 //           </div>
+
 //           <div className='flex-col flex lg:flex-row gap-16 w-full pt-5'>
 //             <div className="flex flex-col gap-2 lg:flex-1">
 //               <label className="text-xs text-gray-500">Categories</label>
@@ -1029,13 +1144,6 @@
 //                   label="Feature Name"
 //                   name={`features.${index}.name`}
 //                   register={register}
-//                   error={errors.features?.[index]?.name}
-//                   className="flex-1"
-//                 />
-//                 <InputField
-//                   label="Feature Detail"
-//                   name={`features.${index}.detail`}
-//                   register={register}
 //                   error={errors.features?.[index]?.detail}
 //                   className="flex-1"
 //                 />
@@ -1061,7 +1169,7 @@
 //               type="checkbox"
 //               id="isAvailable"
 //               {...register("isAvailable")}
-//               className="h-4 w-4 text-teal-700 focus:ring-teal-700 border-gray-300 rounded"
+//               className="h-4 w-4 text-teal-700 focus:ring-teal"
 //             />
 //             <label htmlFor="isAvailable" className="text-sm text-gray-700">
 //               Product Available
@@ -1175,7 +1283,7 @@
 //           />
 //         </div>
 //         <button
-//           className="bg-teal-700 hover:bg-teal-700/90 text-white p-2 rounded-md"
+//           className="bg-teal-700 hover:bg-teal-700/90 text-white p-2 rounded-md cursor-pointer"
 //           type="submit"
 //           disabled={isSubmitting || (id && singleLoading)}
 //         >
@@ -1191,7 +1299,11 @@
 
 
 
-import  { useEffect, useState, useRef, useCallback } from 'react';
+
+
+
+
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -1222,7 +1334,7 @@ const productSchema = z.object({
   isAvailable: z.boolean().default(true),
   desc: z.string().min(10, { message: "Description must be at least 10 characters!" }),
   deliveryDays: z.coerce.number().min(1, { message: "Delivery days must be at least 1!" }),
-  size: z.string().min(1, { message: "Size is required!" }),
+  size: z.array(z.string()).min(1, { message: "At least one size is required!" }),
   color: z.array(z.string()).min(1, { message: "At least one color is required!" }),
   image: z.array(z.string()).min(1, "At least one image is required").max(MAX_IMAGES, `Maximum ${MAX_IMAGES} images allowed`),
   features: z.array(
@@ -1242,10 +1354,10 @@ const defaultFormValues = {
   isAvailable: true,
   desc: '',
   deliveryDays: 1,
-  size: '',
+  size: [],
   color: [],
   image: [],
-  features: []
+  features: [],
 };
 
 const AddProduct = () => {
@@ -1261,7 +1373,7 @@ const AddProduct = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [editorImages, setEditorImages] = useState([]);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [customSize, setCustomSize] = useState(""); // 👈 state for custom size
+  const [customSizes, setCustomSizes] = useState([]); // multiple custom sizes
 
   const uploadForRef = useRef(uploadFor);
   const fileInputRef = useRef(null);
@@ -1296,7 +1408,7 @@ const AddProduct = () => {
   const selectedColors = watch("color");
   const selectedCategories = watch("category");
   const selectedBrand = watch("brandId");
-  const selectedSize = watch("size");
+  const selectedSizes = watch("size");
 
   useEffect(() => {
     if (!id) {
@@ -1312,8 +1424,17 @@ const AddProduct = () => {
             ...product,
             brandId: product.brandId?._id || product.brandId || '',
             category: product.category?.map(c => c._id || c) || [],
+            size: product.size || [],
           };
           reset(formData);
+
+          // if custom sizes exist (anything not in SIZE_OPTIONS), restore them separately
+          const customOnly = (product.size || []).filter(s => !SIZE_OPTIONS.includes(s));
+          if (customOnly.length > 0) {
+            setCustomSizes(customOnly);
+            // keep the actual size form values as-is (they may contain duplicates from DB; we dedupe on submit)
+          }
+
           setUploadedImages(product.image || []);
         }
       } catch (error) {
@@ -1337,11 +1458,35 @@ const AddProduct = () => {
     setUploadQueue(prev => prev.slice(1));
   }, []);
 
+  // Updated handleCheckboxChange: keep custom sizes separate.
   const handleCheckboxChange = useCallback((fieldName, value) => {
     const currentValues = getValues(fieldName) || [];
-    const newValues = currentValues.includes(value)
-      ? currentValues.filter(item => item !== value)
-      : [...currentValues, value];
+    let newValues;
+
+    if (fieldName === "size") {
+      if (value === "Custom") {
+        // Only toggle the "Custom" marker. Do NOT append customSizes here.
+        newValues = currentValues.includes("Custom")
+          ? currentValues.filter(item => item !== "Custom")
+          : [...currentValues, "Custom"];
+      } else {
+        // For standard sizes, toggle them
+        newValues = currentValues.includes(value)
+          ? currentValues.filter(item => item !== value)
+          : [...currentValues.filter(item => item !== "Custom"), value]; // keep Custom if present; this line removes "Custom" only if logic requires — but safer to keep "Custom"
+        // Note: keep Custom marker untouched; if you prefer to always keep the marker, remove the filter above.
+        // For more explicit behavior, we will keep "Custom" if it already existed:
+        if (currentValues.includes("Custom") && !newValues.includes("Custom")) {
+          newValues.push("Custom");
+        }
+      }
+    } else {
+      // For other fields (colors, categories)
+      newValues = currentValues.includes(value)
+        ? currentValues.filter(item => item !== value)
+        : [...currentValues, value];
+    }
+
     setValue(fieldName, newValues);
   }, [getValues, setValue]);
 
@@ -1350,31 +1495,34 @@ const AddProduct = () => {
       const quill = quillRef.current?.getEditor();
       if (quill) {
         const range = quill.getSelection();
-        quill.insertEmbed(range.index, 'image', url);
+        const index = (range && range.index) ? range.index : quill.getLength();
+        quill.insertEmbed(index, 'image', url);
       }
       setEditorImages(prev => [...prev, url]);
     } else {
-      const newImages = [...uploadedImages, url];
-      setUploadedImages(newImages);
-      setValue('image', newImages);
+      setUploadedImages(prev => {
+        const newImages = [...prev, url];
+        setValue('image', newImages);
+        return newImages;
+      });
     }
-  }, [uploadedImages, setValue]);
+  }, [setValue]);
 
   const handleRemoveEditorImage = useCallback((imageUrl) => {
     const quill = quillRef.current?.getEditor();
     if (quill) {
       const contents = quill.getContents();
-      const newContents = contents.ops.filter(op =>
+      const newOps = contents.ops.filter(op =>
         !(op.insert && op.insert.image === imageUrl)
       );
-      quill.setContents(newContents);
+      quill.setContents({ ops: newOps });
       setValue('desc', quill.root.innerHTML);
     }
     setEditorImages(prev => prev.filter(img => img !== imageUrl));
   }, [setValue]);
 
   const handleFileSelect = useCallback((e) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files || []);
     if (!files.length) return;
     if (uploadForRef.current === 'editor') {
       setUploadQueue([files[0]]);
@@ -1395,10 +1543,12 @@ const AddProduct = () => {
   }, [uploadedImages.length, toast]);
 
   const handleRemoveImage = useCallback((index) => {
-    const newImages = uploadedImages.filter((_, i) => i !== index);
-    setUploadedImages(newImages);
-    setValue('image', newImages);
-  }, [uploadedImages, setValue]);
+    setUploadedImages(prev => {
+      const newImages = prev.filter((_, i) => i !== index);
+      setValue('image', newImages);
+      return newImages;
+    });
+  }, [setValue]);
 
   const { fields, append, remove } = useFieldArray({
     name: "features",
@@ -1410,11 +1560,23 @@ const AddProduct = () => {
       const cleanedFeatures = formData.features?.filter(f =>
         f.name.trim() && f.detail.trim()
       ) || [];
+
+      // Compute final sizes:
+      // 1. Take sizes from form that are standard sizes (exclude "Custom" marker and exclude any accidental custom numbers)
+      const standardSizes = (formData.size || []).filter(s => SIZE_OPTIONS.includes(s) && s !== "Custom");
+
+      // 2. Append customSizes (user-entered numeric custom sizes)
+      const allSizes = [...standardSizes, ...customSizes.filter(s => s && s.trim() !== "")];
+
+      // 3. Deduplicate while preserving order
+      const finalSizes = Array.from(new Set(allSizes.map(s => s.toString().trim())));
+
       const payload = {
         ...formData,
         features: cleanedFeatures,
-        size: formData.size === "Custom" ? customSize : formData.size // 👈 use custom size if selected
+        size: finalSizes
       };
+
       if (id) {
         await updateProduct(id, payload);
       } else {
@@ -1437,12 +1599,18 @@ const AddProduct = () => {
 
   const renderSizeOptions = () => (
     SIZE_OPTIONS.map((size) => (
-      <SelectItem key={size} className="cursor-pointer" value={size}>
-        {size}
-      </SelectItem>
+      <label key={size} className="flex items-center gap-2 p-2 min-w-24 rounded-lg bg-gray-100">
+        <input
+          type="checkbox"
+          value={size}
+          checked={selectedSizes?.includes(size)}
+          onChange={() => handleCheckboxChange("size", size)}
+          className="w-4 h-4 accent-teal-700"
+        />
+        <span className="text-sm capitalize">{size}</span>
+      </label>
     ))
   );
-
 
   const renderColorOptions = () => (
     colors.filter(Boolean).map((color) => (
@@ -1578,39 +1746,57 @@ const AddProduct = () => {
             register={register}
             error={errors?.sellingPrice}
           />
-           <div className="flex flex-col gap-2 w-full md:w-60">
-          <label className="text-xs text-gray-500">Size</label>
-          <Select
-            value={selectedSize}
-            onValueChange={(value) => {
-              setValue("size", value);
-              if (value !== "Custom") setCustomSize(""); // reset
-            }}
-          >
-            <SelectTrigger className="border-gray-200 border rounded-md text-sm bg-white w-full flex flex-row items-center h-full p-2 cursor-pointer shadow-sm justify-between">
-              <SelectValue placeholder="Select size" />
-              <ChevronDown className="h-4 w-4" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              <SelectGroup>{renderSizeOptions()}</SelectGroup>
-            </SelectContent>
-          </Select>
-          {errors.size?.message && (
-            <p className="text-xs text-red-400">{errors.size.message.toString()}</p>
-          )}
 
-          {selectedSize === "Custom" && (
-            <InputField
-              label="Custom Size"
-              type="text"
-              register={register}
-              name="customSize" // not in schema
-              value={customSize}
-              onChange={(e) => setCustomSize(e.target.value)}
-              error={customSize.trim() === "" ? { message: "Custom size is required!" } : null}
-            />
-          )}
-        </div>
+          {/* SIZE ARRAY FIELD */}
+          <div className="flex flex-col gap-2 w-full">
+            <label className="text-xs text-gray-500">Sizes</label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {renderSizeOptions()}
+            </div>
+
+            {selectedSizes?.includes("Custom") && (
+              <div className="flex flex-col gap-3 mt-3">
+                {customSizes.map((cs, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <InputField
+                      label={`Custom Size ${idx + 1}`}
+                      type="text"
+                      value={cs}
+                      onChange={(e) => {
+                        const newCustom = [...customSizes];
+                        newCustom[idx] = e.target.value;
+                        setCustomSizes(newCustom);
+                      }}
+                      error={cs.trim() === "" ? { message: "Custom size is required!" } : null}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newCustomSizes = customSizes.filter((_, i) => i !== idx);
+                        setCustomSizes(newCustomSizes);
+                        // don't mutate form size here; final set happens on submit
+                      }}
+                      className="text-red-500 text-sm mt-6"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setCustomSizes([...customSizes, ""])}
+                  className="text-teal-700 text-sm self-start"
+                >
+                  + Add Custom Size
+                </button>
+              </div>
+            )}
+
+            {errors.size?.message && (
+              <p className="text-xs text-red-400">{errors.size.message.toString()}</p>
+            )}
+          </div>
+
           <div className='flex-col flex lg:flex-row gap-16 w-full pt-5'>
             <div className="flex flex-col gap-2 lg:flex-1">
               <label className="text-xs text-gray-500">Categories</label>
@@ -1639,13 +1825,6 @@ const AddProduct = () => {
                   label="Feature Name"
                   name={`features.${index}.name`}
                   register={register}
-                  error={errors.features?.[index]?.name}
-                  className="flex-1"
-                />
-                <InputField
-                  label="Feature Detail"
-                  name={`features.${index}.detail`}
-                  register={register}
                   error={errors.features?.[index]?.detail}
                   className="flex-1"
                 />
@@ -1671,7 +1850,7 @@ const AddProduct = () => {
               type="checkbox"
               id="isAvailable"
               {...register("isAvailable")}
-              className="h-4 w-4 text-teal-700 focus:ring-teal-700 border-gray-300 rounded"
+              className="h-4 w-4 text-teal-700 focus:ring-teal"
             />
             <label htmlFor="isAvailable" className="text-sm text-gray-700">
               Product Available
@@ -1707,7 +1886,7 @@ const AddProduct = () => {
                     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                     ['bold', 'italic', 'underline', 'strike'],
                     ['blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                     ['link', 'image'],
                     ['clean']
                   ],
@@ -1785,7 +1964,7 @@ const AddProduct = () => {
           />
         </div>
         <button
-          className="bg-teal-700 hover:bg-teal-700/90 text-white p-2 rounded-md"
+          className="bg-teal-700 hover:bg-teal-700/90 text-white p-2 rounded-md cursor-pointer"
           type="submit"
           disabled={isSubmitting || (id && singleLoading)}
         >

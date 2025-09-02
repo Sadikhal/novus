@@ -94,6 +94,15 @@ input:-webkit-autofill:active {
   margin: 4px 0;
 }
 
+.quill-content strong,
+.quill-content b {
+  font-weight: 700 !important;
+}
+
+.quill-content em,
+.quill-content i {
+  font-style: italic;
+}
  .wifi-loader {
           --background: #62abff;
           --front-color: #ef4d86;

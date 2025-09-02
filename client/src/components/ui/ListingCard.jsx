@@ -118,24 +118,40 @@ const ListingCard = ({ data, showWishlist, type }) => {
         
 
         {showWishlist && (
-          <div className="w-full h-16 bg-white absolute bottom-4 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button 
-              onClick={handleWishlist}  
+          <div className="w-full h-20 bg-white absolute bottom-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              onClick={handleWishlist}
               className="border flex flex-row gap-2 mt-2 justify-center items-center w-[95%] p-1 px-4 mx-auto"
             >
               <AiFillHeart
                 size={20}
-                className={isInWishlist ? 'fill-slate-400' : 'fill-rose-500'}
+                className={isInWishlist ? "fill-slate-400" : "fill-rose-500"}
               />
-              <div className='text-[14px] font-bold text-slate-950  font-assistant uppercase'>
-                {isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+              <div className="text-[14px] font-bold text-slate-950 font-assistant uppercase">
+                {isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
               </div>
             </button>
-            <div className='font-assistant text-[#535766] text-[14px]  font-normal px-2'>
-              sizes : 40
-            </div>
+
+            {data.size && (
+              <div className='flex flex-row items-center pt-2'>
+                <div className="font-assistant text-[#3e424f] text-[14px] font-normal px-2">
+                  Sizes :
+                </div>
+                <div className="flex flex-row gap-2 items-center">
+                  {data.size.map((item, index) => (
+                    <div
+                      key={index}
+                      className="text-[12px] capitalize text-[#535766]"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+          )}
+
       </div>
 
       {data?.offer && (

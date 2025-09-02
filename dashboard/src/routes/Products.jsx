@@ -83,16 +83,16 @@ const ProductsList = () => {
         ))}
       </td>
       <td className="px-3">{item?.sellingPrice}</td>
-      <td className="px-3 flex flex-row">
+      <td className="pl-3 flex flex-row gap-2 w-44 flex-wrap">
         {item?.color ? (
           Array.isArray(item?.color) ? 
             item.color.map((data, index) => (
-              <div key={index} className="px-1">{data}</div>
+              <div key={index}>{data}</div>
             )) : 
-            <div className="px-1">{item?.color}</div>
+            <div>{item?.color}</div>
         ) : 'N/A'}
       </td>
-      <td className="px-3">
+      <td className="px-1">
         {item?.rating?.toFixed(1) ?? 'N/A'}
       </td>
       <td className="flex items-stretch gap-1 pl-2">     

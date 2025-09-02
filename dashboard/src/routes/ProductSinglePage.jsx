@@ -218,7 +218,7 @@ const ProductSinglePage = () => {
                 </div>
                 {product.desc && product.desc.trim() !== '' ? (
                   <div
-                    className="mt-6 prose w-full font-poppins"
+                    className="quill-content mt-6 prose w-full font-poppins"
                     dangerouslySetInnerHTML={{ __html: product.desc }}
                   />
                 ) : 'No description provided'}

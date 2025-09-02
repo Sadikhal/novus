@@ -46,7 +46,7 @@ const productSchema = new mongoose.Schema(
     deliveryDays: { type: Number,required:true },
     reviews: [reviewSchema],
     color: { type:[ String] },
-    size: { type: String },
+    size: { type: [String] },
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
   },

@@ -5,6 +5,7 @@ import Brand from "../models/brand.model.js";
 import User from "../models/user.model.js";
 
 
+
 export const createProduct = async (req, res, next) => {
   try {
     const { actualPrice, sellingPrice,features,brandId, ...rest } = req.body;
