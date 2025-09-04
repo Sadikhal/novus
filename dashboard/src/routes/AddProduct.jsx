@@ -1827,7 +1827,14 @@ const AddProduct = () => {
                   register={register}
                   error={errors.features?.[index]?.detail}
                   className="flex-1"
-                />
+                            />
+                  <InputField
+                  label="Feature Detail"
+                  name={`features.${index}.detail`}
+                  register={register}
+                  error={errors.features?.[index]?.detail}
+                  className="flex-1"
+                  />
                 <button
                   type="button"
                   onClick={() => remove(index)}

@@ -4,10 +4,10 @@ export const productDetailsData = [
 ]
 
 export const colors = [
-  { name: 'Red', hex: '#F53f5e' },
+  { name: 'Red', hex: '#db1212' },
   { name: 'Blue', hex: '#0099FF' },
   { name: 'Jeans Blue', hex: '#3456BD' },
-  { name: 'Green', hex: '#008080' },
+  { name: 'Green', hex: '#1a611b' },
   { name: 'yellow', hex: '#FFD700' },
   { name: 'Rose', hex: '#FF1D8D' },
   { name: 'Black', hex: '#000000' },
@@ -19,9 +19,10 @@ export const colors = [
   { name: 'Navy', hex: '#000080' },
   { name: 'Pink', hex: '#FFC0CB' },
   { name: 'Purple', hex: '#800080' },
-  { name: 'Orange', hex: '#FFA500' },
+  { name: 'Orange', hex: '#ffa500' },
   { name: 'Rose Gold', hex: '#B76E79' },
-  { name: 'Multicolor', hex: 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff)' },
+
+
 ];
 
 

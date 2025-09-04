@@ -133,15 +133,15 @@ const ListingCard = ({ data, showWishlist, type }) => {
             </button>
 
             {data.size && (
-              <div className='flex flex-row items-center pt-2'>
-                <div className="font-assistant text-[#3e424f] text-[14px] font-normal px-2">
+              <div className='flex flex-row pt-2'>
+                <div className="font-assistant text-[#3e424f] text-[14px] font-normal text-start px-2 -mt-[2px] text-nowrap h-full">
                   Sizes :
                 </div>
-                <div className="flex flex-row gap-2 items-center">
+                <div className="flex flex-row gap-2 items-center w-full flex-wrap">
                   {data.size.map((item, index) => (
                     <div
                       key={index}
-                      className="text-[12px] capitalize text-[#535766]"
+                      className="text-[12px] capitalize text-[#535766] text-nowrap"
                     >
                       {item}
                     </div>

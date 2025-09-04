@@ -22,24 +22,24 @@ const FilterProduct = ({
   ];
 
   const colors = [
-    { name: 'Red', hex: '#F53f5e' },
-    { name: 'cyan', hex: '#3d82af' },
-    { name: 'teal', hex: '#008080' },
+    { name: 'Red', hex: '#db1212' },
     { name: 'yellow', hex: '#FFD700' },
     { name: 'Gray', hex: '#808080' },
+    { name: 'Jeans Blue', hex: '#3456BD' },
     { name: 'Black', hex: '#000000' },
     { name: 'Blue', hex: '#0068f1' },
     { name: 'White', hex: '#FFFFFF' },
     { name: 'Brown', hex: '#964B00' },
     { name: 'rose', hex: '#f53292' },
-    { name: 'green', hex: '#00bc8d' },
+    { name: 'green', hex: '#1a611b' },
     { name: 'Beige', hex: '#F5F5DC' },
     { name: 'Navy', hex: '#000080' },
     { name: 'Pink', hex: '#FFC0CB' },
-    { name: 'Orange', hex: '#ff7b5c' },
+    { name: 'Orange', hex: '#ffa500' },
     { name: 'Silver', hex: '#C0C0C0' },
     { name: 'Purple', hex: '#800080' },
-    { name: 'Bright green', hex: '#00ff3b' },
+   { name: 'Rose Gold', hex: '#B76E79' },
+
   ];
 
   return (
