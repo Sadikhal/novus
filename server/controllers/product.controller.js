@@ -59,22 +59,21 @@ export const createProduct = async (req, res, next) => {
   }
 };
 
+export const deleteProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return next(createError(404, "Product not found!"));
 
-  export const deleteProduct = async (req, res, next) => {
-    try {
-      const product = await Product.findById(req.params.id);
-      if (!product) next(createError(404, "Product not found!"));
-
-      if (product.userId !== req.userId && req.user.role !== "admin")
-        return next(createError(403, "You can delete only your Product!"));
-  
-      await Product.findByIdAndDelete(req.params.id);
-      res.status(200).json("product has been deleted");
-    } catch (err) {
-      next(err);
+    if (product.userId.toString() !== req.userId && !req.isAdmin) {
+      return next(createError(403, "You are not authorized to delete this product!"));
     }
-  };
-  
+
+    await Product.findByIdAndDelete(req.params.id);
+    res.status(200).json("Product has been deleted");
+  } catch (err) {
+    next(err);
+  }
+};
 
   export const getProduct = async (req, res, next) => {
   try {
@@ -113,9 +112,8 @@ export const getSellerProduct = async (req, res, next) => {
     }
     if (!product) next(createError(404, "Product not found!"));
 
-    const brand = await Brand.findOne({
-       brand : product.brand
-    })
+    const brand = await Brand.findById(product.brandId)
+
    const orders = await Order.find({
     product : product._id
    }).sort(sortOptions);

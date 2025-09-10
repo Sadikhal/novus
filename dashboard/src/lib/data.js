@@ -21,8 +21,7 @@ export const colors = [
   { name: 'Purple', hex: '#800080' },
   { name: 'Orange', hex: '#ffa500' },
   { name: 'Rose Gold', hex: '#B76E79' },
-
-
+  { name: 'Gold', hex: '#D4AF37' },
 ];
 
 

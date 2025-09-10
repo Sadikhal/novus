@@ -105,6 +105,8 @@ export default function useProductData(role) {
     }
   }, [sortOrder]);
 
+
+
   const handleSearchOrders = useCallback((term) => {
     const filtered = orders.filter(order => 
       order._id.toLowerCase().includes(term.toLowerCase()) ||
@@ -121,6 +123,8 @@ export default function useProductData(role) {
       prev.map(order => order._id === orderId ? { ...order, ...updatedData } : order)
     );
   }, []);
+
+
 
   const deleteLocalOrder = useCallback((orderId) => {
     setOrders(prev => prev.filter(order => order._id !== orderId));
@@ -161,6 +165,8 @@ export default function useProductData(role) {
     }
   }, [toast]);
 
+
+
   const createProduct = useCallback(async (productData) => {
     try {
       setLoading(true);
@@ -189,6 +195,7 @@ export default function useProductData(role) {
     }
   }, [toast]);
 
+  
   const updateProduct = useCallback(async (id, productData) => {
     try {
       setLoading(true);

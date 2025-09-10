@@ -1303,7 +1303,7 @@
 
 
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -1325,9 +1325,11 @@ import useSellerData from '../hooks/useSellerData';
 const SIZE_OPTIONS = ["S", "M", "L", "XL", "XXL", "Custom"];
 const MAX_IMAGES = 10;
 
-const productSchema = z.object({
+const getProductSchema = (isAdmin) => z.object({
   name: z.string().min(10, { message: "Product name must be at least 3 characters!" }).max(70, { message: "Product name must be at most 70 characters!" }),
-  brandId: z.string().min(1, { message: "Brand is required" }),
+  brandId: isAdmin
+    ? z.string().min(1, { message: "Brand is required" })
+    : z.string().optional(),
   actualPrice: z.coerce.number().min(0.01, { message: "Invalid price!" }),
   sellingPrice: z.coerce.number().min(0.01).optional(),
   category: z.array(z.string()).min(1, { message: "At least one category is required!" }),
@@ -1363,6 +1365,7 @@ const defaultFormValues = {
 const AddProduct = () => {
   const { id } = useParams();
   const { currentUser } = useSelector((state) => state.user);
+  const isAdmin = currentUser.isAdmin;
   const role = currentUser?.role;
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -1390,6 +1393,7 @@ const AddProduct = () => {
 
   const { brands, loading: brandsLoading } = useSellerData();
   const { categoryData: categories } = useCategoryData();
+ const productSchema = useMemo(() => getProductSchema(isAdmin), [isAdmin]);
 
   const {
     register,
@@ -1427,14 +1431,10 @@ const AddProduct = () => {
             size: product.size || [],
           };
           reset(formData);
-
-          // if custom sizes exist (anything not in SIZE_OPTIONS), restore them separately
           const customOnly = (product.size || []).filter(s => !SIZE_OPTIONS.includes(s));
           if (customOnly.length > 0) {
             setCustomSizes(customOnly);
-            // keep the actual size form values as-is (they may contain duplicates from DB; we dedupe on submit)
           }
-
           setUploadedImages(product.image || []);
         }
       } catch (error) {
@@ -1570,6 +1570,7 @@ const AddProduct = () => {
 
       // 3. Deduplicate while preserving order
       const finalSizes = Array.from(new Set(allSizes.map(s => s.toString().trim())));
+        
 
       const payload = {
         ...formData,
@@ -1703,6 +1704,7 @@ const AddProduct = () => {
             register={register}
             error={errors?.name}
           />
+         {currentUser.isAdmin && 
           <div className="flex flex-col gap-2 w-full md:w-60">
             <label className="text-xs text-gray-500">Brand</label>
             <Select
@@ -1723,6 +1725,7 @@ const AddProduct = () => {
               <p className="text-xs text-red-400">{errors.brandId.message.toString()}</p>
             )}
           </div>
+         }  
           <InputField
             label="Delivery Days"
             name="deliveryDays"

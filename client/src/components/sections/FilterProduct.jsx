@@ -38,7 +38,9 @@ const FilterProduct = ({
     { name: 'Orange', hex: '#ffa500' },
     { name: 'Silver', hex: '#C0C0C0' },
     { name: 'Purple', hex: '#800080' },
-   { name: 'Rose Gold', hex: '#B76E79' },
+    { name: 'Rose Gold', hex: '#B76E79' },
+    { name: 'Gold', hex: '#D4AF37' },
+
 
   ];
 

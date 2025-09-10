@@ -12,8 +12,8 @@ router.get("/seller",verifyToken,verifySeller,getSellerProducts);
 router.get("/search/:keyword",searchProducts);
 router.get("/related-products",relatedProducts);
 router.get("/:productId",getProduct);
-router.put("/:id",verifyToken,updateProduct);
-router.delete("/:id",verifyToken,deleteProduct);
+router.put("/:id",verifyToken,verifySeller,updateProduct);
+router.delete("/:id",verifyToken,verifySeller,deleteProduct);
 router.get("/seller/:id",verifyToken,verifySeller,getSellerProduct);
 
 export default router;
