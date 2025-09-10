@@ -53,10 +53,9 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3002", { // Remove /api from URL
+   const newSocket = io(import.meta.env.VITE_SOCKET_URL, {
       withCredentials: true,
-      transports: ['websocket'],
-      upgrade: false,
+      transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: Infinity,
