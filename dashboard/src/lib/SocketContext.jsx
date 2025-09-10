@@ -11,8 +11,7 @@ export const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     const newSocket = io(import.meta.env.VITE_SOCKET_URL, { // Remove /api from URL
       withCredentials: true,
-      transports: ['websocket'],
-      upgrade: false,
+      transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: Infinity,

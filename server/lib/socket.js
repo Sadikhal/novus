@@ -8,7 +8,10 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
-  cors: { origin: [process.env.CLIENT_URL,process.env.DASHBOARD_URL] }
+  cors: { origin: [process.env.CLIENT_URL,process.env.DASHBOARD_URL],  
+  credentials: true
+  },
+  transports: ["websocket", "polling"], 
 });
 
 let onlineUsers = [];
