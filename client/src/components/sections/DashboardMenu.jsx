@@ -14,6 +14,11 @@ import { useAuth } from '../../hooks/useAuth';
 
 const DashboardMenu = () => {
   const { logoutUser } = useAuth();
+
+  const handleLogout = async () => {
+  await logoutUser();
+ }
+ 
   const menuItems = [
     { icon: <RxDashboard />, text: 'Dashboard', path: '/dashboard' },
     { icon: <BiPurchaseTagAlt />, text: 'My Orders', path: '/dashboard/my-orders' },
@@ -25,9 +30,7 @@ const DashboardMenu = () => {
     { icon: <RiLogoutBoxRLine />, text: 'Logout', path: null, action: handleLogout }
   ];
 
-  const handleLogout = async () => {
-  await logoutUser();
- }
+  
 
 
 return(

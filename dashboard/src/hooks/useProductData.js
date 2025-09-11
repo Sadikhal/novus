@@ -40,7 +40,7 @@ export default function useProductData(role) {
   const fetchAllProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const url = currentUser?.isAdmin? '/product' : '/product/seller';
+      const url = currentUser?.isAdmin ? '/product' : '/product/seller';
       const res = await apiRequest.get(url, { 
         params: { sort: sortOrder } 
       });
