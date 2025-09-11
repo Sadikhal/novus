@@ -41,14 +41,6 @@ export default function HomeCarousal({ loading, banner, transformData }) {
               width: '100%'
             }}
           >
-            <div className="absolute inset-0 bg-transparent  bg-opacity-50 flex left-28 top-28 flex-col gap-5">
-              <h1 className="text-[#d8e4d6] text-4xl font-poppins font-bold capitalize ">
-                 {carousel.title}
-              </h1>
-              <div className='text-[#d8e4d6] text-xl font-poppins font-normal  capitalize'>
-               {carousel.title2}
-              </div>
-            </div>
           </SwiperSlide>
         ))}
       </Swiper>
