@@ -1,11 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import InputField from "../ui/InputField";
 import { useToast } from "../../redux/useToast";
 import { Button } from "../ui/Button";
 import ImageCropModal from "../ImageCropper";
+import ImageUpload from "../ImageUpload";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 const sellerSchema = z.object({
   name: z.string()
@@ -24,7 +26,7 @@ const sellerSchema = z.object({
     .max(10, { message: "Phone number must be 10 digits" })
     .regex(/^\d+$/, { message: "Phone number must contain only numbers" }),
   experience: z.coerce.number().optional(),
-  image: z.array(z.string()).min(1, "At least one image is required")
+  image: z.array(z.string()).min(1, { message: "At least one image is required" }),
 });
 
 const SellerForm = ({ 
@@ -35,10 +37,6 @@ const SellerForm = ({
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
-  const [uploadQueue, setUploadQueue] = useState([]);
-  const [showCropModal, setShowCropModal] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState(data?.image || []);
-  const fileInputRef = useRef(null);
   
   const defaultValues = {
     name: "",
@@ -59,10 +57,28 @@ const SellerForm = ({
     reset,
     formState: { errors },
     setValue,
-    watch
   } = useForm({
     resolver: zodResolver(sellerSchema),
     defaultValues
+  });
+
+  const {
+    uploadedImages,
+    uploadQueue,
+    showCropModal,
+    fileInputRef,
+    handleFileSelect,
+    handleRemoveImage,
+    handleSkipCurrent,
+    handleImageUploadComplete,
+    setUploadQueue,
+    setShowCropModal,
+    setUploadedImages,
+  } = useImageUpload({
+    maxImages: 5,
+    initialImages: data?.image || [],
+    onImagesChange: (newImages) => setValue('image', newImages),
+    toast,
   });
 
   useEffect(() => {
@@ -76,40 +92,7 @@ const SellerForm = ({
       });
       setUploadedImages(data.image || []);
     }
-  }, [data, reset]);
-
-  const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files);
-    const remainingSlots = 5 - uploadedImages.length;
-    
-    if (files.length > remainingSlots) {
-      toast({
-        variant: 'destructive',
-        title: 'Too many images',
-        description: `You can only upload ${remainingSlots} more images.`
-      });
-      return;
-    }
-
-    setUploadQueue(files);
-    setShowCropModal(true);
-  };
-
-  const handleImageUploadComplete = (url) => {
-    setUploadedImages(prev => [...prev, url]);
-    setValue('image', [...uploadedImages, url]);
-    setUploadQueue(prev => prev.slice(1));
-  };
-
-  const handleSkipCurrent = () => {
-    setUploadQueue(prev => prev.slice(1));
-  };
-
-  const handleRemoveImage = (index) => {
-    const newImages = uploadedImages.filter((_, i) => i !== index);
-    setUploadedImages(newImages);
-    setValue('image', newImages);
-  };
+  }, [data, reset, setUploadedImages]);
 
   const onSubmit = async (formData) => {
     setSubmitting(true);
@@ -139,7 +122,7 @@ const SellerForm = ({
       className="flex flex-col gap-6 p-2 sm:p-4 h-full" 
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-xl font-semibold border-b-[#384e60] border-b-2 pb-2 ">
+      <h1 className="text-xl font-semibold border-b-[#384e60] border-b-2 pb-2">
         {type === "create" ? "Create New" : "Edit"} Brand
       </h1>
       
@@ -220,46 +203,16 @@ const SellerForm = ({
 
         {/* Image Upload Section */}
         <div className="md:col-span-2 flex flex-col gap-4 h-full">
-          <label className="text-sm font-medium">Brand Images (Max 5)</label>
-          <input
-            type="file"
-            ref={fileInputRef}
-            multiple
-            accept="image/*"
-            onChange={handleFileSelect}
-            className="hidden"
+          <ImageUpload
+            uploadedImages={uploadedImages}
+            onFileSelect={handleFileSelect}
+            onRemoveImage={handleRemoveImage}
+            fileInputRef={fileInputRef}
+            maxImages={5}
+            label="Brand Images"
+            previewClassName="w-32 h-32 object-cover rounded-md border border-gray-300"
+            containerClassName="flex flex-wrap gap-4"
           />
-
-          <div className="flex flex-wrap gap-4">
-            {uploadedImages.map((url, index) => (
-              <div key={url} className="relative group border border-slate-300 p-2 rounded-lg">
-                <img
-                  src={url}
-                  alt={`Brand preview ${index + 1}`}
-                  className="w-32 h-32 object-cover rounded-md border border-gray-300"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-
-            {uploadedImages.length < 5 && (
-              <div className='flex gap-6'>  
-                <label
-                  onClick={() => fileInputRef.current.click()}
-                  htmlFor="fileInput"
-                  className="cursor-pointer flex items-center justify-center rounded-md bg-white hover:bg-gray-100 relative w-36 h-36 border-2 border-dashed text-gray-500 hover:border-teal-500 hover:text-teal-500 transition-colors"
-                >
-                  <img src="/images/model.png" className="w-9 absolute h-9 object-cover" alt="" />
-                </label>
-              </div>
-            )}
-          </div>
           {errors.image?.message && (
             <p className="text-xs text-red-400">{errors.image.message.toString()}</p>
           )}

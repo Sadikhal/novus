@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import InputField from '../ui/InputField';
 import { Button } from '../ui/Button';
 import { useToast } from "../../redux/useToast";
 import ImageCropModal from '../ImageCropper';
+import { useImageUpload } from '../../hooks/useImageUpload';
 
 const userSchema = z.object({
   name: z
@@ -29,11 +30,6 @@ const CustomerForm = ({
   onSuccess
 }) => {
   const [submitting, setSubmitting] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [showCropModal, setShowCropModal] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(data?.image || '');
-  const fileInputRef = useRef(null);
   const { toast } = useToast();
 
   const defaultValues = {
@@ -56,6 +52,24 @@ const CustomerForm = ({
     defaultValues
   });
 
+  const {
+    uploadedImages,
+    showCropModal,
+    fileInputRef,
+    handleFileSelect,
+    handleRemoveImage,
+    handleImageUploadComplete,
+    setShowCropModal,
+    setUploadedImages,
+    uploadQueue,
+  } = useImageUpload({
+    maxImages: 1,
+    initialImages: data?.image ? [data.image] : [],
+    onImagesChange: (newImages) => setValue('image', newImages[0] || ''),
+    toast,
+    isProfile: true,
+  });
+
   useEffect(() => {
     if (data) {
       reset({
@@ -63,42 +77,13 @@ const CustomerForm = ({
         dateOfBirth: data.dateOfBirth ? formatDateForInput(data.dateOfBirth) : "",
         image: data.image || ""
       });
-      setUploadedImage(data.image || '');
+      setUploadedImages(data.image ? [data.image] : []);
     }
-  }, [data, reset]);
+  }, [data, reset, setUploadedImages]);
 
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.match('image.*')) {
-      toast({
-        variant: 'destructive',
-        title: 'Invalid file type',
-        description: 'Please select an image file'
-      });
-      return;
-    }
-
-    setImageFile(file);
-    setShowCropModal(true);
-  };
-
-  const handleImageUploadComplete = async (url) => {
-    setUploadedImage(url);
-    setValue('image', url);
-    setShowCropModal(false);
-    setImageFile(null);
-  };
-
-  const handleRemoveImage = () => {
-    setUploadedImage('');
-    setValue('image', '');
   };
 
   const onSubmit = async (formData) => {
@@ -174,16 +159,16 @@ const CustomerForm = ({
               Profile Image
             </label>
             <div className="mt-2 flex items-center gap-4">
-              {uploadedImage ? (
+              {uploadedImages.length > 0 ? (
                 <div className="relative group">
                   <img
-                    src={uploadedImage}
+                    src={uploadedImages[0]}
                     alt="Customer profile"
                     className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
                   />
                   <button
                     type="button"
-                    onClick={handleRemoveImage}
+                    onClick={() => handleRemoveImage(0)}
                     className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     ×
@@ -208,9 +193,9 @@ const CustomerForm = ({
                   variant="outline"
                   className="border-slate-400 cursor-pointer"
                   onClick={() => fileInputRef.current.click()}
-                  disabled={uploadingImage}
+                  disabled={submitting}
                 >
-                  {uploadedImage ? 'Change Image' : 'Upload Image'}
+                  {uploadedImages.length > 0 ? 'Change Image' : 'Upload Image'}
                 </Button>
                 <p className="text-xs text-gray-500">
                   JPG, PNG (Max 5MB)
@@ -235,7 +220,7 @@ const CustomerForm = ({
           <Button
             type="submit"
             variant="primary"
-            disabled={submitting || uploadingImage}
+            disabled={submitting}
           >
             {submitting ? "Processing..." : "Save Changes"}
           </Button>
@@ -246,10 +231,10 @@ const CustomerForm = ({
         isOpen={showCropModal}
         onClose={() => {
           setShowCropModal(false);
-          setImageFile(null);
+          setUploadQueue([]);
         }}
         onUploadComplete={handleImageUploadComplete}
-        queue={imageFile ? [imageFile] : []}
+        queue={uploadQueue}
       />
     </>
   );

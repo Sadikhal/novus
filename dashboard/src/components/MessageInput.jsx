@@ -8,6 +8,7 @@ import { toast } from "../redux/useToast";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { cn } from "../lib/utils";
 import { MdClose, MdEdit } from "react-icons/md";
+import { useImageUpload } from "../hooks/useImageUpload";
 
 const MessageInput = ({ 
   conversationId, 
@@ -22,13 +23,26 @@ const MessageInput = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ desc: "" });
-  const [cropQueue, setCropQueue] = useState([]);
-  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const inputRef = useRef(null);
   const emojiRef = useRef(null);
   const [processingImage, setProcessingImage] = useState(false);
-  
+
+  const {
+    uploadQueue,
+    showCropModal,
+    fileInputRef,
+    handleFileSelect,
+    handleSkipCurrent,
+    handleImageUploadComplete: hookHandleImageUploadComplete,
+    setShowCropModal,
+    setUploadQueue,
+  } = useImageUpload({
+    maxImages: Infinity,
+    initialImages: [],
+    toast,
+  });
+
   useOnClickOutside(emojiRef, () => setIsEmojiPickerOpen(false));
 
   const handleEmojiSelect = (emojiObject) => {
@@ -87,25 +101,15 @@ const MessageInput = ({
     }
   }, [conversationId, receiver, socket]);
 
-  const handleCroppedImage = useCallback(async (imageUrl) => {
+  const handleImageUploadComplete = useCallback(async (imageUrl) => {
     if (!imageUrl) return;
     setProcessingImage(true);
     const success = await submitMessage({ desc: "", image: [imageUrl] });
     setProcessingImage(false);
     if (success) {
-      setCropQueue(prev => {
-        const newQueue = prev.slice(1);
-        if (newQueue.length === 0) setIsCropModalOpen(false);
-        return newQueue;
-      });
+      hookHandleImageUploadComplete(imageUrl);
     }
-  }, [submitMessage]);
-
-  const handleImageUpload = useCallback((files) => {
-    if (!files.length || processingImage) return;
-    setCropQueue(Array.from(files));
-    setIsCropModalOpen(true);
-  }, [processingImage]);
+  }, [submitMessage, hookHandleImageUploadComplete]);
 
   const handleTextSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -171,7 +175,8 @@ const MessageInput = ({
             multiple
             className="hidden" 
             accept="image/*"
-            onChange={(e) => handleImageUpload(e.target.files)}
+            ref={fileInputRef}
+            onChange={(e) => handleFileSelect(e, 'message')}
             disabled={loading || processingImage}
           />
         </div>
@@ -270,10 +275,13 @@ const MessageInput = ({
       )}
 
       <ImageCropModal
-        isOpen={isCropModalOpen}
-        onClose={() => setIsCropModalOpen(false)}
-        onUploadComplete={handleCroppedImage}
-        queue={cropQueue}
+        isOpen={showCropModal}
+        onClose={() => {
+          setShowCropModal(false);
+          setUploadQueue([]);
+        }}
+        onUploadComplete={handleImageUploadComplete}
+        queue={uploadQueue}
       />
     </form>
   );
