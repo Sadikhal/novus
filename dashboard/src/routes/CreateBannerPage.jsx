@@ -6,7 +6,6 @@ import CategoryBannerForm from '../components/forms/CategoryBannerForm';
 import { toast } from '../redux/useToast';
 
 const CreateBannerPage = ({ type }) => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

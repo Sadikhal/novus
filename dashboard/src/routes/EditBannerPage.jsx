@@ -38,6 +38,7 @@ const EditBannerPage = ({ type }) => {
       await apiRequest.put(`/banner/${type}/${id}`, updatedData);
       navigate('/admin/banner');
        toast({
+        variant: "secondary",
         title: "Banner updated successfully"
       })
     } catch (err) {
