@@ -42,10 +42,10 @@ const bannerSchema = z.object({
         });
       }
 
-      if (type === 'tertiary' && (categories.length < 4 || categories.length > 15)) {
+      if (type === 'tertiary' && (categories.length < 4 || categories.length > 14)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Tertiary banners require 4-10 categories',
+          message: 'Tertiary banners require 4-15 categories',
         });
       }
     }),
@@ -178,7 +178,7 @@ const CategoryBannerForm = ({ initialData = {}, onSubmit, loading }) => {
       case 'secondary':
         return { min: 4, max: 4, text: 'exactly 4 categories' };
       case 'tertiary':
-        return { min: 4, max: 10, text: '4-10 categories' };
+        return { min: 4, max: 14, text: '4-10 categories' };
       default:
         return { min: 0, max: 0, text: 'categories' };
     }
