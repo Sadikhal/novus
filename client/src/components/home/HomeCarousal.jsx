@@ -3,8 +3,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function HomeCarousal({ loading, banner, transformData }) {
+  const navigate = useNavigate();
+
+
   if (loading || !banner) {
     return (
       <div className='w-full sm:h-[300px] md:h-[320px] lg:h-[350px] xl:max-h-[400px] 2xl:max-h-[400px] h-[300px] bg-gray-200 animate-pulse'></div>
@@ -31,6 +37,7 @@ export default function HomeCarousal({ loading, banner, transformData }) {
         {carouselItems.map((carousel) => (
           <SwiperSlide 
             key={carousel._id} 
+            onClick={() => navigate(`/category/${carousel.url}`)}
             className="h-full w-full bg-cover bg-center" 
             style={{ 
               backgroundImage: ` url(${carousel?.image})`,

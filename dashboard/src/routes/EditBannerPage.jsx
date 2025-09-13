@@ -36,7 +36,7 @@ const EditBannerPage = ({ type }) => {
     setIsSubmitting(true);
     try {
       await apiRequest.put(`/banner/${type}/${id}`, updatedData);
-      navigate('/admin/banners');
+      navigate('/admin/banner');
        toast({
         title: "Banner updated successfully"
       })
