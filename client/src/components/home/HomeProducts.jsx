@@ -15,7 +15,6 @@ const HomeProducts = ({ listings,wishlist,type,title,loading}) => {
       orientation="horizontal" 
       className="w-full px-2 bg-[#fffbfb] py-4"
     >
-
       <div className="flex flex-nowrap gap-4 pb-4">
         {listings.map((listing,index) => (
           <div key={index} className="flex-shrink-0 w-36 md:w-48 sm:w-40">

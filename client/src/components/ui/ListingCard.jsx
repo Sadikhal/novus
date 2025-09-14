@@ -46,10 +46,10 @@ const ListingCard = ({ data, showWishlist, type }) => {
           alt="Listing"
         />
       </div>
-      <div className="text-[14px] font-assistant capitalize text-[#405150] overflow-hidden whitespace-nowrap px-2 pt-2 font-medium">
+      <div className="md:text-[14px] text-[12px] font-assistant capitalize text-[#405150] overflow-hidden whitespace-nowrap px-2 pt-2 font-medium">
         {data?.name}
       </div>
-      <div className="font-bold text-[17px] text-[#282c3f] whitespace-nowrap font-assistant overflow-hidden px-2 -mt-1">
+      <div className="font-bold md:text-[16px] text-[14px] text-[#282c3f] whitespace-nowrap font-assistant overflow-hidden px-2 -mt-1 text-wrap">
         {data?.title}
       </div>
     </Link>

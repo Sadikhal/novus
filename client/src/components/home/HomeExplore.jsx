@@ -21,7 +21,7 @@ const HomeExplore = () => {
         </h1>
       </div>
     
-      <div className="carousel flex flex-row gap-6 justify-between h-full py-2 px-1">
+      <div className="carousel carousel-horizontal flex flex-row gap-6 justify-between h-full py-2 px-1">
         {categories?.map((category) => (
           <Link 
             to={`/products?category=${category?.name}`}
