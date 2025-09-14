@@ -15,7 +15,7 @@ export default function HomeCarousal({ loading, banner, transformData }) {
   const carouselItems = transformData(banner);
 
   return (
-    <div className="w-full h-[300px] lg:h-[350px] xl:max-h-[400px] 2xl:max-h-[400px]">
+    <div className="w-full h-[150px] sm:h-[300px] md:h-[350px] xl:max-h-[400px]">
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -36,7 +36,12 @@ export default function HomeCarousal({ loading, banner, transformData }) {
               to={carousel?.url}
               className="h-full w-full"
             >
-              <img src={carousel?.image} className='h-full w-full bg-cover bg-center rounded-[10px]' alt="carousel" />
+              <img 
+                src={carousel?.image} 
+                className="h-full w-full object-contain   md:object-cover md:bject-center rounded-[10px]" 
+                alt="carousel" 
+              />
+
             </Link>
           </SwiperSlide>
         ))}
