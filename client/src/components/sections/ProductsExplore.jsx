@@ -104,12 +104,17 @@ import { cn } from '../../lib/utils';
 import { motion } from 'framer-motion';
 import { CategorySkeletonLoader } from '../ui/Loaders';
 import { containerVariants, itemVariants, textVariants } from '../../lib/motion';
+import { useFetchCategoriesAndBrands } from '../../hooks/useCategoriesAndBrands';
 
 
 
-const ProductsExplore = ({ categories, onCategoryClick, loading}) => {
+const ProductsExplore = ({  onCategoryClick}) => {
 
-  
+    const { 
+      categories, 
+      error,
+      loading
+    } = useFetchCategoriesAndBrands();
   if (loading) {
     return (
       <CategorySkeletonLoader count={15} />
@@ -145,7 +150,6 @@ const ProductsExplore = ({ categories, onCategoryClick, loading}) => {
                 src={category.image?.[0]}
                 className="h-16 w-16 rounded-full object-cover sm:h-20 sm:w-20 2xl:h-28 2xl:w-28 bg-white"
                 alt={`Category: ${category.name}`}
-                loading="lazy"
                 variants={itemVariants}
               />
             </div>

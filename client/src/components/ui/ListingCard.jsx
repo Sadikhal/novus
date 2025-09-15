@@ -212,9 +212,8 @@ const ListingCard = ({ data, showWishlist, type }) => {
         <div className='relative overflow-hidden w-full transition duration-0'>
           <motion.img 
             className="aspect-square object-cover w-full duration-500 transition-transform group-hover:scale-110"
-            src={data?.image || "/no-image.png"}
+            src={data?.image}
             alt="Listing"
-            loading="lazy"
             variants={itemVariants}
           />
         </div>
@@ -228,7 +227,7 @@ const ListingCard = ({ data, showWishlist, type }) => {
       </Link>
     </motion.div>
   ) : (
-    <motion.div variants={itemVariants}> {/* Added motion.div */}
+    <motion.div variants={itemVariants}> 
       <Link 
         to={`/product/${data?._id}`}  
         className="col-span-1 cursor-pointer w-full group relative border rounded-xl flex flex-col pb-1"

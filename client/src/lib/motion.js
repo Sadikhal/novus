@@ -38,27 +38,20 @@ export const textVariants = {
   },
 };
 
+
 export const carouselImageVariants = {
   hidden: {
     opacity: 0,
-    scale: 0.95, // Slightly scaled down for a subtle zoom effect
-    filter: 'blur(5px)', // Subtle blur for smooth entry
+    scale: 0.95,
+    filter: 'blur(5px)',
   },
   visible: {
     opacity: 1,
-    scale: 1, // Scale to normal size
-    filter: 'blur(0px)', // Remove blur
+    scale: 1,
+    filter: 'blur(0px)',
     transition: {
-      duration: 0.6, // Smooth duration for the animation
-      ease: 'easeOut', // Easing for a natural feel
+      duration: 0.6,
+      ease: 'easeOut',
     },
   },
-  // exit: {
-  //   opacity: 1, // Ensure image stays visible when exiting
-  //   scale: 1,
-  //   filter: 'blur(0px)', // No blur on exit
-  //   transition: {
-  //     duration: 0, // Instant exit to prevent disappearance
-  //   },
-  // },
 };

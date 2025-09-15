@@ -36,7 +36,7 @@ const Home = () => {
        <ErrorFallback message = {error}/>
        </div> : (
           <div className='bg-[#f5f5f5] flex flex-col gap-4 lg:gap-3 w-full h-full'>
-          {!loading && bannerData.tertiaryCategories.length > 0 && (
+          {bannerData.tertiaryCategories.length > 0 && (
               <HomeCarousal 
                 loading={loading}
                 banner={bannerData.tertiaryCategories[0]}

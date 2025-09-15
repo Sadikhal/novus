@@ -37,7 +37,7 @@ import { containerVariants } from '../../lib/motion'; // Added import
 
 const HomeTrending = ({ title, listings, wishlist, type }) => {
   return (
-    <div className='felx flex-col bg-[#fff] px-2 h-full py-2'>
+    <div className='felx flex-col bg-[#fff] px-2 h-full py-2 '>
       <div className='text-[23px] font-assistant font-bold leading-[28px] text-slate-900 p-2 capitalize'>
         {title}
       </div>
