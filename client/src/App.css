@@ -1,17 +1,13 @@
 
+*{
+  scroll-behavior: smooth;
+}
 html,
 body {
   position: relative;
-  height: 100%;
-  background: #fff;
+  min-height: 100%;
+  background-color: #fff;
   
-}
-body{
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
- 
- 
 }
 
 .swiper {
@@ -35,7 +31,7 @@ body{
 }
 
 .swiper-pagination-bullet{
-  --swiper-pagination-color: rgb(231, 165, 0);
+  --swiper-pagination-color: rgb(9, 86, 82);
   --swiper-pagination-bullet-inactive-color: #ffff;
   
 }

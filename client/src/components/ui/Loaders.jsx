@@ -239,3 +239,21 @@ export const ChatListSkeleton = () => (
     ))}
   </div>
 );
+
+
+export const CategorySkeletonLoader = ({ count = 10 }) => {
+  return (
+    <div className="carousel carousel-horizontal flex flex-row gap-3 sm:gap-5 w-full justify-between px-1">
+      {Array(count).fill(0).map((_, i) => (
+        <div 
+          key={i} 
+          className="carousel-item flex flex-col items-center justify-center gap-2 animate-pulse"
+        >
+          <div className="h-16 w-16 sm:h-20 sm:w-20 2xl:h-28 2xl:w-28 rounded-full bg-gray-200" />
+          
+          <div className="h-3 w-12 sm:w-16 bg-gray-200 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+};

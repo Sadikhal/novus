@@ -35,7 +35,7 @@ const Home = () => {
       <div className='flex justify-center items-center h-[56vh] md:h-[80vh]'> 
        <ErrorFallback message = {error}/>
        </div> : (
-          <div className='bg-[#f5f5f5] flex flex-col gap-4 lg:gap-3 w-full'>
+          <div className='bg-[#f5f5f5] flex flex-col gap-4 lg:gap-3 w-full h-full'>
           {!loading && bannerData.tertiaryCategories.length > 0 && (
               <HomeCarousal 
                 loading={loading}

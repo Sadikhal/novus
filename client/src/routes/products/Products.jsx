@@ -140,12 +140,14 @@ function Products() {
 
   
   return (
-    <div className="p-2 sm:px-2 md:px-4 lg:px-6 flex flex-col w-full bg-[#fff]">
-      <div className="bg-[#ffffff]">
-        <ProductsExplore categories={categories} onCategoryClick={handleCategoryClick} />
+    <div className="p-2 sm:px-2 md:px-4 lg:px-6 flex flex-col w-full bg-lamaWhite">
+      <div>
+        {categories && categories.length > 0 && (
+          <ProductsExplore categories={categories} loading={isLoading} onCategoryClick={handleCategoryClick} />
+        )}
       </div>
       
-      <div className="flex w-full flex-col justify-between  pt-8 ">
+      <div className="flex w-full flex-col justify-between  pt-4 ">
        <div className='w-full flex flex-row items-center justify-between lg:hidden'>
         <div className="items-center flex ">
           {filtersLoading ? (

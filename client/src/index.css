@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
@@ -13,25 +13,60 @@
 }
 
 @theme {
-  
-  --font-poppins: "Poppins", sans-serif;
-  --font-robotos: "Roboto Slab", sans-serif; 
+  --font-poppins: "Poppins",sans-serif;
+  --font-robotos: "Roboto Slab",sans-serif; 
   --font-assistant: "Assistant",sans-serif;
-  --font-helvetica:"Helvetica Now Text",  "Helvetica, Arial", sans-serif;
-   --font-rubik:"Rubik", sans-serif,
+  --font-helvetica:"Helvetica Now Text","Helvetica, Arial", sans-serif;
+   --font-rubik:"Rubik", sans-serif;
 
 
 
 
-  --color-novusHome : #F5F;
+  --color-novusHome : #daeff2;
   --color-regalWhite: #243c5a;
   --color-lamaWhite: #FFFF;
   --color-novusWhite: #F5FEFD;
   --color-novusGreen: #ddf5f2;
-  --color-novusYellow: #cecc27
-  --color-textBlack: #0000;
+  --color-novusYellow: #cecc27;
+  --color-textBlack: #000;
   --color-textBlue: #268098;
   --color-cartBg: #909c80;
 
 }
+ */
 
+
+ @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100..900&display=swap');
+
+/* Tailwind v4 directives */
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Custom font */
+@font-face {
+  font-family: "Helvetica Now Text";
+  src: url("./font/HelveticaNowText-Regular.ttf") format("truetype");
+}
+
+/* Tailwind v4 theme block */
+@theme {
+  --font-poppins: "Poppins", sans-serif;
+  --font-robotos: "Roboto Slab", serif;
+  --font-assistant: "Assistant", sans-serif;
+  --font-helvetica: "Helvetica Now Text", "Helvetica", "Arial", sans-serif;
+  --font-rubik: "Rubik", sans-serif;
+
+  --color-novusHome: #f5f5f5;
+  --color-regalWhite: #243c5a;
+  --color-lamaWhite: #ffffff;
+  --color-novusWhite: #f5fefd;
+  --color-novusGreen: #ddf5f2;
+  --color-novusYellow: #cecc27;
+  --color-textBlack: #000000;
+  --color-textBlue: #268098;
+  --color-cartBg: #909c80;
+}

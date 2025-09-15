@@ -14,7 +14,7 @@ export const BannerSection = ({
   transformData,
   className = '' 
 }) => (
-  <div className={`bg-white ${className}`}>
+  <div className={`bg-lamaWhite ${className}`}>
     {loading ? (
       <SkeletonLoader type={type} count={6} />
     ) : banner && (
