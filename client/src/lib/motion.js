@@ -55,3 +55,14 @@ export const carouselImageVariants = {
     },
   },
 };
+
+
+export const bannerVariants = {
+  hidden: { opacity: 0, filter: 'blur(5px)' },
+  visible: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    transition: { duration: 0.9 },
+    delay : 0.9
+  },
+};

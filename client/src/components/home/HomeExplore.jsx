@@ -141,7 +141,6 @@ const HomeExplore = () => {
                 src={category?.image[0]}
                 className="md:h-28 md:w-28 h-24 w-24 object-cover bg-[#ffff] rounded-full" 
                 alt={category?.name}
-                loading="lazy"
                 variants={itemVariants}
               />
             </div> 

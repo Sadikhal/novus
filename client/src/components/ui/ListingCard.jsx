@@ -170,8 +170,8 @@ import { AiFillHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { addToWishlist, removeFromWishlist } from '../../redux/wishlistSlice';
-import { motion } from 'framer-motion'; // Added import
-import { itemVariants, textVariants } from '../../lib/motion'; // Added import
+import { motion } from 'framer-motion'; 
+import { itemVariants, textVariants } from '../../lib/motion';
 
 const ListingCard = ({ data, showWishlist, type }) => { 
   const dispatch = useDispatch();

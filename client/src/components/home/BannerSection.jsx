@@ -3,6 +3,8 @@ import HomeTrending from "./HomeTrending";
 import { GridSkeletonLoader, SkeletonLoader } from "../ui/Loaders";
 import { transformCategoryData } from "../../lib/extractBanners";
 import { Button } from "../ui/Button";
+import { containerVariants, bannerVariants } from "../../lib/motion";
+import { motion } from 'framer-motion';
 
 
 
@@ -59,8 +61,19 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
     {loading ? (
       <SkeletonLoader type='category' count={4} />
     ) : (
-      <div className='lg:hidden px-3 mt-1 relative  h-full max-h-[300px] w-full block'>
-        <img src="/banner/ban3.jpg" className="object-cover h-full max-h-[300px] w-full" alt="ban" />
+      <motion.div className='lg:hidden px-3 mt-1 relative  h-full max-h-[300px] w-full block'
+       variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }} 
+            >
+        <motion.img 
+          src="/banner/ban3.jpg" 
+          className="object-cover h-full w-full rounded-lg"
+          alt="banner"
+          variants={bannerVariants}
+          
+        />
        <div className="absolute inset-0  bg-opacity-50 flex  left-10 top-20 flex-col gap-2">
         <div className="text-white text-2xl font-assistant font-extrabold capitalize  ">Unveil the Essence of Elegance</div>
         <div className='text-white text-base font-poppins font-medium  capitalize'>
@@ -72,7 +85,7 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
           Shop Now
         </Button>
       </div>
-      </div>
+      </motion.div>
     )}
   </>
 );

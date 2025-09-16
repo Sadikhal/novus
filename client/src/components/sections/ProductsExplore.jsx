@@ -104,27 +104,14 @@ import { cn } from '../../lib/utils';
 import { motion } from 'framer-motion';
 import { CategorySkeletonLoader } from '../ui/Loaders';
 import { containerVariants, itemVariants, textVariants } from '../../lib/motion';
-import { useFetchCategoriesAndBrands } from '../../hooks/useCategoriesAndBrands';
 
 
 
-const ProductsExplore = ({  onCategoryClick}) => {
+const ProductsExplore = ({categories, onCategoryClick, loading}) => {
 
-    const { 
-      categories, 
-      error,
-      loading
-    } = useFetchCategoriesAndBrands();
   if (loading) {
     return (
       <CategorySkeletonLoader count={15} />
-    );
-  }
-  if (!categories || categories.length === 0) {
-    return (
-      <div className="flex h-full w-full items-center justify-center text-gray-500">
-        No categories available
-      </div>
     );
   }
 
