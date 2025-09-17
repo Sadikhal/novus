@@ -124,7 +124,7 @@ const AddressDetails = ({ initialAddress }) => {
   const { addresses, loading, error, updateDefaultAddress, defaultAddress } = useAddresses();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Pre-select the default address once addresses load
+  
   useEffect(() => {
     if (defaultAddress?._id && !selectedAddress) {
       setSelectedAddress(defaultAddress._id);
@@ -149,7 +149,7 @@ const AddressDetails = ({ initialAddress }) => {
         </button>
       </DialogTrigger>
 
-      <DialogContent className="md:max-w-2xl max-w-sm bg-lamaWhite font-poppins flex flex-col sm:items-center sm:justify-center items-start justify-start">
+      <DialogContent className="md:max-w-2xl max-w-full sm:max-w-md bg-lamaWhite font-poppins flex flex-col sm:items-center sm:justify-center items-start h-full sm:h-auto justify-start">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-gray-800">
             Select Delivery Address
@@ -167,7 +167,7 @@ const AddressDetails = ({ initialAddress }) => {
         ) : error ? (
           <p className="text-red-800 py-5 text-center">{error}</p>
         ) : addresses.length === 0 ? (
-          <p className="py-5 text-center italic text-slate-600">No addresses found</p>
+          <p className="py-5 text-center w-full h-full justify-center flex items-center italic text-slate-600">No addresses found</p>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col h-[400px]">
             <ScrollArea className="flex-1">
