@@ -30,7 +30,7 @@ const Home = () => {
 
 
   return (
-    <div className='bg-[#f5f5f5] overflow-x-hidden'>
+    <div className='bg-[#f5f5f5] min-h-screen overflow-hidden h-full w-full'>
       { error ?
       <div className='flex justify-center items-center h-[56vh] md:h-[80vh]'> 
        <ErrorFallback message = {error}/>
@@ -49,7 +49,7 @@ const Home = () => {
                  <Loader/>
               </div>
             )}
-      <div className='bg-lamaWhite py-5'>
+      <div className='bg-lamaWhite py-5 h-full w-full'>
         <HomeExplore />
       </div>
       

@@ -150,9 +150,6 @@ function Products() {
       <div className="flex w-full flex-col justify-between  pt-4 ">
        <div className='w-full flex flex-row items-center justify-between lg:hidden'>
         <div className="items-center flex ">
-          {filtersLoading ? (
-            <FilterSkeleton />
-          ) : (
             <MobileFilter
               filters={filters} 
               handleCheckboxChange={handleCheckboxChange}  
@@ -162,7 +159,6 @@ function Products() {
               handleClearAll={handleClearAll}
               handlePriceRangeChange={handlePriceRangeChange} 
             />
-          )}
         </div>
          <div className="flex w-full items-end justify-end">
           <RightFilter filters={filters} setFilters={setFilters} />

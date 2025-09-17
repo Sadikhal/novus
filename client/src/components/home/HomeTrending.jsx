@@ -46,7 +46,7 @@ const HomeTrending = ({ title, listings, wishlist, type }) => {
           className="px-2 grid grid-cols-2 gap-4 bg-[#fff] h-full"
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
+           whileInView="visible"
           viewport={{ once: true }}
         >    
           {listings?.map((listing) => (

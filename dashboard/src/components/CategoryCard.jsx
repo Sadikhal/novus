@@ -12,7 +12,6 @@ const CategoryCard = ({ data, handleDelete }) => {
           className="w-full h-full object-cover"
           src={data?.image?.[0] || '/images/default-category.png'}
           alt={data?.name || 'Category'}
-          loading="lazy"
         />
         
         <div className="absolute right-2 top-2 bg-white/90 rounded-md p-1 flex items-center gap-1">

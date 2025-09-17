@@ -146,7 +146,7 @@ const HomeCarousal = ({ loading, banner, transformData }) => {
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
-          pauseOnMouseEnter: false,
+          pauseOnMouseEnter: true,
         }}
         keyboard={{
           enabled: true,

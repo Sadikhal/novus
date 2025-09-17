@@ -55,33 +55,33 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
           
           <div className="flex flex-col gap-2 mt-1">
             <Link to={`/product/${item.id}`}>
-              <h3 className="font-bold text-gray-900 truncate">
+              <h3 className="font-bold text-gray-900 truncate text-wrap text-sm md:text-base">
                 {item.name}
               </h3>
             </Link>
             
             <div className="flex items-center gap-2">
-              <span className="font-medium text-gray-800">
+              <span className="font-medium text-gray-800 text-xs sm:text-sm">
                 ₹{item.price.toFixed(2)}
               </span>
               
               {item.price < item.actualPrice && (
                 <>
-                  <span className="text-red-600 line-through text-sm">
+                  <span className="text-red-600 line-through text-[10px] sm:text-xs">
                     ₹{item.actualPrice.toFixed(2)}
                   </span>
-                  <span className="text-[#c75b30] text-sm">
+                  <span className="text-[#c75b30] text-xs sm:text-sm">
                     {item.offer}% off
                   </span>
                 </>
               )}
             </div>
             
-            <div className="text-sm text-gray-700">
+            <div className="text-xs sm:text-sm text-gray-700">
               <span className="font-bold text-teal-800">14 days</span> return available
             </div>
             
-            <div className="text-sm text-gray-700">
+            <div className="text-xs sm:text-sm text-gray-700">
               Delivery in <span className="font-bold text-teal-800">{item.deliveryDays} days</span>
             </div>
           </div>

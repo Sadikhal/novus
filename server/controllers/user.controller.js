@@ -79,32 +79,22 @@ export const getSellers = async (req, res, next) => {
   }
 };
 
-
 export const getUser = async (req, res, next) => {
   try {
     const id = req.userId;
-    const user = await User.findById(id);
-     if (!user) {
-      return createError(404, "user not found")
+    const userDetails = await User.findById(id);
+    if (!userDetails) {
+      return next(createError(404, "user not found"));
     }
-    res.status(200).json({
-       user: {
-        ...user._doc,
-        password: undefined,
-         isVerified: user.isVerified
-      },
-   } ); 
-    console.log({
-       user: {
-        ...user._doc,
-        password: undefined,
-         isVerified: user.isVerified
-      },
-   } );
-
+    const user = {
+      ...userDetails._doc,
+      password: undefined,
+      isVerified: userDetails.isVerified
+    };
+    res.status(200).json(user);
+    console.log(user);
   } catch (err) {
     console.log(err);
-
     next(err);
   }
 };
@@ -143,13 +133,44 @@ export const getUserDetails = async (req, res, next) => {
 
 
 
+// export const addAddress = async (req, res, next) => {
+//   const { name, city, address1, address2, pincode, state, number } = req.body;
+
+//   try {
+//     const user = await User.findById(req.userId);
+//     if (!user) return next(createError(404, "User not found"));
+
+//     const newAddress = {
+//       name,
+//       city,
+//       address1,
+//       address2,
+//       pincode,
+//       state,
+//       number,
+//     };
+//     user.addresses.push(newAddress);
+
+//     user.defaultAddress = user.addresses[user.addresses.length - 1]._id;
+//     await user.save();
+//     res.status(201).json({
+//       addresses: user.addresses,
+//       defaultAddress: user.defaultAddress,
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+
+
+
+// Corrected backend addAddress function
 export const addAddress = async (req, res, next) => {
   const { name, city, address1, address2, pincode, state, number } = req.body;
-
   try {
     const user = await User.findById(req.userId);
     if (!user) return next(createError(404, "User not found"));
-
     const newAddress = {
       name,
       city,
@@ -160,56 +181,53 @@ export const addAddress = async (req, res, next) => {
       number,
     };
     user.addresses.push(newAddress);
-
     user.defaultAddress = user.addresses[user.addresses.length - 1]._id;
     await user.save();
-    res.status(201).json({
-      addresses: user.addresses,
-      defaultAddress: user.defaultAddress,
-    });
+    const { password, ...safeUserData } = user._doc;
+    res.status(201).json(safeUserData);
   } catch (err) {
     next(err);
   }
 };
+// export const createAddress = async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.userId);
+//     if (!user) return next(createError(404, "User not found"));
+//     const newAddress = { ...req.body };
+//     user.addresses.push(newAddress);
+//     await User.findOneAndUpdate(
+//       {_id:user._id},{
+//         $set : {
+//           defaultAddresss : user.addresses[user.addresses.length - 1]._id
+//         }
+//       }
+//     )
+//     console.log(user);
+//     await user.save();
+//     res.status(201).json(user);
+   
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
-
-export const createAddress = async (req, res, next) => {
+export const updateAddress = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) return next(createError(404, "User not found"));
-    const newAddress = { ...req.body };
-    user.addresses.push(newAddress);
-    await User.findOneAndUpdate(
-      {_id:user._id},{
-        $set : {
-          defaultAddresss : user.addresses[user.addresses.length - 1]._id
-        }
-      }
-    )
-    console.log(user);
+
+    const address = user.addresses.id(req.params.addressId);
+    if (!address) return next(createError(404, "Address not found"));
+    
+    address.set(req.body);
     await user.save();
-    res.status(201).json(user);
-   
+    
+    const { password, ...safeUserData } = user._doc;
+    res.status(200).json(safeUserData);
   } catch (err) {
+    console.log("e", err);
     next(err);
   }
-};
-
-
-export const updateAddress = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.userId);
-        if (!user) return next(createError(404, "User not found"));
-
-        const address = user.addresses.id(req.params.addressId);
-        if (!address) return next(createError(404, "Address not found"));
-        address.set(req.body);
-        await user.save();
-        res.status(200).json( address);
-    } catch (err) {
-      console.log("e",err);
-        next(err);
-    }
 };
 
 

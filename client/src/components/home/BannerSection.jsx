@@ -16,7 +16,7 @@ export const BannerSection = ({
   transformData,
   className = '' 
 }) => (
-  <div className={`bg-lamaWhite ${className}`}>
+  <div className={`bg-lamaWhite h-full w-full ${className}`}>
     {loading ? (
       <SkeletonLoader type={type} count={6} />
     ) : banner && (
@@ -33,8 +33,8 @@ export const BannerSection = ({
 
 export const SecondaryBannerSection = ({ loading, banners }) => (
   <>
-    <div className='lg:flex items-center justify-center lg:flex-row hidden'>
-      <div className='px-4 lg:flex-[0.6] hidden lg:flex'>
+    <div className='lg:flex items-center justify-center lg:flex-row hidden h-full w-full'>
+      <div className='px-4 lg:flex-[0.6] hidden lg:flex h-full'>
         <div className='flex flex-col gap-3 w-full'> 
           {loading ? (
             <GridSkeletonLoader count={4} />
@@ -51,7 +51,7 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
       {loading ? (
         <SkeletonLoader type='category' count={4} />
       ) : (
-        <div className='lg:flex-1 pr-6 mt-1 hidden lg:block'>
+        <div className='lg:flex-1 pr-6 mt-1 hidden lg:block h-full w-full'>
          <AdProducts />
         </div>
         
@@ -63,13 +63,12 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
     ) : (
       <motion.div className='lg:hidden px-3 mt-1 relative  h-full max-h-[300px] w-full block'
        variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }} 
-            >
+       initial="hidden"
+       animate="visible"
+       >
         <motion.img 
           src="/banner/ban3.jpg" 
-          className="object-cover h-full w-full rounded-lg"
+          className="object-cover h-full max-h-[300px] w-full rounded-lg"
           alt="banner"
           variants={bannerVariants}
           
@@ -91,10 +90,10 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
 );
 
 export const GridSection = ({ loading, banners }) => (
-  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-full w-full'>
     {loading ? (
       Array(3).fill(0).map((_, i) => (
-        <div key={i} className='px-4 flex-[0.6]'>
+        <div key={i} className='px-4 flex-[0.6] h-full'>
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-4"></div>
           <GridSkeletonLoader count={4} />
         </div>
@@ -123,7 +122,7 @@ export const GridSection = ({ loading, banners }) => (
           />
         )}
 
-        <div className='flex lg:hidden flex-col gap-3 w-full'> 
+        <div className='flex lg:hidden flex-col gap-3 h-full w-full'> 
           {loading ? (
             <GridSkeletonLoader count={4} />
           ) : banners.secondaryProducts[0] && (
@@ -140,7 +139,7 @@ export const GridSection = ({ loading, banners }) => (
 );
 
 const GridBannerItem = ({ title, listings, type = 'product' }) => (
-  <div className='px-4 flex-[0.6]'>
+  <div className='px-4 flex-[0.6] h-full'>
     <HomeTrending 
       title={title}
       listings={listings} 
