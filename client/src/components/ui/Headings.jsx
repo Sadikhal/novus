@@ -11,8 +11,7 @@ const Heading = ({
       <div className="h-8 w-48 bg-gray-200 rounded animate-pulse"></div>
       ): listings.length > 0 ?
     (
-    
-      <div className="text-2xl font-helvetica text-black font-extrabold capitalize">
+      <div className="sm:text-2xl text-xl font-helvetica text-black font-extrabold capitalize">
         {title}
       </div>
         ) : null}

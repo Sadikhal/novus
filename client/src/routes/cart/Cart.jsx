@@ -8,8 +8,6 @@ import { useCheckout } from '../../hooks/useCheckout';
 import { usePayment } from '../../hooks/usePayment';
 
 
-
-
 const Cart = () => {
   const dispatch = useDispatch();
    const { address, orderProducts, priceDetails } = useCheckout();
@@ -20,7 +18,7 @@ const Cart = () => {
       <div className="mx-2 border rounded-md border-lamawhite">
         <div className="bg-lamaWhite rounded-sm w-full min-h-10 h-fit flex flex-col sm:flex-row items-center justify-between p-2 sm:p-3">
           <div className="w-full">
-            <span className="text-gray-700 font-robotos font-medium">Deliver To: </span>
+            <span className="text-gray-700 font-robotos font-medium text-sm sm:text-base">Deliver To: </span>
             <span className="text-slate-950 text-sm font-semibold tracking-wider font-poppins capitalize">
               {address?.name} - {address?.pincode}
             </span>
@@ -35,7 +33,7 @@ const Cart = () => {
                 </p>
               </div>
             ) : (
-            <p className='text-slate-500 italic'>No Address Selected</p>
+            <p className='text-slate-500 italic sm:text-sm text-xs '>No Address Selected</p>
             )}
           </div>
           <AddressDetails initialAddress={address} />

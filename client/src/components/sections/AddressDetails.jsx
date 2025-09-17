@@ -149,7 +149,7 @@ const AddressDetails = ({ initialAddress }) => {
         </button>
       </DialogTrigger>
 
-      <DialogContent className="md:max-w-2xl max-w-full sm:max-w-md bg-lamaWhite font-poppins flex flex-col sm:items-center sm:justify-center items-start h-full sm:h-auto justify-start">
+      <DialogContent className="md:max-w-2xl max-w-full sm:max-w-md bg-lamaWhite font-poppins flex flex-col sm:items-center sm:justify-center items-start rounded-lg  sm:h-auto justify-start">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-gray-800">
             Select Delivery Address

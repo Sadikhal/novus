@@ -7,8 +7,7 @@ const PriceDetails = ({
   totalDiscount, 
   onPlaceOrder, 
   isCheckout ,
-  loading,
-  error
+  loading
 }) => {
   return (
     <div className="bg-white p-4 mt-2 rounded-md lg:sticky lg:top-0 lg:w-[400px] text-[#1e1b1b]">
@@ -16,7 +15,7 @@ const PriceDetails = ({
         Price Details ({items.length} items)
       </h3>
       
-      <div className="space-y-3 py-4 border-b">
+      <div className="space-y-3 py-4 border-b text-sm sm:text-base">
         <div className="flex justify-between">
           <span>Total MRP</span>
           <span>₹{totalPrice.toFixed(2)}</span>
@@ -42,7 +41,7 @@ const PriceDetails = ({
       </div>
       
       <div className="py-4">
-        <div className="flex justify-between font-bold text-lg">
+        <div className="flex justify-between font-bold sm:text-lg text-base">
           <span>Total Amount</span>
           <span>₹{totalPrice.toFixed(2)}</span>
         </div>
@@ -51,13 +50,13 @@ const PriceDetails = ({
           <Button
             loading={loading}
             onClick={onPlaceOrder}
-            className=" bg-[#714815] hover:bg-[#5a380f] text-white w-full mt-4 py-3 rounded-full uppercase tracking-wider transition-all"
+            className=" bg-[#714815] hover:bg-[#5a380f] text-white w-full mt-4 py-3 rounded-full uppercase tracking-wider transition-all text-sm sm:text-base"
           >
             Place Order
           </Button>
         ) : (
           <Link to="/dashboard/checkout">
-            <button className="btn bg-[#714815] hover:bg-[#5a380f] text-white w-full mt-4 py-3 rounded-full uppercase tracking-wider transition-all">
+            <button className="btn bg-[#714815] hover:bg-[#5a380f] text-white w-full mt-4 py-3 rounded-full uppercase tracking-wider transition-all text-sm sm:text-base">
               Proceed to Checkout
             </button>
           </Link>

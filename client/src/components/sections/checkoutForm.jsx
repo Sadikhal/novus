@@ -76,13 +76,13 @@ const ProductItem = ({ item }) => (
       alt={item.name} 
     />
     <div className="pl-2 flex flex-col gap-3">
-      <h4 className="font-semibold capitalize text-lg text-slate-950 font-poppins overflow-hidden px-2">
+      <h4 className="font-semibold capitalize text-[15px] sm:text-base  text-slate-950 font-poppins overflow-hidden px-2">
         {item.name}
       </h4>
-      <p className="font-bold text-[#593d3d] px-2 text-xs">Quantity: {item.quantity}</p>
-      <p className="font-medium font-poppins text-xs text-slate-950 px-2">Shipping Fee: 0</p>
-      <p className="font-medium font-poppins text-xs text-slate-950 px-2">
-        Price: ${(item.price * item.quantity).toFixed(2)}
+      <p className="font-robotos font-bold text-[#593d3d] px-2 text-sm">Quantity: {item.quantity}</p>
+      <p className="font-medium font-robotos text-sm text-slate-950 px-2">Shipping Fee: 0</p>
+      <p className="font-medium font-robotos text-sm text-slate-950 px-2">
+        Price: ₹{(item.price * item.quantity).toFixed(2)}
       </p>
     </div>
   </div>
@@ -141,8 +141,8 @@ export default function CheckoutForm({ products, address, total, clientSecret })
           <ProductItem key={item.id} item={item} />
         ))}
         
-        <div className="flex justify-between pt-4 px-2 font-poppins">
-          <h3 className="text-xl font-bold text-[#25290a]">Total Amount : </h3>
+        <div className="flex justify-between pt-4 px-2 font-robotos">
+          <h3 className="text-xl font-bold text-[#121403]">Total Amount : </h3>
           <h3 className="text-xl font-bold text-[#282c09]">₹{total.toFixed(2)}</h3>
         </div>
         <Separator className="mx-3 w-[97%] bg-slate-200 h-[1px]"/> 

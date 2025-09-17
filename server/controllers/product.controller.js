@@ -89,7 +89,7 @@ export const deleteProduct = async (req, res, next) => {
     }).limit(12); 
 
      const brand = await Brand.findOne({
-       brand : product.brand
+       brand : product.brand,
     })
     res.status(200).json({product,similarProducts,brand});
   } catch (err) {

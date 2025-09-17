@@ -55,7 +55,7 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
           
           <div className="flex flex-col gap-2 mt-1">
             <Link to={`/product/${item.id}`}>
-              <h3 className="font-bold text-gray-900 truncate text-wrap text-sm md:text-base">
+              <h3 className="sm:font-bold font-semibold text-gray-900 truncate text-wrap text-sm md:text-base">
                 {item.name}
               </h3>
             </Link>

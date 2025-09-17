@@ -19,7 +19,7 @@ const Checkout = () => {
           <div className='lg:flex-1 flex flex-col'>
             <div className="bg-lamaWhite w-full min-h-10 h-fit flex flex-col sm:flex-row items-center justify-between p-3">
               <div className="w-full sm:px-2">
-                <span className="text-gray-700 font-robotos font-medium">Deliver To: </span>
+                <span className="text-gray-700 font-robotos text-sm sm:text-base  font-medium">Deliver To: </span>
                 <span className="text-slate-950 text-sm font-semibold tracking-wider font-poppins capitalize">
                   {address?.name} - {address?.pincode}
                 </span>
@@ -34,7 +34,7 @@ const Checkout = () => {
                     </p>
                   </div>
                 ) : (
-                  <p className='text-slate-500 italic'>No Address Selected</p>
+                  <p className='sm:text-sm text-xs text-slate-500 italic'>No Address Selected</p>
                 )}
               </div>
               <div className='mt-2 sm:mt-0'>

@@ -47,9 +47,9 @@ const BrandProduct = ({ product }) => {
       
       <ScrollArea
         orientation="horizontal" 
-        className="w-full h-[300px] bg-[#fffbfb] py-2"
+        className="w-full h-[320px] bg-[#fffbfb] py-2 mt-2"
       >
-        <div className="flex flex-row w-max space-x-4 px-2">
+        <div className="flex flex-row w-max space-x-4 px-2 h-full">
           {loading ? (
             <div className="w-[220px]">
               <SkeletonLoader count={8} />
@@ -57,7 +57,7 @@ const BrandProduct = ({ product }) => {
           ) : (
             brandProducts.length > 0 && (
               brandProducts.map((listing) => (
-                <div key={listing._id} className="w-[220px]">
+                <div key={listing._id} className="h-full w-[220px]">
                   <ProductCard
                     data={listing}
                     wishlist={true}
