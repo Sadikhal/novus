@@ -74,18 +74,14 @@ function Product() {
           <div className='lg:hidden block w-full mt-8 py-3 px-2 sm:px-3 md:px-5 bg-[#e4ddcc] rounded-md'>
             <Services product={product}/>
           </div>
-          
           <div>
             <Detailsection product={product} />
           </div>
         </>
       )}
-
-      <div className='pt-4'>
-        <div className='flex flex-col'>
+        <div className='flex flex-col h-full'>
           <BrandProduct product={product} />
           <SimilarProducts products={similarProducts} loading={loading} error={error} />
-          </div>
         </div>
       </div>
   );

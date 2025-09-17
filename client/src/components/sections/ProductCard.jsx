@@ -12,7 +12,6 @@ const ProductCard = ({ data }) => {
           save {data?.discount}%
         </span>
       )}
-      
       <div className="w-full transition duration-0 h-full flex flex-col">
         <div className="flex flex-col w-full h-full">
           <div className="w-full relative overflow-hidden flex-grow">

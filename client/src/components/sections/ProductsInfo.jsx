@@ -22,18 +22,18 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
       <div className='text-slate-600 text-[13px] font-semibold font-robotos uppercase tracking-wide'>
         {product.brand}
       </div>
-      <div className='text-[#162034] text-[25px] font-bold font-helvetica capitalize -mt-1'>
+      <div className='text-[#162034] text-[22px] sm:text-[24] font-bold font-helvetica capitalize -mt-1'>
         {product.name}
       </div>
       
       <div className="flex flex-col items-start pt-1 xl:pt-2">
         {product.sellingPrice < product.actualPrice ? (
           <div className='flex flex-row gap-4 items-center'>
-            <div className='text-[#292b28] text-[22px] font-bold tracking-wider font-helvetica capitalize'>
+            <div className='text-[#292b28] sm:text-[22px] text-[20px] font-bold tracking-wider font-helvetica capitalize'>
               ₹{product?.sellingPrice}
             </div>
-            <div className='text-[#454952] text-[20px] font-semibold tracking-wide font-helvetica uppercase'>
-              <span className='line-through text-[16px]'>₹{product.actualPrice}</span>
+            <div className='text-[#454952] font-semibold tracking-wide font-helvetica uppercase'>
+              <span className='line-through sm:text-[16px] text-[15px]'>₹{product.actualPrice}</span>
             </div>
             <div className='text-[#a94a2d] text-[18px] font-semibold font-helvetica'>
               {product.discount}% Off
@@ -88,7 +88,7 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
       </div>
       
       <div 
-        className='quill-content text-[#111111] text-[16px] font-[300] tracking-wide font-helvetica'
+        className='quill-content text-[#111111] tracking-wider sm:tracking-wide font-helvetica'
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.desc, sanitizeConfig) }}
       />
       

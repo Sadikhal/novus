@@ -75,23 +75,37 @@ export const deleteProduct = async (req, res, next) => {
   }
 };
 
-  export const getProduct = async (req, res, next) => {
+// controllers/productController.js
+export const getProduct = async (req, res, next) => {
   try {
     const { productId } = req.params;
-
     const product = await Product.findById(productId);
+    if (!product) return next(createError(404, "Product not found!"));
 
-    if (!product) next(createError(404, "Product not found!"));
+    const categories = Array.isArray(product.category) ? product.category.filter(Boolean) : [];
 
-    const similarProducts = await Product.find({
-      category: product.category,
-      _id: { $ne: productId },
-    }).limit(12); 
+    let similarProducts = [];
+    if (categories.length > 0) {
+      similarProducts = await Product.find({
+        _id: { $ne: product._id },
+        category: { $all: categories }, 
+      })
+        .limit(12)
+        .lean();
+    }
 
-     const brand = await Brand.findOne({
-       brand : product.brand,
-    })
-    res.status(200).json({product,similarProducts,brand});
+    if ((similarProducts || []).length === 0) {
+      similarProducts = await Product.find({
+        _id: { $ne: product._id },
+        category: { $in: categories },
+      })
+        .limit(12)
+        .lean();
+    }
+
+    const brand = await Brand.findOne({ brand: product.brand }).lean();
+
+    res.status(200).json({ product, similarProducts, brand });
   } catch (err) {
     next(err);
   }
@@ -119,6 +133,7 @@ export const getSellerProduct = async (req, res, next) => {
    }).sort(sortOptions);
     res.status(200).json({product,brand,orders});
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

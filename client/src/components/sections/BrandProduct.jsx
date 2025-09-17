@@ -18,7 +18,10 @@ const BrandProduct = ({ product }) => {
           const brandProductResponse = await apiRequest.get(
             `/product?brand=${product.brand}&limit=10`
           );
-          setBrandProducts(brandProductResponse.data.products || []);
+          const filteredProducts = brandProductResponse.data.products?.filter(
+            (item) => item._id !== product._id
+          ) || [];
+          setBrandProducts(filteredProducts);
         }
       } catch (error) {
         console.error("API Error:", error);
@@ -38,16 +41,14 @@ const BrandProduct = ({ product }) => {
         loading={loading} 
         listings={brandProducts} 
       />
-      
       {error && (
         <div className="text-red-800 text-center py-4">
           {error}
         </div>
       )}
-      
       <ScrollArea
         orientation="horizontal" 
-        className="w-full h-[320px] bg-[#fffbfb] py-2 mt-2"
+        className="w-full h-[300px] bg-[#fffbfb] mt-2"
       >
         <div className="flex flex-row w-max space-x-4 px-2 h-full">
           {loading ? (
