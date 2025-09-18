@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Detailsection from '../../components/sections/Detailsection';
-import HomeProducts from '../../components/home/HomeProducts';
 import Slider from '../../components/sections/Slider';
 import BrandProduct from '../../components/sections/BrandProduct';
-import { Separator } from '../../components/ui/Separator';
 import { Services } from '../../components/sections/Services';
 import { ErrorFallback } from '../../components/sections/ErrorFallback';
-import { Loader, SkeletonLoader } from '../../components/ui/Loaders';
-import { ScrollArea } from '../../components/ui/ScrollArea';
+import { Loader } from '../../components/ui/Loaders';
 import { useUserActions } from '../../hooks/useUserActions';
 import { useProductDetails } from '../../hooks/useProductDetails';
 import {ProductInfo} from '../../components/sections/ProductsInfo';
@@ -18,6 +15,7 @@ import SimilarProducts from '../../components/sections/SimilarProducts';
 function Product() {
   const { productId } = useParams();
   const [imageIndex, setImageIndex] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
   const { product, similarProducts, loading, error } = useProductDetails(productId);
   const {
     isInWishlist,
@@ -50,8 +48,8 @@ function Product() {
               />
               
               <PrimaryProductActions 
-                onAddToCart={handleAddToCart}
-                onBuyNow={handleBuyNow}
+               onAddToCart={() => handleAddToCart(selectedSize)}
+               onBuyNow={() => handleBuyNow(selectedSize)}
               />
               
               <div className="flex flex-col gap-12 lg:mt-8">
@@ -61,12 +59,14 @@ function Product() {
               </div>
             </div>
             
-            <div className="right xl:w-[58%] pt-6 lg:pt-2  px-2 lg:ml-9 xl:ml-7 lg:w-[60%]">
+            <div className="right xl:w-[58%] pt-6 lg:pt-2  px-2 lg:ml-9 xl:ml-7 lg:w-[60%] ">
               <ProductInfo  
                 product={product}
                 isInWishlist={isInWishlist}
                 onWishlist={handleWishlist}
-                onMessage={handleMessageSubmit}
+                onMessage={() => handleMessageSubmit(product?.userId, 'chat')}
+                selectedSize={selectedSize}
+                setSelectedSize={setSelectedSize}
               />
             </div>
           </div>
@@ -79,7 +79,7 @@ function Product() {
           </div>
         </>
       )}
-        <div className='flex flex-col h-full'>
+        <div className='flex flex-col h-full gap-8'>
           <BrandProduct product={product} />
           <SimilarProducts products={similarProducts} loading={loading} error={error} />
         </div>

@@ -16,7 +16,7 @@ const ProductCard = ({ data }) => {
         <div className="flex flex-col w-full h-full">
           <div className="w-full relative overflow-hidden flex-grow">
             <img 
-              className="object-cover h-full w-full duration-500 group-hover:scale-150 transition max-h-[200px]"
+              className="object-cover h-full w-full duration-500 group-hover:scale-150 transition aspect-square"
               src={`${data.image[0]}`}
               alt="Listing"
             />

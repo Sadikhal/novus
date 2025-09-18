@@ -1,22 +1,15 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/HoverCard';
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { logout } from "../../redux/userSlice";
-import { useNavigate } from 'react-router-dom';
 import { getMenuItems } from "../../lib/utils";
 import { useAuth } from "../../hooks/useAuth";
 
 const Account = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const { logoutUser } = useAuth();
-  
-  
- const handleLogout = async () => {
-  await logoutUser();
- }
+   const { logoutUser } = useAuth();
 
-  const menuItems = getMenuItems(currentUser, handleLogout);
+  const menuItems = getMenuItems(currentUser, logoutUser);
 
   return (
     <div>
@@ -44,15 +37,15 @@ const Account = () => {
       </HoverCardTrigger>
       <HoverCardContent className="px-1 p-2 w-[180px] bg-[#fff]">
         {menuItems.map((item, index) => (
-          <div key={index} className="bg-lamaWhite hover:bg-[#577569] px-4 rounded-md z-100">
+          <div key={index} className="z-100">
             {item.path ? (
-              <Link to={item.path} className="block py-1 text-sm text-slate-800 font-medium hover:text-lamaWhite font-poppins">
+              <Link to={item.path} className="block py-1 text-sm text-slate-800 font-medium hover:text-lamaWhite font-poppins bg-lamaWhite hover:bg-[#577569] px-4 rounded-md">
                 {item.text}
               </Link>
             ) : (
               <button 
                 onClick={item.action} 
-                className="block w-full text-left py-1 text-sm text-slate-800 font-medium font-poppins hover:text-lamaWhite" 
+                className="block w-full text-left py-1 text-sm text-slate-800 font-medium cursor-pointer font-poppins bg-lamaWhite hover:bg-[#577569] px-4 rounded-md hover:text-lamaWhite" 
                 type="button"
               >
                 {item.text}

@@ -11,11 +11,11 @@ const PriceDetails = ({
 }) => {
   return (
     <div className="bg-white p-4 mt-2 rounded-md lg:sticky lg:top-0 lg:w-[400px] text-[#1e1b1b]">
-      <h3 className="font-bold border-b border-t py-4">
+      <h3 className="font-bold border-b border-[#c0c2bf] border-t py-4">
         Price Details ({items.length} items)
       </h3>
       
-      <div className="space-y-3 py-4 border-b text-sm sm:text-base">
+      <div className="space-y-3 py-4 border-[#c0c2bf] border-b text-sm sm:text-base">
         <div className="flex justify-between">
           <span>Total MRP</span>
           <span>₹{totalPrice.toFixed(2)}</span>

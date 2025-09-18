@@ -85,18 +85,18 @@ export const useAuth = () => {
     try {
       await apiRequest.post('/auth/logout');
       dispatch(logout());
-       toast({
-      variant: "secondary",
-      title: "Logout successfully",
-      description: "You Logout successfully",
-    });
+      toast({
+        variant: "secondary",
+        title: "Logout successfully",
+        description: "You Logout successfully",
+      });
       navigate('/login');
     } catch (err) {
       toast({
-      variant: "destructive",
-      title: "Logout Failed",
-      description: err.response?.data?.message || "Unable to logout. Please try again.",
-    });
+        variant: "destructive",
+        title: "Logout Failed",
+        description: err.response?.data?.message || "Unable to logout. Please try again.",
+      });
     }
   };
 
@@ -151,5 +151,5 @@ export const useAuth = () => {
     }
   };
 
-  return { register, login,sendResetLink, resetPassword ,loading, isSubmitted, verifyEmail, logout: logoutUser, loading };
+  return { register, login,sendResetLink, resetPassword ,loading, isSubmitted, verifyEmail, logoutUser, loading };
 };

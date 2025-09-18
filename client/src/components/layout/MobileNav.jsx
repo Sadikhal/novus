@@ -1,22 +1,76 @@
+// import { GiHamburgerMenu } from "react-icons/gi";
+// import { Link } from "react-router-dom";
+// import { Sheet, SheetTrigger, SheetContent } from '../../components/ui/Sheet';
+// import { getMenuItems } from "../../lib/utils";
+// import { useSelector } from "react-redux";
+// import { useAuth } from "../../hooks/useAuth";
+
+
+// const Mobilenav = () => {
+//   const { currentUser } = useSelector((state) => state.user);
+//   const { logoutUser } = useAuth();
+
+//   const menuItems = getMenuItems(currentUser, logoutUser);
+
+//   return (
+//     <div>
+//       <Sheet className="w-full bg-lamaWhite">
+//         <SheetTrigger className="cursor-pointer">
+//           <GiHamburgerMenu size={24} className="text-[#266a6e] text-[28px]" />
+//         </SheetTrigger>
+//         <SheetContent className="flex bg-lamaWhite flex-col items-start gap-4" side="left">
+//           <div className="flex flex-col">
+//             <Link to='/' className="w-full">
+//               <img 
+//                 src='/novus9.png' 
+//                 className='w-28 h-28 rounded-full bg-transparent object-contain' 
+//                 alt='logo'
+//               />
+//             </Link>
+
+//             {menuItems.map((item, index) => (
+//               <div 
+//                 key={index}
+//                 className="bg-lamaWhite hover:bg-[#577569] px-4 rounded-md shadow-sm mt-1"
+//               >
+//                 {item?.path ? (
+//                   <Link
+//                     to={item.path}
+//                     className="block py-2 text-sm text-slate-800 font-medium hover:text-lamaWhite font-poppins text-nowrap"
+//                   >
+//                     {item.text}
+//                   </Link>
+//                 ) : (
+//                   <button
+//                     onClick={logoutUser}
+//                     className="block py-2 text-sm text-slate-800 font-medium font-poppins hover:text-lamaWhite"
+//                     type="button"
+//                   >
+//                     {item.text}
+//                   </button>
+//                 )}
+//               </div>
+//             ))}
+//           </div>
+//         </SheetContent>
+//       </Sheet>
+//     </div>
+//   );
+// };
+
+// export default Mobilenav;
+
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Sheet, SheetTrigger, SheetContent } from '../../components/ui/Sheet';
 import { getMenuItems } from "../../lib/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/userSlice";
-
+import { useSelector } from "react-redux";
+import { useAuth } from "../../hooks/useAuth";
 
 const Mobilenav = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
-  
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
-
-  const menuItems = getMenuItems(currentUser, handleLogout);
+  const { logoutUser } = useAuth();
+  const menuItems = getMenuItems(currentUser, logoutUser);
 
   return (
     <div>
@@ -26,30 +80,29 @@ const Mobilenav = () => {
         </SheetTrigger>
         <SheetContent className="flex bg-lamaWhite flex-col items-start gap-4" side="left">
           <div className="flex flex-col">
-            <Link to='/' className="w-full">
-              <img 
-                src='/novus9.png' 
-                className='w-28 h-28 rounded-full bg-transparent object-contain' 
-                alt='logo'
+            <Link to="/" className="w-full">
+              <img
+                src="/novus9.png"
+                className="w-28 h-28 rounded-full bg-transparent object-contain"
+                alt="logo"
               />
             </Link>
-
             {menuItems.map((item, index) => (
-              <div 
+              <div
                 key={index}
-                className="bg-lamaWhite hover:bg-[#577569] px-4 rounded-md shadow-sm mt-1"
+                className="shadow-sm mt-1"
               >
                 {item?.path ? (
                   <Link
                     to={item.path}
-                    className="block py-2 text-sm text-slate-800 font-medium hover:text-lamaWhite font-poppins text-nowrap"
+                    className="block py-2 text-sm text-slate-800 font-medium hover:text-lamaWhite font-poppins text-nowrap bg-lamaWhite hover:bg-[#577569] px-4 rounded-md "
                   >
                     {item.text}
                   </Link>
                 ) : (
                   <button
-                    onClick={handleLogout}
-                    className="block py-2 text-sm text-slate-800 font-medium font-poppins hover:text-lamaWhite"
+                    onClick={item.action}
+                    className="block py-2 text-left w-full text-sm text-slate-800 font-medium font-poppins hover:text-lamaWhite  cursor-pointer bg-lamaWhite hover:bg-[#577569] px-4 rounded-md "
                     type="button"
                   >
                     {item.text}

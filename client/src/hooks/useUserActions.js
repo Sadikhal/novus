@@ -11,7 +11,7 @@ import {
 import { apiRequest } from '../lib/apiRequest';
 import { toast } from '../redux/useToast';
 
-export const useUserActions = (product) => {
+export const useUserActions = (product = null) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,7 +28,7 @@ export const useUserActions = (product) => {
     return action();
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (selectedSize) => {
     if (!product) return;
     
     const action = () => {
@@ -41,6 +41,7 @@ export const useUserActions = (product) => {
         image: product.image[0],
         deliveryDays: product.deliveryDays,
         quantity: 1,
+        size: selectedSize
       }));
       toast({
         variant: "secondary",
@@ -71,7 +72,7 @@ export const useUserActions = (product) => {
     return requireAuth(action);
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = (selectedSize) => {
     if (!product) return;
     
     const action = () => {
@@ -79,8 +80,12 @@ export const useUserActions = (product) => {
         id: product._id,
         name: product.name,
         price: product.sellingPrice || product.actualPrice,
+        actualPrice: product.actualPrice,
+        offer: product.discount,
         image: product.image[0],
+        deliveryDays: product.deliveryDays,
         quantity: 1,
+        size: selectedSize
       }));
       navigate(`/dashboard/checkout/${product._id}`);
     };
@@ -88,27 +93,26 @@ export const useUserActions = (product) => {
     return requireAuth(action);
   };
 
-  const handleMessageSubmit = async () => {
-    if (!product) return;
-    
+ const handleMessageSubmit = (receiverId, url = 'chat') => {
+    if (!receiverId) return;
     const action = async () => {
       try {
-        const response = await apiRequest.post("/conversation", {
-          receiverId: product.userId
-        });
-        navigate(`/dashboard/chat/${response.data.conversation._id}`);
+        const response = await apiRequest.post("/conversation", { receiverId });
+        const convId = response.data?.conversation?._id;
+        navigate(`/dashboard/${url}/${convId}`);
       } catch (error) {
         console.error("Error creating conversation:", error);
         toast({
           variant: "destructive",
           title: "Failed to start conversation",
-          description: error.response?.data?.message || "Please try again later.",
+          description: error.response?.data?.message || error.message || "Please try again later.",
         });
       }
     };
-    
+
     return requireAuth(action);
   };
+
 
   return {
     isInWishlist,

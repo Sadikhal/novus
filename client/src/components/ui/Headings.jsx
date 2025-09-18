@@ -6,7 +6,7 @@ const Heading = ({
   loading
 }) => {
   return ( 
-    <div className={center ? 'text-center' : 'text-start px-3 lg:px-5'}>
+    <div className={center ? 'text-center' : 'text-start px-1 md:px-3'}>
       {loading ? (
       <div className="h-8 w-48 bg-gray-200 rounded animate-pulse"></div>
       ): listings.length > 0 ?

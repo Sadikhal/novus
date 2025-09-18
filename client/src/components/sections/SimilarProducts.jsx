@@ -21,7 +21,7 @@ const SimilarProducts = ({ products, error, loading }) => {
           orientation="horizontal" 
           className="w-full bg-[#fffbfb]"
         >
-          <div className="flex flex-row w-max space-x-4 px-2">
+          <div className="flex flex-row w-max space-x-4">
             <HomeProducts listings={products} title="similar products" />
           </div>
         </ScrollArea>

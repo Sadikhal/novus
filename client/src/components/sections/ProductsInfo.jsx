@@ -1,16 +1,11 @@
 import DOMPurify from 'dompurify';
-import { FaShareFromSquare } from 'react-icons/fa6';
-import SocialIcons from "../ui/SocialIcons"
 import ProductSpecs from './ProductSpecs';
 import { SecondaryProductActions } from './ProductActions';
 import { sanitizeConfig } from '../../lib/utils';
-import { Button } from '../ui/Button';
 import { useState, useEffect } from "react";
 
-export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) => {
-  const [selectedSize, setSelectedSize] = useState(null);
+export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage,selectedSize,setSelectedSize }) => {
 
-  // Auto-select first size on mount
   useEffect(() => {
     if (product.size && product.size.length > 0) {
       setSelectedSize(product.size[0]);
@@ -62,9 +57,9 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
         </div>
 
         {product.size ? (
-          <div className="flex flex-row gap-2 items-center mt-2">
+          <div className="flex flex-row gap-2 items-center mt-2 min-w-full">
             <span className='font-medium font-robotos text-nowrap'>Size</span>:
-            <div className="flex flex-row min-w-full flex-wrap gap-2">
+            <div className="flex flex-row w-full flex-wrap gap-2">
               {product.size.map((data, index) => (
                 <button
                   key={index}
@@ -88,7 +83,7 @@ export const ProductInfo = ({ product, isInWishlist, onWishlist, onMessage }) =>
       </div>
       
       <div 
-        className='quill-content text-[#111111] tracking-wider sm:tracking-wide font-helvetica'
+        className='quill-content text-[#111111] tracking-wide font-helvetica'
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.desc, sanitizeConfig) }}
       />
       

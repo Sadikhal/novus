@@ -21,9 +21,16 @@ const ProductSpecs = ({ features, product }) => {
         </div>
           <div className="grid grid-cols-2 gap-4 pb-2">
             <span className="text-gray-500">size</span>
-            <span className="px-2 py-1 text-gray-900 rounded">
-              {product.size}
-            </span>
+           <div className="flex flex-wrap gap-1">
+            {product.size.map((i) => (
+              <span
+                key={i}
+                className="px-1 py-1 text-gray-900 rounded bg-gray-50"
+              >
+                {i}
+              </span>
+            ))}
+          </div>
           </div>
 
           {features.map((item) => (

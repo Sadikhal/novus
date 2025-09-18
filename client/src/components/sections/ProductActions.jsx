@@ -25,11 +25,11 @@ export const SecondaryProductActions = ({ isInWishlist, onWishlist, onMessage })
   </div>
 );
 
-export const PrimaryProductActions = ({ onAddToCart, onBuyNow }) => (
+export const PrimaryProductActions = ({ onAddToCart, onBuyNow,selectedSize }) => (
   <div className='pt-2 sm:pt-4 md:pt-8 lg:pt-0 xl:pt-12 flex sm:flex-row lg:flex-col xl:flex-row sm:gap-5 gap-2 flex-col items-center w-full'>
     <Button 
      variant = "ghost"
-      onClick={onAddToCart} 
+      onClick={() => onAddToCart(selectedSize)}  
       className='bg-[#ffff] border-2  realtive border-[#066144] sm:flex-1 lg:w-full xl:w-auto sm:w-auto w-full uppercase text-[#066144] md:text-[18px] text-base font-[700] cursor-pointer tracking-wide  hover:border-none font-helvetica flex flex-row gap-2 hover:bg-[#077572] hover:text-lamaWhite h-auto min-h-12'
     >
       <span><TiShoppingCart /></span>
@@ -37,7 +37,7 @@ export const PrimaryProductActions = ({ onAddToCart, onBuyNow }) => (
     </Button>
     <Button 
       variant = "ghost"
-      onClick={onBuyNow}
+      onClick={() => onBuyNow(selectedSize)}
       className='sm:flex-1 sm:w-auto w-full lg:w-full xl:w-auto uppercase text-[18px] text-base font-[700] h-auto min-h-12 font-helvetica flex flex-row gap-2 cursor-pointer'
     >
       <span><MdSell /></span>

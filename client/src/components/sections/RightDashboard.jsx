@@ -16,53 +16,57 @@ const RightDashboard = () => {
     {
       icon: <MdOutlineProductionQuantityLimits className='text-[#edc74a] h-8 w-8'/>,
       title: 'Total Orders',
-      value: data.metrics?.totalOrderedProducts || 0,
+      value: data?.metrics?.totalOrderedProducts || 0,
       bgColor: 'bg-[#ffff]',
       shadowColor: 'shadow-[#edc74a]/50'
     },
     {
       icon: <MdPendingActions className='text-[#238398] h-8 w-8' />,
       title: 'Pending Orders',
-      value: data.metrics?.pendingProducts || 0,
+      value: data?.metrics?.pendingProducts || 0,
       bgColor: 'bg-gray-300',
       shadowColor: 'shadow-blue-500/50'
     },
     {
       icon: <TbTruckDelivery className='text-[#815e56] h-8 w-8'/>,
       title: 'Delivered Orders',
-      value: data.metrics?.deliveredProducts || 0,
+      value: data?.metrics?.deliveredProducts || 0,
       bgColor: 'bg-[#dfd982]',
       shadowColor: 'shadow-[#815e56]/50'
     }
   ];
 
   const renderStatCard = ({ icon, title, value, bgColor, shadowColor }) => (
-    <div className="flex sm:w-96 w-80 md:w-full justify-center flex-1 items-center p-5 relative shadow-xl shadow-slate-500/50 bg-white rounded-md gap-5 group hover:scale-105 transition ease-in-out delay-0 duration-500">
-      <div className={`${bgColor} w-[70px] h-[70px] transition duration-0 relative group-hover:duration-150 rounded-full flex justify-center items-center text-2xl shadow-xl ${shadowColor} group-hover:shadow-slate-500/100`}>
-        <div className="h-[100px] rounded-full w-[100px] flex justify-center items-center opacity-100 z-50">{icon}</div>
-        <div className="rounded-full absolute w-full h-full scale-x-0 group-hover:bg-slate-100 group-hover:shadow-slate-500/100 group-hover:scale-x-100 transition ease-in-out delay-0 duration-500" />
+    <div className="flex w-full h-full justify-start items-center p-5 relative shadow-xl shadow-slate-500/50 bg-white rounded-md gap-5 group hover:scale-105 transition-transform duration-300">
+      <div className={`${bgColor} flex-none w-16 h-16 md:w-20 md:h-20 rounded-full flex justify-center items-center text-2xl shadow-xl ${shadowColor} relative group-hover:shadow-slate-500/100`}>
+        <div className="flex justify-center items-center z-10">
+          {icon}
+        </div>
+        <div className="rounded-full absolute inset-0 scale-x-0 group-hover:scale-x-100 group-hover:bg-slate-100 transition-transform duration-300 origin-left" />
       </div>
+
       <div className="flex flex-col justify-start items-start text-slate-600">
-        <h2 className="text-2xl font-semibold font-helvetica text-teal-800">{value}</h2>
-        <span className="capitalize font-helvetica text-lg font-semibold text-black">{title}</span>
+        <h2 className="text-2xl lg:text-xl xl:text-2xl font-semibold font-helvetica text-teal-800">{value}</h2>
+        <span className="capitalize font-helvetica text-lg lg:text-base xl:text-lg font-semibold text-black">{title}</span>
       </div>
     </div>
   );
 
   return (
-    <div>
+    <div className='w-full'>
       <div className="h-full lg:hidden w-full">
         <DashboardMenu />
       </div>
-      
-      <div className="flex flex-wrap flex-row gap-3 lg:gap-4 md:w-full justify-center items-center mt-7 lg:mt-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-2 w-full items-stretch justify-items-stretch mt-7 lg:mt-0">
         {statsCards.map((card, index) => (
-          <div key={index}>
+          <div
+            key={index}
+            className={`w-full h-full ${index === 2 ? 'md:col-span-2 lg:col-span-1' : ''}`}
+          >
             {renderStatCard(card)}
           </div>
         ))}
       </div>
-
       <div className="md:h-[680px] h-[700px] w-full mt-5">
         <CustomerPerformanceChart customerId={currentUser?._id} />
       </div>
@@ -79,7 +83,7 @@ const RightDashboard = () => {
               <h3 className="font-bold">Error</h3>
               <p>{error}</p>
             </div>
-          ) : data.orders?.length === 0 ? (
+          ) : data?.orders?.length === 0 ? (
             <div className="text-gray-700 items-center justify-center h-full w-full flex font-poppins">
               No Orders Are Placed
             </div>

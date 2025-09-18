@@ -88,7 +88,7 @@ export const paymentElementOptions = {
 
 
 
-export const getMenuItems = (currentUser, handleLogout) => {
+export const getMenuItems = (currentUser, logoutUser) => {
   if (currentUser) {
     return [
       { text: 'Dashboard', path: '/dashboard' },
@@ -98,7 +98,7 @@ export const getMenuItems = (currentUser, handleLogout) => {
       { text: 'Change Password', path: '/forgot-password' },
       { text: 'Profile', path: '/dashboard/profile' },
       { text: 'Cart', path: '/dashboard/cart' },
-      { text: 'Logout', action: handleLogout }
+      { text: 'Logout', action: logoutUser }
     ];
   }
   return [

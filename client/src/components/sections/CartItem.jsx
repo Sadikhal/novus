@@ -59,7 +59,11 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
                 {item.name}
               </h3>
             </Link>
-            
+             {item.size && (
+              <div className="text-xs text-gray-700">
+                <span className="font-semibold ">Size : </span>{item.size}
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <span className="font-medium text-gray-800 text-xs sm:text-sm">
                 ₹{item.price.toFixed(2)}

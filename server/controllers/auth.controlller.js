@@ -137,15 +137,21 @@ export const login = async (req,res ,next) => {
   }
 };
 
-export const logOut = (req, res ,next ) => {
-  res
-  .clearCookie ("token", {
-    sameSite:"NONE",
-    secure: true
-  })
-  .status(200)
-  .send("user has been logged out")
+export const logOut = async(req, res, next) => {
+  try {
+    res
+      .clearCookie("token", {
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+      })
+      .status(200)
+      .json({ message: "User has been logged out" });
+  } catch (err) {
+    next(createError(500, "Failed to log out"));
+  }
 };
+
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
