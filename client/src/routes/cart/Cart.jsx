@@ -11,7 +11,7 @@ import { usePayment } from '../../hooks/usePayment';
 const Cart = () => {
   const dispatch = useDispatch();
    const { address, orderProducts, priceDetails } = useCheckout();
-   const {  loading, error } = usePayment();
+   const { loading, error } = usePayment();
 
   return (
     <div className="bg-[#909c80] pt-6 pb-3 font-poppins">
@@ -46,7 +46,7 @@ const Cart = () => {
                 <CartItem 
                   key={item.id} 
                   item={item} 
-                  onRemove={() => dispatch(removeItem(item.id))}
+                   onRemove={() => dispatch(removeItem({ id: item.id, size: item.size }))}
                 />
               ))
             ) : (
@@ -65,10 +65,10 @@ const Cart = () => {
           {orderProducts.length > 0 && (
             <PriceDetails 
               loading={loading}
-            error={error}
+              error={error}
               items={orderProducts}
-             totalPrice={priceDetails.totalPrice}
-            totalDiscount={priceDetails.totalDiscount}
+              totalPrice={priceDetails.totalPrice}
+              totalDiscount={priceDetails.totalDiscount}
               isCheckout={false}
             />
           )}

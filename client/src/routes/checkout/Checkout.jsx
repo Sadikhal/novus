@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { removeItem } from '../../redux/cartSlice';
 import AddressDetails from '../../components/sections/AddressDetails';
@@ -48,8 +48,7 @@ const Checkout = () => {
                   <CartItem 
                     key={item.id} 
                     item={item} 
-                    showQuantity={!item.isTemp}
-                    onRemove={() => dispatch(removeItem(item.id))}
+                    onRemove={() => dispatch(removeItem({ id: item.id, size: item.size }))}
                   />
                 ))
               ) : (

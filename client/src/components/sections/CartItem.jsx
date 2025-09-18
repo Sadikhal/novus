@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { decreaseQuantity, increaseQuantity } from '../../redux/cartSlice';
 import { Link } from 'react-router-dom';
 
-
 const CartItem = ({ item, onRemove, showQuantity = true }) => {
   const dispatch = useDispatch();
 
@@ -18,11 +17,9 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
               className="object-cover rounded-md h-28 w-28"
             />
           </Link>
-          
-          {showQuantity && (
             <div className="flex items-center gap-1 mt-2 text-[#171212]">
               <button
-                onClick={() => dispatch(decreaseQuantity(item.id))}
+                onClick={() => dispatch(decreaseQuantity({ id: item.id, size: item.size }))}
                 className="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300"
                 aria-label="Decrease quantity"
               >
@@ -32,14 +29,13 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
                 {item.quantity}
               </span>
               <button
-                onClick={() => dispatch(increaseQuantity(item.id))}
+                onClick={() => dispatch(increaseQuantity({ id: item.id, size: item.size }))}
                 className="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300"
                 aria-label="Increase quantity"
               >
                 +
               </button>
             </div>
-          )}
         </div>
         
         <div className="flex-1">

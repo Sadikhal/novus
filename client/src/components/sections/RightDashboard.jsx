@@ -72,7 +72,9 @@ const RightDashboard = () => {
       </div>
 
       <div className="bg-white p-4 mt-5 my-8 rounded-md">
-        <Heading title="Recent orders" />
+        <h2 className='text-[23px] font-poppins  font-semibold leading-[28px] text-slate-900 p-2 capitalize'>
+          Recent orders
+        </h2>
         <div className="pt-2">
           {loading ? (
             <div className='flex justify-center items-center w-full h-[30vh] md:h-[40vh]'>

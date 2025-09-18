@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { RxDashboard } from 'react-icons/rx';
 import { PiChatCenteredDotsBold } from 'react-icons/pi';
@@ -7,7 +8,7 @@ import { ImProfile } from 'react-icons/im';
 import { BiPurchaseTagAlt } from 'react-icons/bi';
 import { FiShoppingCart } from 'react-icons/fi';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
-import { BiSupport } from 'react-icons/bi'; 
+import { BiSupport } from 'react-icons/bi';
 import { useAuth } from '../../hooks/useAuth';
 import { useUserActions } from '../../hooks/useUserActions';
 
@@ -20,7 +21,12 @@ const DashboardMenu = () => {
     { icon: <BiPurchaseTagAlt />, text: 'My Orders', path: '/dashboard/my-orders' },
     { icon: <FaRegHeart />, text: 'Wishlist', path: '/dashboard/my-wishlist' },
     { icon: <PiChatCenteredDotsBold />, text: 'Chat', path: '/dashboard/chat' },
-    // { icon: <RiLockPasswordLine />, text: 'Change Password', path: '/forgot-password' },
+    {
+      icon: <RiLockPasswordLine />,
+      text: 'Change Password',
+      path: '/dashboard/change-password',
+      className: 'hidden sm:block',
+    },
     { icon: <ImProfile />, text: 'Profile', path: '/dashboard/profile' },
     { icon: <FiShoppingCart />, text: 'Cart', path: '/dashboard/cart' },
     {
@@ -34,16 +40,16 @@ const DashboardMenu = () => {
 
   return (
     <nav className="rounded-md z-50 h-min py-5 -left-4 lg:w-[230px] lg:ml-4 transition-all duration-300 bg-white w-full">
-      <ul className="py-2 text-slate-600 sm:px-4 px-2 flex lg:flex-col lg:gap-2 gap-5 w-full justify-center lg:justify-start flex-wrap">
+      <ul className="py-2 text-slate-600 sm:px-4 px-2  lg:gap-2 gap-5 w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1">
         {menuItems.map((item, index) => (
           <li
             key={index}
-            className="flex items-center gap-4 rounded-md w-32 sm:w-auto sm:min-w-48 hover:bg-white border-b-2 bg-[#fffefe] lg:min-w-full hover:translate-x-3 transition-all duration-400 hover:shadow-inner hover:shadow-stone-300"
+            className={`flex items-center gap-4 rounded-md hover:bg-white border-b-2 bg-[#fffefe] lg:min-w-full hover:translate-x-3 transition-all duration-400 hover:shadow-inner hover:shadow-stone-300 ${item.className || ''}`}
           >
             {item.path ? (
               <Link
                 to={item.path}
-                className="md:text-md text-sm text-slate-700 font-medium font-robotos w-full px-2 py-2 flex flex-row flex-nowrap items-center md:gap-4 sm:gap-3 gap-2"
+                className="text-sm text-slate-700 font-medium font-robotos w-full px-2 py-2 flex flex-row flex-nowrap items-center md:gap-4 sm:gap-3 gap-2"
                 aria-label={item.text}
               >
                 <span className="md:text-lg text-base text-[#566218] cursor-pointer">{item.icon}</span>
@@ -52,7 +58,7 @@ const DashboardMenu = () => {
             ) : (
               <button
                 onClick={item.action}
-                className="text-slate-700 font-medium font-robotos px-2 py-2 flex flex-row flex-nowrap items-center gap-4 w-full cursor-pointer"
+                className="text-sm text-slate-700 font-medium font-robotos w-full px-2 py-2 flex flex-row flex-nowrap items-center md:gap-4 sm:gap-3 gap-2"
                 type="button"
                 aria-label={item.text}
               >

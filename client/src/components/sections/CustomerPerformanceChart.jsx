@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RiBarChartGroupedLine } from "react-icons/ri";
 import { FaChartArea, FaChartLine } from "react-icons/fa";
 import {
@@ -32,13 +32,18 @@ const CustomerPerformanceChart = ({ customerId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  // refs & drag state for horizontal scrolling
+  const scrollRef = useRef(null);
+  const isDownRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      
       try {
         const [startDate, endDate] = dateRange;
-        const timeRange = startDate && endDate 
+        const timeRange = startDate && endDate
           ? `${startDate.toISOString()}_${endDate.toISOString()}`
           : undefined;
 
@@ -49,16 +54,14 @@ const CustomerPerformanceChart = ({ customerId }) => {
             customerId
           }
         });
-        
-        const processedData = response.data.data.map(item => ({
+
+        const processedData = (response.data?.data || []).map(item => ({
           ...item,
           date: new Date(item.date)
         }));
-        
-        setChartData(processedData || []);
-      
+        setChartData(processedData);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to load customer data");
+        setError(err?.response?.data?.message || err?.message || "Failed to load customer data");
       } finally {
         setLoading(false);
       }
@@ -67,17 +70,32 @@ const CustomerPerformanceChart = ({ customerId }) => {
     if (customerId) fetchData();
   }, [timeFrame, dateRange, customerId]);
 
+  // inject light custom scrollbar CSS once
+  useEffect(() => {
+    if (document.getElementById("cp-chart-scrollbar-style")) return;
+    const style = document.createElement("style");
+    style.id = "cp-chart-scrollbar-style";
+    style.innerHTML = `
+      .cp-scrollbar::-webkit-scrollbar { height: 10px; }
+      .cp-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .cp-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(99,102,241,0.18);
+        border-radius: 8px;
+        border: 2px solid rgba(255,255,255,0.0);
+      }
+      .cp-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(99,102,241,0.18) transparent; }
+      /* make dragging cursor */
+      .cp-dragging { cursor: grabbing !important; cursor: -webkit-grabbing !important; }
+    `;
+    document.head.appendChild(style);
+  }, []);
+
   const formatDate = (date) => {
     const dateObj = new Date(date);
     const isCustomRange = dateRange[0] && dateRange[1];
-    
     if (isCustomRange) {
-      return dateObj.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      });
+      return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
-
     const options = {
       daily: { month: 'short', day: 'numeric' },
       weekly: () => {
@@ -89,10 +107,7 @@ const CustomerPerformanceChart = ({ customerId }) => {
       monthly: { year: 'numeric', month: 'short' },
       yearly: { year: 'numeric' }
     };
-    
-    if (timeFrame === 'weekly') {
-      return options.weekly();
-    }
+    if (timeFrame === 'weekly') return options.weekly();
     return dateObj.toLocaleDateString('en-US', options[timeFrame]);
   };
 
@@ -122,147 +137,193 @@ const CustomerPerformanceChart = ({ customerId }) => {
     <button
       onClick={() => setChartType(type)}
       className={`sm:px-3 py-1 rounded-lg flex items-center gap-2 px-2 ${
-        chartType === type 
-          ? 'bg-[#7fb324] text-slate-100'
-          : 'bg-gray-100 hover:bg-gray-200'
+        chartType === type ? 'bg-[#7fb324] text-slate-100' : 'bg-gray-100 hover:bg-gray-200'
       }`}
+      type="button"
+      aria-pressed={chartType === type}
     >
-      <span className="material-icons">{icon}</span>
+      <span className="material-icons" aria-hidden>{icon}</span>
       {label}
     </button>
   );
 
+  const onMouseDown = (e) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDownRef.current = true;
+    el.classList.add("cp-dragging");
+    startXRef.current = e.pageX - el.offsetLeft;
+    scrollLeftRef.current = el.scrollLeft;
+  };
+
+  const onMouseLeave = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDownRef.current = false;
+    el.classList.remove("cp-dragging");
+  };
+
+  const onMouseUp = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDownRef.current = false;
+    el.classList.remove("cp-dragging");
+  };
+
+  const onMouseMove = (e) => {
+    const el = scrollRef.current;
+    if (!el || !isDownRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startXRef.current) * 1.2; 
+    el.scrollLeft = scrollLeftRef.current - walk;
+  };
+
+  const touchStart = (e) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDownRef.current = true;
+    startXRef.current = e.touches[0].pageX - el.offsetLeft;
+    scrollLeftRef.current = el.scrollLeft;
+  };
+
+  const touchMove = (e) => {
+    const el = scrollRef.current;
+    if (!el || !isDownRef.current) return;
+    const x = e.touches[0].pageX - el.offsetLeft;
+    const walk = (x - startXRef.current) * 1.2;
+    el.scrollLeft = scrollLeftRef.current - walk;
+  };
+
+  const touchEnd = () => {
+    isDownRef.current = false;
+  };
+
   const renderChart = () => {
     const gradientColors = ['#13496be6', '#10B981'];
+
+    const pointCount = chartData.length || 1;
+
     
+    let barCategoryGap;
+    let barGap;
+    let maxBarSize;
+
+    if (pointCount <= 4) {
+      barCategoryGap = "30%";
+      barGap = 8;
+      maxBarSize = 80;
+    } else if (pointCount <= 12) {
+      barCategoryGap = "14%";
+      barGap = 6;
+      maxBarSize = 40;
+    } else if (pointCount <= 24) {
+      barCategoryGap = "8%";
+      barGap = 4;
+      maxBarSize = 24;
+    } else {
+      barCategoryGap = "4%";
+      barGap = 2;
+      maxBarSize = 16;
+    }
+
+    const minWidthPx = Math.max(640, pointCount * 48);
+
     return (
-      <ResponsiveContainer width="100%" height={500}>
-        {chartType === 'area' ? (
-          <AreaChart data={chartData}>
-            <defs>
-              <linearGradient id="colorProducts" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={gradientColors[0]} stopOpacity={0.4}/>
-                <stop offset="95%" stopColor={gradientColors[1]} stopOpacity={0.2}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12 }}
-              interval={0}
-              tickLine={false}
-              height={90}
-            />
-            <YAxis 
-              tick={{ fill: '#6b7280', fontSize: 13 }}
-              width={30}
-              tickLine={false}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
-            <Area
-              type="monotone"
-              dataKey="productCount"
-              stroke={gradientColors[0]}
-              strokeWidth={2}
-              fill="url(#colorProducts)"
-              name="Products Purchased"
-            />
-          </AreaChart>
-        ) : chartType === 'line' ? (
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12 }}
-              interval={0}
-              tickLine={false}
-              height={130}
-            />
-            <YAxis 
-              tick={{ fill: '#6b7280', fontSize: 12 }}
-              tickLine={false}
-              width={30}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-800">{value}</span>}
-              iconType="circle"
-            />
-            <Line
-              type="monotone"
-              dataKey="productCount"
-              stroke={gradientColors[0]}
-              strokeWidth={2}
-              dot={{ fill: gradientColors[1], strokeWidth: 2 }}
-              activeDot={{ r: 8 }}
-              name="Products Purchased"
-            />
-          </LineChart>
-        ) : (
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12 }}
-              interval={0}
-              tickLine={false}
-            />
-            <YAxis 
-              tick={{ fill: '#6b7280', fontSize: 13 }}
-              tickLine={false}
-              width={30}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-800">{value}</span>}
-              iconType="circle"
-            />
-            <Bar
-              dataKey="productCount"
-              fill={gradientColors[0]}
-              radius={[4, 4, 0, 0]}
-              name="Products Purchased"
-            />
-          </BarChart>
-        )}
-      </ResponsiveContainer>
+      <div
+        ref={scrollRef}
+        className="w-full overflow-x-auto cp-scrollbar"
+        onMouseDown={onMouseDown}
+        onMouseLeave={onMouseLeave}
+        onMouseUp={onMouseUp}
+        onMouseMove={onMouseMove}
+        onTouchStart={touchStart}
+        onTouchMove={touchMove}
+        onTouchEnd={touchEnd}
+        role="region"
+        aria-label="Customer purchase chart horizontal scroll"
+      >
+        <div style={{ minWidth: `${minWidthPx}px` }} className="px-1">
+          <ResponsiveContainer width="100%" height={500}>
+            {chartType === 'area' ? (
+              <AreaChart data={chartData}>
+                <defs>
+                  <linearGradient id="colorProducts" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={gradientColors[0]} stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor={gradientColors[1]} stopOpacity={0.2}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis
+                  dataKey="date"
+                  tickFormatter={formatDate}
+                  angle={-45}
+                  textAnchor="end"
+                  tick={{ fontSize: 12 }}
+                  interval={0}
+                  tickLine={false}
+                  height={90}
+                />
+                <YAxis tick={{ fill: '#6b7280', fontSize: 13 }} width={30} tickLine={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend formatter={(value) => <span className="text-gray-600">{value}</span>} iconType="circle" />
+                <Area type="monotone" dataKey="productCount" stroke={gradientColors[0]} strokeWidth={2} fill="url(#colorProducts)" name="Products Purchased" />
+              </AreaChart>
+            ) : chartType === 'line' ? (
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis dataKey="date" tickFormatter={formatDate} angle={-45} textAnchor="end" tick={{ fontSize: 12 }} interval={0} tickLine={false} height={130} />
+                <YAxis tick={{ fill: '#6b7280', fontSize: 12 }} tickLine={false} width={30} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend formatter={(value) => <span className="text-gray-800">{value}</span>} iconType="circle" />
+                <Line type="monotone" dataKey="productCount" stroke={gradientColors[0]} strokeWidth={2} dot={{ fill: gradientColors[1], strokeWidth: 2 }} activeDot={{ r: 8 }} name="Products Purchased" />
+              </LineChart>
+            ) : (
+              <BarChart
+                data={chartData}
+                barCategoryGap={barCategoryGap}
+                barGap={barGap}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis
+                  dataKey="date"
+                  tickFormatter={formatDate}
+                  angle={-45}
+                  textAnchor="end"
+                  tick={{ fontSize: 12 }}
+                  interval={0}
+                  tickLine={false}
+                />
+                <YAxis tick={{ fill: '#6b7280', fontSize: 13 }} tickLine={false} width={30} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend formatter={(value) => <span className="text-gray-800">{value}</span>} iconType="circle" />
+                <Bar dataKey="productCount" fill={gradientColors[0]} radius={[4, 4, 0, 0]} name="Products Purchased" maxBarSize={maxBarSize} />
+              </BarChart>
+            )}
+          </ResponsiveContainer>
+        </div>
+      </div>
     );
   };
 
   return (
     <div className="bg-white rounded-xl p-2 sm:p-3 md:p-4 lg:p-6 h-full flex flex-col shadow-sm font-poppins">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <h1 className="text-xl font-bold text-gray-800 text-nowrap flex items-center gap-2 pt-3">
-          <BsPersonLinesFill className="text-[#324875] " /> 
+        <h1 className="text-xl font-semibold text-gray-800 text-nowrap flex items-center gap-2 pt-3">
+          <BsPersonLinesFill className="text-[#324875]" />
           <span className="font-poppins">Customer Purchase Activity</span>
         </h1>
-        
+
         <div className="flex flex-wrap gap-3 items-center pt-3">
           <div className="flex gap-2 bg-gray-200 p-1 rounded-lg text-teal-800 font-poppins text-[15px]">
-            <ChartTypeButton type="bar" label="Bars" icon={<RiBarChartGroupedLine />}/>
+            <ChartTypeButton type="bar" label="Bars" icon={<RiBarChartGroupedLine />} />
             <ChartTypeButton type="area" label="Area" icon={<FaChartArea />} />
             <ChartTypeButton type="line" label="Lines" icon={<FaChartLine />} />
           </div>
 
-          <Select
-            value={timeFrame}
-            onValueChange={(value) => setTimeFrame(value)}
-          >
-            <SelectTrigger 
-              className="border-gray-200 border rounded-lg px-2 py-2 text-sm bg-white shadow-sm w-44 font-poppins items-center text-nowrap flex flex-row justify-between text-[#686767]" 
+          <Select value={timeFrame} onValueChange={(value) => setTimeFrame(value)}>
+            <SelectTrigger
+              className="border-gray-200 border rounded-lg px-2 py-2 text-sm bg-white shadow-sm w-44 font-poppins items-center text-nowrap flex flex-row justify-between text-[#686767]"
               disabled={dateRange[0] !== null}
             >
               <SelectValue placeholder="Select timeframe" />
@@ -292,11 +353,11 @@ const CustomerPerformanceChart = ({ customerId }) => {
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
-          <Loader/>
+          <Loader />
         </div>
       ) : error ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-          <ErrorFallback message={error}/>
+          <ErrorFallback message={error} />
         </div>
       ) : chartData.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
