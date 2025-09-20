@@ -68,7 +68,7 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
        >
         <Link to ='/products?category=perfumes,beauty' className='h-full w-full'>
           <motion.img 
-            src="/banner/ban3.jpg" 
+            src="/banner/perfume9.webp" 
             className="object-cover h-full max-h-[300px] w-full rounded-lg"
             alt="banner"
             variants={bannerVariants}
