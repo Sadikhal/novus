@@ -49,12 +49,12 @@ const AdProducts = () => {
     <div
       className="relative bg-transparent lg:aspect-50/40 2xl:aspect-50/41 aspect-video z-[100]"
     >
-     <Link to ='/products?category=perfumes' className='h-full w-full'>
-      <img src="/banner/ban3.jpg" alt="banner" className="w-full h-full object-cover object-center rounded-[10px]"
+     <Link to ='/products?category=perfumes,beauty' className='h-full w-full'>
+      <img src="/banner/perfume9.webp" alt="banner" className="w-full h-full object-cover object-center rounded-[10px]"
       loading='lazy'
       decoding="async"
        />
-        <div className="absolute left-28 top-28 flex flex-col gap-2">
+        <div className="absolute left-16 top-20 flex flex-col gap-2">
           <h1
             className="text-white text-4xl font-assistant font-bold capitalize"
           >
@@ -66,7 +66,7 @@ const AdProducts = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-20 left-28">
+        <div className="absolute bottom-20 left-16">
           <Buttons className="btn text-slate-900 bg-white capitalize font-assistant font-bold text-[22px]" />
         </div>
       </Link>  

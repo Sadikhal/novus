@@ -5,7 +5,7 @@ import { transformCategoryData } from "../../lib/extractBanners";
 import { Button } from "../ui/Button";
 import { containerVariants, bannerVariants } from "../../lib/motion";
 import { motion } from 'framer-motion';
-
+import { Link } from "react-router-dom";
 
 
 export const BannerSection = ({ 
@@ -61,30 +61,32 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
     {loading ? (
       <SkeletonLoader type='category' count={4} />
     ) : (
-      <motion.div className='lg:hidden px-3 mt-1 relative  h-full max-h-[300px] w-full block'
+      <motion.div className='lg:hidden px-3 mt-1 relative h-full max-h-[300px] w-full block'
        variants={containerVariants}
        initial="hidden"
        animate="visible"
        >
-        <motion.img 
-          src="/banner/ban3.jpg" 
-          className="object-cover h-full max-h-[300px] w-full rounded-lg"
-          alt="banner"
-          variants={bannerVariants}
-          
-        />
-       <div className="absolute inset-0  bg-opacity-50 flex  left-10 top-20 flex-col gap-2">
-        <div className="text-white text-2xl font-assistant font-extrabold capitalize  ">Unveil the Essence of Elegance</div>
-        <div className='text-white text-base font-poppins font-medium  capitalize'>
-         Timeless & Modern choices
+        <Link to ='/products?category=perfumes,beauty' className='h-full w-full'>
+          <motion.img 
+            src="/banner/ban3.jpg" 
+            className="object-cover h-full max-h-[300px] w-full rounded-lg"
+            alt="banner"
+            variants={bannerVariants}
+            
+          />
+        <div className="absolute inset-0  bg-opacity-50 flex  left-10 top-20 flex-col gap-2">
+          <div className="text-white text-2xl font-assistant font-extrabold capitalize  ">Unveil the Essence of Elegance</div>
+          <div className='text-white text-base font-poppins font-medium  capitalize'>
+          Timeless & Modern choices
+          </div>
         </div>
-      </div>
       <div className="absolute bottom-9 left-16">
         <Button className="border-slate-50 text-lamaWhite bg-transparent border-2 hover:bg-transparent font-bold">
           Shop Now
         </Button>
       </div>
-      </motion.div>
+     </Link> 
+    </motion.div>
     )}
   </>
 );
