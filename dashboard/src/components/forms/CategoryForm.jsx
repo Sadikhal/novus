@@ -141,3 +141,4 @@ const CategoryForm = ({ type, data }) => {
 };
 
 export default CategoryForm;
+

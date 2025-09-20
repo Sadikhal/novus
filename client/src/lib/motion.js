@@ -21,13 +21,13 @@ export const itemVariants = {
   visible: {
     opacity: 1,
     filter: 'blur(0px)',
-    transition: { duration: 2, ease: 'easeOut' },
+    transition: { duration: 0.2, ease: 'easeOut' },
   },
 };
 
 export const textVariants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
 };
 
 export const carouselImageVariants = {
@@ -36,7 +36,7 @@ export const carouselImageVariants = {
     opacity: 1,
     scale: 1,
     filter: 'blur(0px)',
-    transition: { duration: 1, ease: 'easeOut' },
+    transition: { duration: 0.3, ease: 'easeOut' },
   },
 };
 
@@ -51,7 +51,7 @@ export const bannerContainer = {
     x: 0,
     y: 0,
     transition: {
-      duration: 3,
+      duration: 0.3,
       staggerChildren: 0.1,
       type: 'spring',
       stiffness: 80,
@@ -65,6 +65,6 @@ export const bannerVariants = {
   visible: {
     opacity: 1,
     filter: 'blur(0px)',
-    transition: { duration:3, ease: 'easeOut' },
+    transition: { duration:0.3, ease: 'easeOut' },
   },
 };

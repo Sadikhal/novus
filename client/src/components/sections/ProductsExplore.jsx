@@ -134,7 +134,7 @@ const ProductsExplore = ({categories, onCategoryClick, loading}) => {
           >
             <div className="relative flex items-center justify-center rounded-full bg-transparent">
               <motion.img
-                src={category.image?.[0]}
+                src={category.image?.[1]}
                 className="h-16 w-16 rounded-full object-cover sm:h-20 sm:w-20 2xl:h-28 2xl:w-28 bg-white"
                 alt={`Category: ${category.name}`}
                 variants={itemVariants}
