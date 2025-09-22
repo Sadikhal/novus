@@ -2,7 +2,6 @@ import { createError } from "../lib/createError.js";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 
-
 export const createReview = async (req, res, next) => {
   const { productId } = req.params;
   const { rating, comment } = req.body;
@@ -18,29 +17,35 @@ export const createReview = async (req, res, next) => {
       return next(createError(403, "You can't review your own product"));
 
     const existingReview = product.reviews.find(
-      review => review.userId.toString() === req.userId
+      (review) => review.userId.toString() === req.userId
     );
 
     if (existingReview) {
       existingReview.rating = rating;
       existingReview.comment = comment;
-       existingReview.userImage = user.image;
+      existingReview.userImage = user.image;
+      existingReview.name = user.name; 
     } else {
       const newReview = {
         userId: req.userId,
         name: user.name,
-        userImage: user.image, 
+        userImage: user.image,
         rating,
-        comment
+        comment,
       };
       product.reviews.push(newReview);
     }
 
     product.numReviews = product.reviews.length;
-    product.rating = product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.numReviews;
+    product.rating =
+      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      product.numReviews;
 
     await product.save();
-    res.status(200).json({ message: 'Review added/updated successfully', reviews : product.reviews});
+    res.status(200).json({
+      message: "Review updated successfully",
+      reviews: product.reviews,
+    });
   } catch (err) {
     next(err);
   }

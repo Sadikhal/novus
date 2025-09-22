@@ -1,4 +1,3 @@
-// frontend/src/routes/layout/layout.jsx
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';

@@ -45,9 +45,7 @@ const Home = () => {
             )}
             
             {loading && (
-              <div className='w-full h-[300px] justify-center flex items-center'>
-                 <Loader/>
-              </div>
+              <div className="w-full h-[300px] sm:h-[300px] md:h-[320px] lg:h-[350px] xl:h-[400px] 2xl:h-[400px] bg-gray-200 animate-pulse"></div>
             )}
       <div className='bg-lamaWhite py-5 h-full w-full'>
         <HomeExplore />

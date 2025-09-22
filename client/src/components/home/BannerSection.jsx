@@ -3,7 +3,7 @@ import HomeTrending from "./HomeTrending";
 import { GridSkeletonLoader, SkeletonLoader } from "../ui/Loaders";
 import { transformCategoryData } from "../../lib/extractBanners";
 import { Button } from "../ui/Button";
-import { containerVariants, bannerVariants } from "../../lib/motion";
+import { containerVariants, bannerVariants, bannerTextVariants } from "../../lib/motion";
 import { motion } from 'framer-motion';
 import { Link } from "react-router-dom";
 
@@ -71,15 +71,18 @@ export const SecondaryBannerSection = ({ loading, banners }) => (
             src="/banner/perfume9.webp" 
             className="object-cover h-full max-h-[300px] w-full rounded-lg"
             alt="banner"
+            loading="lazy"
+            decoding="async"
             variants={bannerVariants}
             
           />
-        <div className="absolute inset-0  bg-opacity-50 flex  left-10 top-20 flex-col gap-2">
+        <motion.div className="absolute inset-0  bg-opacity-50 flex  left-10 top-20 flex-col gap-2"
+        variants={bannerTextVariants}>
           <div className="text-white text-2xl font-assistant font-extrabold capitalize  ">Unveil the Essence of Elegance</div>
           <div className='text-white text-base font-poppins font-medium  capitalize'>
           Timeless & Modern choices
           </div>
-        </div>
+        </motion.div>
       <div className="absolute bottom-9 left-16">
         <Button className="border-slate-50 text-lamaWhite bg-transparent border-2 hover:bg-transparent font-bold">
           Shop Now

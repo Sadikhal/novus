@@ -77,7 +77,7 @@ const Footer = () => {
         <div className='flex flex-row gap-2 pt-4 text-center items-center justify-center'>
           {social.map((item) => (       
             <Link to='' key={item.name}>
-              <button className="border btn btn-accent rounded-full hover:bg-[#FC8D00]">
+              <button className="btn border-none bg-[#2aa488] rounded-full hover:bg-[#1a924c]">
                 <img src={item.url} alt={item.name} className="w-[18px] h-[22px] object-contain cursor-pointer" />
               </button>
             </Link>

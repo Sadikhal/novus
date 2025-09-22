@@ -67,7 +67,7 @@ const RightDashboard = () => {
           </div>
         ))}
       </div>
-      <div className="md:h-[680px] h-[700px] w-full mt-5">
+      <div className="md:h-[700px] h-[750px] w-full mt-5">
         <CustomerPerformanceChart customerId={currentUser?._id} />
       </div>
 

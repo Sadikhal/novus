@@ -6,6 +6,8 @@ import { EmptyState } from '../ui/Loaders';
 import { ProductListSkeleton } from '../ui/Loaders';
 import Pagination from './pagination';
 import FilterProduct from './FilterProduct';
+import { containerVariants, itemVariants } from '../../lib/motion';
+import { motion } from 'framer-motion';
 
 const Filter = ({ 
   handleCheckboxChange,
@@ -49,7 +51,11 @@ const Filter = ({
             <EmptyState handleClearAll={handleClearAll} />
           ) : (
             <>
-              <div className="px-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 py-4">
+              <motion.div className="px-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 py-4"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true}}>
                 {isLoading ? (
                  <ProductListSkeleton/>
                   
@@ -60,14 +66,16 @@ const Filter = ({
                   </div>
                 ) : (
                   products?.map((item) => (
+                   <motion.div variants={itemVariants} key={item._id}> 
                     <ListingCard 
                       key={item._id}
                       data={item}
-                      showWishlist={true} 
+                      showWishlist={true}  
                     />
+                   </motion.div> 
                   ))
                 )}
-              </div>
+              </motion.div>
 
               {pagination && !isLoading && !error && (
                 <Pagination

@@ -3,9 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './Button';
 
-
-
-
 export const SecondaryHoveredButton = ({title, href}) => {
   return (
 <Link to={href}>
@@ -25,8 +22,8 @@ export const SecondaryHoveredButton = ({title, href}) => {
       <span className="relative text-base font-semibold">
         
         <div  className= 'group-hover:text-lamaWhite text-black uppercase text-sm w-full h-full'>
-                           {title}
-                          </div>
+           {title}
+        </div>
       </span>
     </Button>
     </Link>

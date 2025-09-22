@@ -340,9 +340,9 @@ const Profile = () => {
 
               {currentUser?.addresses?.length > 0 && (
                 <div className="md:flex-row flex-col md:gap-3 flex gap-1 md:items-center text-slate-600 w-full">
-                  <label className="flex-[0.9] flex justify-between items-center capitalize font-poppins text-sm md:text-base font-medium text-slate-800">
+                  <label className="flex-[0.9] flex md:justify-between  items-center capitalize font-poppins text-sm md:text-base font-medium text-slate-800 gap-5">
                     Default Address
-                    <span>: </span>
+                    <span> : </span>
                   </label>
                   <div className="flex-1">
                     {isEditing ? (

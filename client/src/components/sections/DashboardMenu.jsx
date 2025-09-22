@@ -58,7 +58,7 @@ const DashboardMenu = () => {
             ) : (
               <button
                 onClick={item.action}
-                className="text-sm text-slate-700 font-medium font-robotos w-full px-2 py-2 flex flex-row flex-nowrap items-center md:gap-4 sm:gap-3 gap-2"
+                className="text-sm text-slate-700 font-medium font-robotos w-full px-2 py-2 flex flex-row flex-nowrap items-center md:gap-4 sm:gap-3  cursor-pointer gap-2"
                 type="button"
                 aria-label={item.text}
               >

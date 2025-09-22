@@ -201,7 +201,6 @@ const handleDeleteMessage = async (messageId) => {
     const handleGetMessage = (data) => {
       setState(prev => {
         const convo = prev.convo || { messages: [] };
-        // Prevent duplicate messages (by _id)
         if (convo.messages.some(msg => msg._id === data._id)) return prev;
         return {
           ...prev,
@@ -264,7 +263,7 @@ const handleDeleteMessage = async (messageId) => {
                     />
                   </div>
                   <div className='flex flex-col'>
-                    <span className='font-semibold text-lg font-robotos capitalize text-slate-800'>
+                    <span className='font-semibold text-lg font-robotos capitalize text-slate-800 text-nowrap'>
                       {receiver?.name}
                     </span>
                     <div className='flex items-center gap-2'>

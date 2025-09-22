@@ -113,7 +113,6 @@ export const useUserActions = (product = null) => {
     return requireAuth(action);
   };
 
-
   return {
     isInWishlist,
     handleAddToCart,

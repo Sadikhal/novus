@@ -11,7 +11,6 @@ const ReviewModal = ({ onReviewSubmit }) => {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(1);
 
-  const { currentUser } = useSelector((state) => state.user);
   const { productId } = useParams();
 
   const handleSubmit = async (e) => {
@@ -50,9 +49,9 @@ const ReviewModal = ({ onReviewSubmit }) => {
       </button>
 
       <dialog id="review_modal" className="modal">
-        <ScrollArea className="md:h-[500px] modal-box w-full max-w-xl h-full bg-[#ffff] font-poppins">
+        <ScrollArea className="sm:h-[500px] modal-box w-full max-w-xl h-full bg-[#ffff] font-poppins">
           <button
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            className="btn btn-sm btn-circle text-slate-950 btn-ghost absolute right-2 top-2"
             onClick={() => document.getElementById('review_modal').close()}
           >
             ✕
@@ -69,40 +68,39 @@ const ReviewModal = ({ onReviewSubmit }) => {
             </div>
 
             <div className="flex flex-col w-full py-4 gap-3">
-              <div className="form-control w-full">
+              <div className="form-control w-full flex flex-col sm:flex-row sm:justify-between md:gap-4 gap-1">
                 <label className="label">
-                  <span className="label-text text-black">Overall Rating</span>
+                  <span className="label-text text-black">Overall Rating :</span>
                 </label>
-                <div className="rating gap-1 w-full rating-md">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <input
-                      key={star}
-                      type="radio"
-                      name="rating"
-                      value={star}
-                      checked={rating === star}
-                      onChange={() => setRating(star)}
-                      className="mask mask-heart bg-red-400"
-                    />
-                  ))}
+                <div className="rating gap-1 w-full rating-md pl-4">
+                  {["bg-red-400", "bg-orange-400", "bg-yellow-400", "bg-lime-400", "bg-green-400"].map((color, i) => {
+                    const star = i + 1;
+                    return (
+                      <input
+                        key={star}
+                        type="radio"
+                        name="rating"
+                        value={star}
+                        checked={rating === star}
+                        onChange={() => setRating(star)}
+                        className={`mask mask-heart ${color}`}
+                      />
+                    );
+                  })}
                 </div>
               </div>
-
-              <div className="form-control w-full">
+              <div className="form-control w-full flex flex-col md:flex-row md:justify-between md:gap-4 gap-1 mt-3">
                 <label className="label">
-                  <span className="label-text text-black">Your Review</span>
+                  <span className="label-text text-black">Your Review : </span>
                 </label>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   required
                   minLength={6}
-                  className="textarea textarea-bordered bg-white border-gray-100 focus:outline-none focus:border-slate-300 font-poppins shadow-sm shadow-slate-400 rounded-md"
+                  className="textarea text-black bg-white w-full border-slate-200 focus:outline-none focus:border-slate-400 font-poppins shadow-lg shadow-slate-100 rounded-md"
                   placeholder="Describe your experience..."
                 />
-                <span className="label-text-alt text-black">
-                  Minimum 30 characters.
-                </span>
               </div>
             </div>
 

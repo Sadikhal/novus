@@ -8,8 +8,10 @@ import ProductsExplore from '../../components/sections/ProductsExplore';
 import { apiRequest } from '../../lib/apiRequest';
 import { ProductsFailed, ProductsStart, ProductsSuccess } from '../../redux/productSlice';
 import { useFetchCategoriesAndBrands } from '../../hooks/useCategoriesAndBrands';
-import { ProductListSkeleton, FilterSkeleton } from '../../components/ui/Loaders';
+import { ProductListSkeleton } from '../../components/ui/Loaders';
 import { ErrorFallback } from '../../components/sections/ErrorFallback';
+import {Link} from "react-router-dom";
+
 
 function Products() {
   const dispatch = useDispatch();
@@ -167,8 +169,11 @@ function Products() {
        
        <div className="flex flex-row items-center w-full justify-between md:pt-0 pt-3">
           <div className="flex flex-row gap-2 items-center">
-           <div className="text-[12px] font-robotos tracking-wide  text-[#197a79] font-semibold capitalize h-full">
-            Home / Wear Online Store
+           <Link to="/" className="text-[12px] font-robotos tracking-wide  text-[#197a79] font-semibold capitalize h-full">
+            Home /
+           </Link>
+           <div className="text-[12px] font-robotos tracking-wide  text-[#197a79] font-semibold capitalize h-full pl-1">
+            Wear Nocus Store
            </div>
             <span className="text-[14px] font-robotos tracking-wide  text-black font-semibold capitalize">
               -
