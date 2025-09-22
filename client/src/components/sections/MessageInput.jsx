@@ -261,11 +261,11 @@ const MessageInput = ({
             onClick={onEditCancel}
             disabled={loading || processingImage}
           >
-            <MdClose className="w-5 h-5 text-gray-600" />
+            <MdClose className="w-5 h-5 text-gray-600 cursor-pointer" />
           </button>
           <button 
             type="submit"
-            className="p-2 bg-[#1b827a] rounded-full hover:bg-[#0f4b46] text-white"
+            className="p-2 bg-[#1b827a] rounded-full hover:bg-[#0f4b46] text-white cursor-pointer"
             disabled={loading || processingImage || !editText.trim()}
           >
             <MdEdit className="w-5 h-5" />
