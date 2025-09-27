@@ -9,9 +9,6 @@ const sendMail = async (options) => {
             user: process.env.SMTP_MAIL,
             pass: process.env.SMTP_PASSWORD,
         },
-        tls: {
-        rejectUnauthorized: false,
-      },
     });
 
     const mailOptions = {
