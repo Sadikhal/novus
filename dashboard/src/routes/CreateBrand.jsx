@@ -1,5 +1,5 @@
 
-import { useRef, useState, useEffect } from 'react';
+import {  useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -87,7 +87,7 @@ const CreateBrand = () => {
         description: 'Redirecting to dashboard...',
       });
       reset();
-      setUploadedImages([]); // Reset images after successful submission
+      setUploadedImages([]);
       navigate('/seller/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');

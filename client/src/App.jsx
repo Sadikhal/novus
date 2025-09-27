@@ -22,6 +22,8 @@ import ForgotPasswordPage from './routes/forgotPassword/forgotPassword';
 import OrderSuccess from './routes/orderSuccessPage/OrderSuccess';
 import ProtectedRoute from './lib/protectedRoute';
 import HelpDesk from './routes/HelpDesk/HelpDesk';
+import Terms from './routes/terms/Terms';
+import Privacy from './routes/privacy/Privacy';
 
 function App() {
   const router = createBrowserRouter([
@@ -57,6 +59,9 @@ function App() {
         { index : true, element: <Home /> },
         { path: "/products", element: <Products /> },
         { path: "/product/:productId", element: <Product /> },
+        { path: "/terms", element: <Terms /> },
+        { path: "/privacy", element: <Privacy /> },
+
       ]
     },
     {

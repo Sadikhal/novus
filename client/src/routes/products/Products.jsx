@@ -1,6 +1,7 @@
+
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import Filter from '../../components/sections/Filter';
 import MobileFilter from '../../components/sections/MobileFilter';
 import RightFilter from '../../components/sections/RightFilter';
@@ -10,22 +11,20 @@ import { ProductsFailed, ProductsStart, ProductsSuccess } from '../../redux/prod
 import { useFetchCategoriesAndBrands } from '../../hooks/useCategoriesAndBrands';
 import { ProductListSkeleton } from '../../components/ui/Loaders';
 import { ErrorFallback } from '../../components/sections/ErrorFallback';
-import {Link} from "react-router-dom";
-
 
 function Products() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const { searchTerm } = useSelector((state) => state.search);
   const urlSearchTerm = searchParams.get('search') || '';
-  
+
   const { 
     allProducts: products, 
     isLoading: productsLoading, 
     error: productsError, 
     pagination 
   } = useSelector((state) => state.product);
-  
+
   const { 
     categories, 
     brands, 
@@ -33,7 +32,8 @@ function Products() {
     error: filtersError 
   } = useFetchCategoriesAndBrands();
 
-  const initialFilters = useMemo(() => ({
+  // ✅ Always derive filters from searchParams
+  const derivedFilters = useMemo(() => ({
     category: searchParams.get('category')?.split(',') || [],
     brand: searchParams.get('brand')?.split(',') || [],
     color: searchParams.get('color') || '',
@@ -45,11 +45,16 @@ function Products() {
     search: urlSearchTerm
   }), [searchParams, urlSearchTerm]);
 
-  const [filters, setFilters] = React.useState(initialFilters);
+  const [filters, setFilters] = React.useState(derivedFilters);
 
+  // ✅ Sync filters whenever URL changes
+  useEffect(() => {
+    setFilters(derivedFilters);
+  }, [derivedFilters]);
+
+  // ✅ Sync URL when filters change
   useEffect(() => {
     const params = new URLSearchParams();
-    
     if (filters.category.length > 0) params.set('category', filters.category.join(','));
     if (filters.brand.length > 0) params.set('brand', filters.brand.join(','));
     if (filters.color) params.set('color', filters.color);
@@ -58,18 +63,19 @@ function Products() {
     if (filters.limit) params.set('limit', filters.limit);
     if (filters.minPrice !== undefined) params.set('minPrice', filters.minPrice);
     if (filters.maxPrice !== undefined) params.set('maxPrice', filters.maxPrice);
-    
+    if (filters.search) params.set('search', filters.search);
+
     setSearchParams(params);
   }, [filters, setSearchParams]);
 
-  
+  // ✅ Fetch products on param change
   useEffect(() => {
     const fetchProducts = async () => {
       dispatch(ProductsStart());
       try {
         const params = new URLSearchParams(searchParams);
         if (urlSearchTerm) params.set('search', urlSearchTerm);
-        
+
         const response = await apiRequest.get(`/product?${params.toString()}`);
         dispatch(ProductsSuccess({
           products: response.data.products,
@@ -79,10 +85,9 @@ function Products() {
         dispatch(ProductsFailed(err.message || 'Error fetching products'));
       }
     };
-    
+
     fetchProducts();
   }, [dispatch, searchParams, urlSearchTerm]);
-
   const handleCheckboxChange = useCallback((e, type) => {
     const { value, checked } = e.target;
     setFilters(prev => ({

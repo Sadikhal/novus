@@ -612,6 +612,7 @@ const Profile = () => {
                         src="/images/avatar.png"
                         className="md:h-36 md:w-36 h-32 w-32 object-cover rounded-full cursor-pointer"
                         alt="profile"
+                        loading='lazy'
                         onClick={() => fileInputRef.current?.click()}
                       />
                       <div

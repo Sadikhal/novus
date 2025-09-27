@@ -46,7 +46,7 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-
+/* 
 /* Quill Content Styles */
 .quill-content h1 { 
   font-size: 2em;
@@ -99,7 +99,8 @@ input:-webkit-autofill:active {
 .quill-content em,
 .quill-content i {
   font-style: italic;
-}
+} 
+
  .wifi-loader {
           --background: #62abff;
           --front-color: #ef4d86;
@@ -203,7 +204,6 @@ input:-webkit-autofill:active {
           }
         } 
 
-        /* Add to your global CSS file for emoji picker customization */
 .epr-emoji-category-label {
   background-color: white !important;
   color: #4b5563 !important;

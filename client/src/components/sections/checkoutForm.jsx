@@ -74,6 +74,7 @@ const ProductItem = ({ item }) => (
       src={item.image} 
       className="object-cover rounded-md h-28 w-28" 
       alt={item.name} 
+      loading="lazy"
     />
     <div className="pl-2 flex flex-col gap-3">
       <h4 className="font-semibold capitalize text-[15px] sm:text-base  text-slate-950 font-poppins overflow-hidden px-2">

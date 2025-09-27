@@ -1,15 +1,14 @@
-import React from 'react';
 import { TiTick } from "react-icons/ti";
 
 const CompanyDetails = () => {
   return (
     <div className='bg-[#ffeee8] px-2 md:px-4 lg:px-6 p-12'>
       <div className='font-robotos text-sm md:text-[15px] text-slate-700 font-normal leading-relaxed text-balance'>
-        Myntra makes selling online extremely easy. After guiding sellers with their onboarding requirements, there is support in terms of fulfillment models, platform integration & prerequisites for operational readiness. Secure and timely payments on predefined days makes the entire process easier for sellers. There is also a lot of scope for growth with tailored support at every step of the selling journey if you sell in Myntra.
+        Novus makes selling online extremely easy. After guiding sellers with their onboarding requirements, there is support in terms of fulfillment models, platform integration & prerequisites for operational readiness. Secure and timely payments on predefined days makes the entire process easier for sellers. There is also a lot of scope for growth with tailored support at every step of the selling journey if you sell in Novus.
 
-        Moreover, Myntra's Partner Insights provides real-time data with reporting dashboards and highly curated data insight tools. Product list ads, display ads, search banners and Myntra Live will also help promote your brands and products. Myntra's very own Partner University will help sellers understand Myntra's policies and processes through videos, courses, documents and more.
+        Moreover, Novus's Partner Insights provides real-time data with reporting dashboards and highly curated data insight tools. Product list ads, display ads, search banners and Novus Live will also help promote your brands and products. Novus's very own Partner University will help sellers understand Novus's policies and processes through videos, courses, documents and more.
 
-        So as a fashion or beauty brand, if you are selling in India, you should sell in Myntra!
+        So as a fashion or beauty brand, if you are selling in India, you should sell in Novus!
 
         At Flipkart, we recognize that there may be times when you require additional assistance for your online business. That's why, with your Flipkart seller account, you gain access to a diverse range of tools and support functions designed to foster business growth. These include:
       </div>

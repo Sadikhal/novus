@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { ScrollArea, ScrollBar } from "../ui/ScrollArea";
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import { FiChevronLeft } from "react-icons/fi";
+import { containerVariants, itemVariants } from "../../lib/motion";
+import { motion } from "framer-motion";
 
 const Slider = ({ images, imageIndex, setImageIndex }) => {
   const [activeImage, setActiveImage] = useState(images[0]);
@@ -33,9 +34,13 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
   }, [activeImage, images]);
 
   return (
-    <div className="w-full h-auto md:h-[500px] lg:h-[530px] xl:h-[430px] flex flex-col md:flex-row lg:flex-col xl:flex-row gap-1 relative 2xl:min-h-[650px] items-center justify-center 2xl:h-auto">
+    <motion.div className="w-full h-auto md:h-[500px] lg:h-[530px] xl:h-[430px] flex flex-col md:flex-row lg:flex-col xl:flex-row gap-1 relative 2xl:min-h-[650px] items-center justify-center 2xl:h-auto"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}>
       {imageIndex !== null && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex flex-col w-full h-full">
+        <motion.div className="fixed inset-0 z-50 bg-black/90 flex flex-col w-full h-full">
           <div className="flex flex-row justify-center items-center w-full h-full">
             <div
               className="flex bg-[#ffff] p-2 px-2 items-center absolute justify-center z-50 lg:left-9 left-2 cursor-pointer"
@@ -46,7 +51,6 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
               />
             </div>
 
-            {/* Enlarged image area */}
             <ScrollArea className="flex items-center justify-center w-full h-full">
               <div
                 className="
@@ -59,6 +63,7 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
                   src={images[imageIndex]}
                   className="w-full h-full object-cover"
                   alt="Enlarged view"
+                  loading="lazy"
                 />
               </div>
               <ScrollBar orientation="horizontal" />
@@ -82,11 +87,9 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
             </div>
           </div>
 
-          {/* Bottom thumbnails (modal) */}
           <div className="fixed bottom-6 z-[999] md:h-[60px] h-[30px] w-full">
             <div className="h-full justify-center w-full flex items-center">
               <div
-                /* CHANGE: start-align the scroll content; keep the strip centered by sizing the container, not the items */
                 className="flex items-center gap-2 py-2 overflow-x-auto overflow-y-hidden w-auto max-w-[95%] mx-auto"
                 style={{ WebkitOverflowScrolling: "touch" }}
               >
@@ -104,34 +107,40 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
                       className="max-h-full max-w-full object-contain rounded-md"
+                      loading="lazy"
                     />
                   </button>
                 ))}
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Active image preview */}
-      <div className="flex-3 w-full md:w-[90%] lg:w-full xl:w-[85%]">
+      <motion.div className="flex-3 w-full md:w-[90%] lg:w-full xl:w-[85%]"
+      variants={itemVariants}
+      >
         <img
           src={activeImage}
           onClick={() => setImageIndex(activeIndex)}
           className="min-w-full h-full min-h-[350px] max-h-[500px] sm:max-h-[500px] sm:min-h-[400px] md:min-h-[400px] md:max-h-[500px] xl:h-[460px] lg:min-h-[400px] lg:max-h-[450px] 2xl:min-h-[600px] 2x:h-auto cursor-pointer object-contain 2xl:w-full"
           alt="Main product view"
+          loading="lazy"
         />
-      </div>
+      </motion.div>
 
       {/* Thumbnails vertical */}
       <ScrollArea className="hidden md:flex lg:hidden xl:flex flex-col h-full md:w-[10%] xl:w-[15%] min-w-[100px]">
         <div className="flex flex-col gap-3 pr-2">
           {images?.map((image, index) => (
-            <img
+            <motion.img
               src={image}
               alt={`Thumbnail ${index + 1}`}
               key={index}
               className="h-[80px] xl:h-[80px] 2xl:min-h-[85px] w-full object-cover rounded-md border-2 border-transparent hover:border-[#6a92ab]"
+              loading="lazy"
+              variants={itemVariants}
               onMouseEnter={() => setActiveImage(image)}
               onClick={() => {
                 setActiveImage(image);
@@ -143,16 +152,16 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
         <ScrollBar orientation="vertical" />
       </ScrollArea>
 
-      {/* Thumbnails horizontal at lg, mobile */}
       <ScrollArea orientation="horizontal" className="flex md:hidden lg:flex xl:hidden h-[100px] w-full">
-        {/* CHANGE: same idea—start-align the scroll content, center the strip via its own width */}
         <div className="flex items-center gap-3 pb-2 w-max h-full mx-auto">
           {images?.map((image, index) => (
-            <img
+            <motion.img
               src={image}
               alt={`Thumbnail ${index + 1}`}
               key={index}
+              variants={itemVariants}
               className="h-[70px] w-24 object-cover rounded-md border-2 border-transparent hover:border-[#083a5a]"
+              loading="lazy"
               onMouseEnter={() => setActiveImage(image)}
               onClick={() => {
                 setActiveImage(image);
@@ -163,7 +172,7 @@ const Slider = ({ images, imageIndex, setImageIndex }) => {
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-    </div>
+    </motion.div>
   );
 };
 

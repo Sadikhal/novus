@@ -8,7 +8,6 @@ import { itemVariants, textVariants } from '../../lib/motion';
 
 const ListingCard = ({ data, showWishlist, type }) => { 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const wishlistItems = useSelector((state) => state.wishlist.items);  
   const isInWishlist = wishlistItems.some((item) => item?._id === data?._id);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

@@ -43,6 +43,7 @@ const MessageItem = ({
             src={isSender 
               ? currentUser.image || '/avatar.png' 
               : receiver?.image || '/avatar.png'} 
+              loading="lazy"
           />
         </div>
       </div>
@@ -92,7 +93,8 @@ const MessageItem = ({
                   <img 
                     src={image} 
                     alt={`Attachment ${index + 1}`} 
-                    className="w-36 h-36 object-cover rounded-md border border-gray-300" 
+                    className="w-36 h-36 object-cover rounded-md border border-gray-300"
+                    loading="lazy" 
                   />
                 </div>
               </DialogTrigger>
@@ -100,7 +102,8 @@ const MessageItem = ({
                 <img 
                   src={image} 
                   alt={`Attachment ${index + 1}`} 
-                  className="w-full object-cover rounded-md border border-gray-300" 
+                  className="w-full object-cover rounded-md border border-gray-300"
+                  loading="lazy" 
                 />
               </DialogContent>
             </Dialog>

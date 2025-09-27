@@ -122,6 +122,7 @@ const NotificationItem = ({ notification, onItemClick, closePopover }) => {
       <img 
         src={sender?.image || '/images/avatar.png'} 
         alt={sender?.name || 'User avatar'}
+        loading='lazy'
         className="w-10 h-10 rounded-full mr-3"
         onError={(e) => {
           e.target.onerror = null;

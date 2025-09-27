@@ -58,7 +58,7 @@ const Profile = () => {
   }, [currentUser]);
 
   const handleDateChangeFromPicker = (selectedDate) => {
-    // selectedDate is a Date object or null
+    
     const isoString = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
     setFormData((prev) => ({ ...prev, dateOfBirth: isoString }));
 
@@ -209,6 +209,7 @@ const Profile = () => {
                   src={uploadedImage || '/avatar.png'}
                   className="md:h-36 md:w-36 h-32 w-32 object-cover rounded-full cursor-pointer"
                   alt="profile"
+                  loading='lazy'
                   onClick={() => isEditing && fileInputRef.current.click()}
                 />
                 {isEditing && (
@@ -333,7 +334,7 @@ const Profile = () => {
                 </label>
                 <div className="flex-1">
                   <div className="capitalize w-full border p-2 border-gray-100 text-sm text-slate-900 placeholder-transparent bg-[#fff] focus:outline-none focus:border-slate-200 font-poppins font-medium shadow-sm rounded-sm">
-                    {format(parseISO(currentUser.createdAt), 'MM/dd/yy')}
+                  {currentUser.createdAt ? format(parseISO(currentUser.createdAt), 'MM/dd/yy') : 'N/A'}
                   </div>
                 </div>
               </div>

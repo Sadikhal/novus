@@ -15,6 +15,7 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
               src={item.image} 
               alt={item.name}
               className="object-cover rounded-md h-28 w-28"
+              loading="lazy"
             />
           </Link>
             <div className="flex items-center gap-1 mt-2 text-[#171212]">
