@@ -115,6 +115,7 @@ export const useAuth = () => {
       });
       return true;
     } catch (err) {
+      console.log(err)
       toast({
         variant: "destructive",
         title: "Failed to Send Reset Link",
