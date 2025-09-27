@@ -100,7 +100,7 @@ export const sendVerificationEmail = async (email, verificationToken) => {
         console.log('Verification email sent successfully');
         return response;
     } catch (error) {
-        console.error('Error sending verification email:', error);
+        console.log('Error sending verification email:', error);
         throw new Error(`Error sending verification email: ${error.message}`);
     }
 };
@@ -114,7 +114,7 @@ export const sendWelcomeEmail = async (email, name) => {
         });
         return response;
     } catch (error) {
-        console.error('Error sending welcome email:', error);
+        console.log('Error sending welcome email:', error);
         throw new Error(`Error sending welcome email: ${error.message}`);
     }
 };
@@ -128,7 +128,7 @@ export const sendPasswordResetEmail = async (email, resetURL) => {
         });
         return response;
     } catch (error) {
-        console.error('Error sending password reset email:', error);
+        console.log('Error sending password reset email:', error);
         throw new Error(`Error sending password reset email: ${error.message}`);
     }
 };
@@ -142,7 +142,7 @@ export const sendResetSuccessEmail = async (email) => {
         });
         return response;
     } catch (error) {
-        console.error('Error sending password reset success email:', error);
+        console.log('Error sending password reset success email:', error);
         throw new Error(`Error sending password reset success email: ${error.message}`);
     }
 };
@@ -161,7 +161,7 @@ export const sendOrderSuccessEmail = async (email, orders) => {
         
         return response;
     } catch (error) {
-        console.error('Error sending order confirmation email:', error);
+        console.log('Error sending order confirmation email:', error);
         throw new Error(`Error sending order confirmation email: ${error.message}`);
     }
 };
