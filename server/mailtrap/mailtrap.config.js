@@ -64,7 +64,7 @@ const sendMail = async (options) => {
         console.log('SMTP transporter verified successfully');
 
         const mailOptions = {
-            from: `Novus E-commerce <${process.env.SMTP_EMAIL}>`,
+            from: `Novus E-commerce <${process.env.SMTP_MAIL}>`,
             to: options.email,
             subject: options.subject,
             text: options.message,
