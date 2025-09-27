@@ -36,17 +36,12 @@ const createTransporter = () => {
     return nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: parseInt(process.env.SMTP_PORT),
-        secure: false, // Use TLS
+        secure: true, // Use TLS
         auth: {
             user: process.env.SMTP_MAIL,
             pass: process.env.SMTP_PASSWORD,
         },
-        tls: {
-            rejectUnauthorized: false // Important for production servers
-        },
-        connectionTimeout: 10000, // 10 seconds
-        greetingTimeout: 10000, // 10 seconds
-        socketTimeout: 10000 // 10 seconds
+        
     });
 };
 
