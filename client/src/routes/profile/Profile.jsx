@@ -11,13 +11,11 @@ import { toast } from '../../redux/useToast';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useImageUpload } from '../../hooks/useImageUpload';
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const [showCropModal, setShowCropModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState([]);
-  const [uploadedImage, setUploadedImage] = useState(currentUser?.image || '');
-  const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -31,6 +29,25 @@ const Profile = () => {
 
   const [age, setAge] = useState(0);
 
+  const {
+      uploadedImages,
+      uploadQueue,
+      showCropModal,
+      fileInputRef,
+      handleFileSelect,
+      handleRemoveImage,
+      handleSkipCurrent,
+      handleImageUploadComplete: hookHandleImageUploadComplete,
+      setShowCropModal,
+      setUploadQueue,
+    } = useImageUpload({
+      maxImages: 1,
+      initialImages: currentUser?.image ? [currentUser.image] : [],
+      isProfile: true,
+      onImagesChange: (images) => setFormData((prev) => ({ ...prev, image: images[0] || '' })),
+      toast,
+    });
+  
   useEffect(() => {
     if (currentUser) {
       setFormData({
@@ -41,8 +58,9 @@ const Profile = () => {
           ? new Date(currentUser.dateOfBirth).toISOString().split('T')[0]
           : '',
         defaultAddress: currentUser.defaultAddress || '',
+       image: currentUser.image || '',
+
       });
-      setUploadedImage(currentUser.image || '');
 
       if (currentUser.dateOfBirth) {
         const birthDate = new Date(currentUser.dateOfBirth);
@@ -56,6 +74,7 @@ const Profile = () => {
       }
     }
   }, [currentUser]);
+
 
   const handleDateChangeFromPicker = (selectedDate) => {
     
@@ -76,47 +95,26 @@ const Profile = () => {
     }
   };
 
-  const handleDateChange = (e) => {
-    // Keep this handler for any potential non-datepicker fallback
-    const newDate = e.target.value;
-    setFormData({ ...formData, dateOfBirth: newDate });
-
-    if (newDate) {
-      const birthDate = new Date(newDate);
-      const today = new Date();
-      let calculatedAge = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        calculatedAge--;
-      }
-      setAge(calculatedAge);
-    }
-  };
-
+  const handleImageUploadComplete = (url) => {
+      hookHandleImageUploadComplete(url);
+      setFormData((prev) => ({ ...prev, image: url }));
+      dispatch(updateUser({
+        ...currentUser,
+        image: url,
+      }));
+    };
+  
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageUploadComplete = (url) => {
-    setUploadedImage(url);
-    setShowCropModal(false);
-    setSelectedImage([]);
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage([file]);
-      setShowCropModal(true);
-    }
-  };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const updateData = {
         ...formData,
-        image: uploadedImage,
+        image: uploadedImages[0] || currentUser.image,
       };
 
       if (!updateData.defaultAddress) {
@@ -206,7 +204,7 @@ const Profile = () => {
               />
               <div className="relative group">
                 <img
-                  src={uploadedImage || '/avatar.png'}
+                  src={uploadedImages[0] || '/avatar.png'}
                   className="md:h-36 md:w-36 h-32 w-32 object-cover rounded-full cursor-pointer"
                   alt="profile"
                   loading='lazy'
@@ -394,9 +392,13 @@ const Profile = () => {
 
       <ImageCropModal
         isOpen={showCropModal}
-        onClose={() => setShowCropModal(false)}
+        onClose={() => {
+          setShowCropModal(false);
+          setUploadQueue([]);
+        }}
         onUploadComplete={handleImageUploadComplete}
-        queue={selectedImage}
+        onSkipCurrent={handleSkipCurrent}
+        queue={uploadQueue}
       />
     </div>
   );

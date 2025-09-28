@@ -476,10 +476,9 @@ const Profile = () => {
     }));
   };
 
-  // helper: convert YYYY-MM-DD string to Date object (for DatePicker)
+  
   const dateStringToDate = (str) => (str ? new Date(str + 'T00:00:00') : null);
 
-  // handler used by react-datepicker
   const handleDateChangeFromPicker = (selectedDate) => {
     const isoString = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
     setFormData((prev) => ({ ...prev, dateOfBirth: isoString }));
@@ -498,7 +497,7 @@ const Profile = () => {
     }
   };
 
-  // kept for compatibility if you'd like to keep a raw input fallback
+
   const handleDateChange = (e) => {
     const newDate = e.target.value;
     setFormData({ ...formData, dateOfBirth: newDate });
@@ -726,7 +725,7 @@ const Profile = () => {
                 </label>
                 <div className='flex-1'>
                   <div className='capitalize w-full border p-2 border-gray-100 text-sm text-slate-900 placeholder-transparent bg-[#fff] focus:outline-none focus:border-slate-200 font-poppins font-medium shadow-sm rounded-sm'>
-                    {format(parseISO(currentUser.createdAt), 'MM/dd/yy')}
+                   {currentUser.createdAt ? format(parseISO(currentUser.createdAt), 'MM/dd/yy') : 'N/A'}
                   </div>
                 </div>
               </div>

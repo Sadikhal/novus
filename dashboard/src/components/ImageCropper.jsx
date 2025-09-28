@@ -217,13 +217,10 @@ const ImageCropModal = ({
                   type="button"
                   onClick={() => setHdMode(prev => !prev)}
                   disabled={uploading}
-                  className={`px-3 py-1 rounded-md border ${hdMode ? 'bg-[#1c5868] text-white' : 'bg-white text-gray-700'} transition-colors`}
+                  className={`px-3 py-1 rounded-md border shadow-sm cursor-pointer border-slate-300 ${hdMode ? 'bg-[#1c5868] text-white' : 'bg-white text-gray-700'} transition-colors`}
                 >
                   HD
                 </button>
-                <span className="text-sm text-gray-500">
-                  {hdMode ? '100–250KB target' : '≤100KB target'}
-                </span>
               </div>
 
               <div className="flex items-center gap-2">

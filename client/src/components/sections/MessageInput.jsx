@@ -8,6 +8,7 @@ import { toast } from "../../redux/useToast";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 import { cn } from "../../lib/utils";
 import { MdClose, MdEdit } from "react-icons/md";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 const MessageInput = ({ 
   conversationId, 
@@ -22,13 +23,26 @@ const MessageInput = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ desc: "" });
-  const [cropQueue, setCropQueue] = useState([]);
-  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const inputRef = useRef(null);
   const emojiRef = useRef(null);
   const [processingImage, setProcessingImage] = useState(false);
   
+
+  const {
+      uploadQueue,
+      showCropModal,
+      fileInputRef,
+      handleFileSelect,
+      handleSkipCurrent,
+      handleImageUploadComplete: hookHandleImageUploadComplete,
+      setShowCropModal,
+      setUploadQueue,
+    } = useImageUpload({
+      maxImages: Infinity,
+      initialImages: [],
+      toast,
+    });
   useOnClickOutside(emojiRef, () => setIsEmojiPickerOpen(false));
 
   const handleEmojiSelect = (emojiObject) => {
@@ -94,28 +108,19 @@ const MessageInput = ({
     }
   }, [conversationId, receiver, socket]);
 
-  const handleCroppedImage = useCallback(async (imageUrl) => {
-    if (!imageUrl) return;
-    
-    setProcessingImage(true);
-    const success = await submitMessage({ desc: "", image: [imageUrl] });
-    setProcessingImage(false);
-    
-    if (success) {
-      setCropQueue(prev => {
-        const newQueue = prev.slice(1);
-        if (newQueue.length === 0) setIsCropModalOpen(false);
-        return newQueue;
-      });
-    }
-  }, [submitMessage]);
 
-  const handleImageUpload = useCallback((files) => {
-    if (!files.length || processingImage) return;
-    
-    setCropQueue(Array.from(files));
-    setIsCropModalOpen(true);
-  }, [processingImage]);
+  
+
+  const handleImageUploadComplete = useCallback(async (imageUrl) => {
+      if (!imageUrl) return;
+      setProcessingImage(true);
+      const success = await submitMessage({ desc: "", image: [imageUrl] });
+      setProcessingImage(false);
+      if (success) {
+        hookHandleImageUploadComplete(imageUrl);
+      }
+    }, [submitMessage, hookHandleImageUploadComplete]);
+
 
   const handleTextSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -175,7 +180,7 @@ const MessageInput = ({
     >
       {!isEditing && (
         <div className="w-[40px] h-[40px] border p-2 flex justify-center items-center rounded-full shadow-xl bg-white">
-          <label htmlFor="fileInput" className="cursor-pointer font-bold text-black">
+          <label htmlFor="fileInput" className="font-bold text-black cursor-pointer h-full w-full">
             <AiOutlinePlus />
           </label>
           <input
@@ -184,7 +189,8 @@ const MessageInput = ({
             multiple
             className="hidden" 
             accept="image/*"
-            onChange={(e) => handleImageUpload(e.target.files)}
+            ref={fileInputRef}
+            onChange={(e) => handleFileSelect(e, 'message')}
             disabled={loading || processingImage}
           />
         </div>
@@ -273,7 +279,7 @@ const MessageInput = ({
         </div>
       ) : (
         <button 
-          className="text-[#ffff]"
+          className="text-[#ffff] cursor-pointer"
           type="submit" 
           disabled={loading || !formData.desc.trim() || processingImage}
           aria-busy={loading || processingImage}
@@ -283,10 +289,13 @@ const MessageInput = ({
       )}
 
       <ImageCropModal
-        isOpen={isCropModalOpen}
-        onClose={() => setIsCropModalOpen(false)}
-        onUploadComplete={handleCroppedImage}
-        queue={cropQueue}
+        isOpen={showCropModal}
+        onClose={() => {
+          setShowCropModal(false);
+          setUploadQueue([]);
+        }}
+        onUploadComplete={handleImageUploadComplete}
+        queue={uploadQueue}
       />
     </form>
   );
