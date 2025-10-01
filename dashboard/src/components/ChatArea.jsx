@@ -259,7 +259,7 @@ const handleDeleteMessage = async (messageId) => {
                     <img 
                       src={receiver?.image || '/avatar.png'} 
                       alt={receiver?.name || 'Receiver avatar'} 
-                      className='object-cover rounded-full w-8 h-8' 
+                      className='object-content rounded-full w-8 h-8' 
                     />
                   </div>
                   <div className='flex flex-col'>
