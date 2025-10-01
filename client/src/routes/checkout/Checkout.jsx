@@ -1,6 +1,7 @@
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { removeItem } from '../../redux/cartSlice';
+import { Link, useParams } from 'react-router-dom';
+import { removeItem, clearTempOrder } from '../../redux/cartSlice';
 import AddressDetails from '../../components/sections/AddressDetails';
 import CartItem from '../../components/sections/CartItem';
 import PriceDetails from '../../components/sections/PriceDetails';
@@ -9,8 +10,15 @@ import { usePayment } from '../../hooks/usePayment';
 
 const Checkout = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const { address, orderProducts, priceDetails } = useCheckout();
   const { handlePayment, loading, error } = usePayment();
+
+  useEffect(() => {
+    if (!id) {
+      dispatch(clearTempOrder());
+    }
+  }, [id, dispatch]);
 
   return (
     <div className="bg-cartBg pt-6 pb-3 font-poppins">
@@ -81,5 +89,4 @@ const Checkout = () => {
     </div>
   );
 };
-
 export default Checkout;

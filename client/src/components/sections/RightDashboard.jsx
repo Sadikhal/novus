@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import { MdOutlineProductionQuantityLimits, MdPendingActions } from 'react-icons/md';
 import { TbTruckDelivery } from "react-icons/tb";
 import CustomerPerformanceChart from '../sections/CustomerPerformanceChart';
-import Heading from '../sections/Heading';
 import OrderCard from '../sections/OrderCard';
 import DashboardMenu from '../sections/DashboardMenu';
 import { Loader } from '../ui/Loaders';
@@ -18,27 +17,24 @@ const RightDashboard = () => {
       title: 'Total Orders',
       value: data?.metrics?.totalOrderedProducts || 0,
       bgColor: 'bg-[#ffff]',
-      shadowColor: 'shadow-[#edc74a]/50'
     },
     {
       icon: <MdPendingActions className='text-[#238398] h-8 w-8' />,
       title: 'Pending Orders',
       value: data?.metrics?.pendingProducts || 0,
       bgColor: 'bg-gray-300',
-      shadowColor: 'shadow-blue-500/50'
     },
     {
       icon: <TbTruckDelivery className='text-[#815e56] h-8 w-8'/>,
       title: 'Delivered Orders',
       value: data?.metrics?.deliveredProducts || 0,
       bgColor: 'bg-[#dfd982]',
-      shadowColor: 'shadow-[#815e56]/50'
     }
   ];
 
-  const renderStatCard = ({ icon, title, value, bgColor, shadowColor }) => (
+  const renderStatCard = ({ icon, title, value, bgColor }) => (
     <div className="flex w-full h-full justify-start items-center p-5 relative shadow-xl shadow-slate-500/50 bg-white rounded-md gap-5 group hover:scale-105 transition-transform duration-300">
-      <div className={`${bgColor} flex-none w-16 h-16 md:w-20 md:h-20 rounded-full flex justify-center items-center text-2xl shadow-xl ${shadowColor} relative group-hover:shadow-slate-500/100`}>
+      <div className={`${bgColor} flex-none w-16 h-16 md:w-20 md:h-20 rounded-full flex justify-center items-center text-2xl shadow-xl relative group-hover:shadow-slate-500/100`}>
         <div className="flex justify-center items-center z-10">
           {icon}
         </div>
@@ -57,7 +53,7 @@ const RightDashboard = () => {
       <div className="h-full lg:hidden w-full">
         <DashboardMenu />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-2 w-full items-stretch justify-items-stretch mt-7 lg:mt-0">
+      <div className="grid p-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-2 w-full items-stretch justify-items-stretch mt-7 lg:mt-0">
         {statsCards.map((card, index) => (
           <div
             key={index}
@@ -67,7 +63,7 @@ const RightDashboard = () => {
           </div>
         ))}
       </div>
-      <div className="md:h-[700px] h-[750px] w-full mt-5">
+      <div className="h-full w-full mt-5">
         <CustomerPerformanceChart customerId={currentUser?._id} />
       </div>
 
@@ -90,7 +86,7 @@ const RightDashboard = () => {
               No Orders Are Placed
             </div>
           ) : (
-            <div className="px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 bg-[#fff]">
+            <div className="px-2 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 bg-[#fff]">
               {data.orders.slice(0, 4).map((listing) => (
                 <OrderCard
                   key={listing._id}

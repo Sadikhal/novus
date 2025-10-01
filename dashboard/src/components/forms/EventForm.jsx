@@ -17,7 +17,7 @@ export const eventschema = z.object({
   desc: z
     .string()
     .min(10, { message: "Description must be at least 10 characters long!" })
-    .max(120, { message: "Description must be at most 60 characters long!" }),
+    .max(180, { message: "Description must be at most 180 characters long!" }),
   startingDate : z.string({message : "Starting Date is required!"}),
   startingTime : z.string({message : "Starting time is required!"}),
   endingDate : z.string({message : "Ending date is required!"}),

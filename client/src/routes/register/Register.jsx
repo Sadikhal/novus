@@ -114,7 +114,7 @@ const Register = () => {
 
         <div className='w-full xl:w-[48%] h-96 md:h-full xl:h-full flex justify-center items-center text-center rounded-t-lg xl:rounded-t-none flex-col bg-[#ffffff] border-l border-slate-100'>
           <div className="h-full w-full items-center justify-center">
-            <img src="/bg4.png" className="w-full object-contain" alt="Registration illustration" />
+            <img src="/bg4.webp" className="w-full object-contain" alt="Registration illustration" />
           
             <div className='flex items-center justify-center flex-col gap-3 w-[90%] mt-5 pl-4 md:mt-8'>
               <div className='font-normal text-[15px] md:text-base text-black font-poppins'>

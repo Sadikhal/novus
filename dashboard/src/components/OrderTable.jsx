@@ -20,7 +20,7 @@ const columns = [
     className: "p-5"
   },
   {
-    header: "Brand",
+    header: "Brand ID",
     accessor: "brand",
     className: "p-5"
   },
@@ -37,12 +37,12 @@ const columns = [
   {
     header: "Total Price",
     accessor: "total",
-    className: "p-5"
+    className: "p-3"
   },
   {
     header: "Order Placed",
     accessor: "createdAt",
-    className: "p-5"
+    className: "p-3"
   },
   {
     header: "Payment Status",
@@ -99,14 +99,14 @@ const OrderTable = ({
         key={item._id}
         className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight capitalize"
       >
-        <td className="p-5">{item.name}</td>
+        <td className="p-5 min-w-68">{item.name}</td>
         <td className="p-5">{item.product}</td>
         <td className="p-5">{item._id}</td>
-        <td className="p-5">{item.brand}</td>
+        <td className="p-5">{item.brandId}</td>
         <td className="p-2">₹{item.price}</td>
         <td className="p-5">{item.quantity}</td>
-        <td className="p-5">₹{item.total}</td>
-        <td className="p-5">{format(parseISO(item.createdAt), 'MM/dd/yyyy')}</td>
+        <td className="p-3">₹{item.total}</td>
+        <td className="p-3">{format(parseISO(item.createdAt), 'MM/dd/yyyy')}</td>
         <td className="p-5">{item.isCompleted ? 'Completed' : 'Pending'}</td>
         <td className="p-5">{item.customerName}</td>
         <td className="p-5">{item.customerId}</td>

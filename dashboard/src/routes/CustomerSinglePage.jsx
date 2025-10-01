@@ -79,9 +79,7 @@ const SingleCustomerPage = () => {
   if (loading || !customer) return <Loader />;
   return (
     <div className="flex-1 sm:p-4 p-1 xs:p-2 flex flex-col gap-4">
-      {/* Customer Info Section */}
       <div className="flex w-full flex-col lg:flex-row gap-4">
-        {/* Customer Info Card */}
         <div className="bg-lamaSky py-6 sm:px-4 px-1 rounded-md flex-1 flex sm:gap-4 xs:gap-2 gap-1">
           <div className="sm:w-1/3 w-1/6">
             <img
@@ -203,7 +201,6 @@ const SingleCustomerPage = () => {
         </div>
       </div>
       
-      {/* Orders Table */}
       <div className="w-full pt-5">
         <OrderTable 
           filteredData={filteredOrders}
@@ -218,8 +215,7 @@ const SingleCustomerPage = () => {
         />
       </div>
       
-      {/* Performance Chart */}
-      <div className="w-full sm:h-[700px] h-[800px]">
+      <div className="w-full h-auto max-h-[650px]">
         <CustomerPerformanceChart customerId={id}/>
       </div>
     </div>

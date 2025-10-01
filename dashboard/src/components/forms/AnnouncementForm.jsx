@@ -13,11 +13,11 @@ import z from 'zod';
   title: z
     .string()
     .min(4, { message: "Title must be at least 4 characters long!" })
-    .max(30, { message: "Title must be at most 20 characters long!" }),
+    .max(40, { message: "Title must be at most 40 characters long!" }),
   desc: z
     .string()
     .min(10, { message: "Description must be at least 10 characters long!" })
-    .max(120, { message: "Description must be at most 60 characters long!" }),
+    .max(250, { message: "Description must be at most 250 characters long!" }),
 });
 
 const AnnouncementForm = ({ 
@@ -90,9 +90,6 @@ const AnnouncementForm = ({
             placeholder="Enter announcement description..."
             className="ring-gray-500 ring-[1.2px] w-full"
           />
-          {errors?.desc?.message && (
-            <p className="text-xs text-red-400">{errors.desc.message.toString()}</p>
-          )}
         </div>
       </div>
       

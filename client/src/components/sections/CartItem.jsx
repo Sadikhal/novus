@@ -21,7 +21,7 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
             <div className="flex items-center gap-1 mt-2 text-[#171212]">
               <button
                 onClick={() => dispatch(decreaseQuantity({ id: item.id, size: item.size }))}
-                className="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300"
+                className="w-6 h-6 flex items-center justify-center rounded-full border cursor-pointer border-gray-300"
                 aria-label="Decrease quantity"
               >
                 -
@@ -31,7 +31,7 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
               </span>
               <button
                 onClick={() => dispatch(increaseQuantity({ id: item.id, size: item.size }))}
-                className="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300"
+                className="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300 cursor-pointer"
                 aria-label="Increase quantity"
               >
                 +
@@ -43,7 +43,7 @@ const CartItem = ({ item, onRemove, showQuantity = true }) => {
           <div className="flex justify-end">
             <button 
               onClick={onRemove}
-              className="text-teal-700"
+              className="text-teal-700 cursor-pointer"
               aria-label="Remove item"
             >
               <RiDeleteBin6Fill />

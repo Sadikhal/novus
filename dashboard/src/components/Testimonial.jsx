@@ -55,7 +55,7 @@ const TestimonialSlider = ({number}) => {
                 </div>
               </CardDescription>
           </CardHeader>
-          <CardContent className="px-8 text-justify text-balance">
+          <CardContent className="px-8">
             <p className='font-poppins text-[16px] text-black leading-[2.125em] text-flex group-hover:text-[#ffff]'>
               "{item.desc}"
             </p>

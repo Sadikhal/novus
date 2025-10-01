@@ -33,7 +33,7 @@ const BrandDetails = () => {
     <ErrorFallback error={error} />
   </div> 
   return (
-    <div className="flex-1 p-4 flex-col">
+    <div className="flex-1 p-4 flex-col flex h-full">
       {/* LEFT */}
       <div className="flex w-full flex-col gap-4">
         <div className="w-full">
@@ -153,7 +153,7 @@ const BrandDetails = () => {
       <div className="w-full flex flex-col gap-4">
         <Performance rating={rating?.averageRating || 0}/>
     </div>
-    <div className="w-full pt-12 h-[800px]">
+    <div className="w-full pt-12 h-full">
           <BrandPerformanceChart brandId={brand._id}/>
         </div>
     </div>

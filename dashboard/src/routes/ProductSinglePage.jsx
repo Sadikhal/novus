@@ -218,7 +218,7 @@ const ProductSinglePage = () => {
                 </div>
                 {product.desc && product.desc.trim() !== '' ? (
                   <div
-                    className="quill-content mt-6 prose w-full font-poppins"
+                    className="quill-content mt-6 prose w-full"
                     dangerouslySetInnerHTML={{ __html: product.desc }}
                   />
                 ) : 'No description provided'}
@@ -245,9 +245,8 @@ const ProductSinglePage = () => {
         </div>
       </div>
       
-      {/* BOTTOM SECTION - HIDDEN ON MOBILE */}
       <div className="w-full  pt-5 flex flex-col gap-4">
-        <div className="w-full h-[800px] sm:h-[600px]">
+        <div className="w-full h-full">
           <SingleProductPerformance productId={id} />
         </div>
         <OrderTable 

@@ -59,13 +59,13 @@ const EventCalendar = () => {
               key={event._id}
             >
               <div className="flex items-center justify-between">
-                <h1 className="font-semibold text-gray-600 flex-1">{event.title}</h1>
-                <span className="text-gray-300 text-xs flex-[0.7]">
+                <h1 className="font-semibold text-gray-900 flex-1">{event.title}</h1>
+                <span className="text-[#53736f] text-xs flex-[0.7]">
                   {formatDate(event.startingDate)} - {formatDate(event.endingDate)}
                 </span>
               </div>
-              <p className="mt-2 text-gray-400 text-sm">{event.desc}</p>
-              <div className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-gray-500 text-sm ">{event.desc}</p>
+              <div className="mt-2 text-xs text-gray-600">
                 Time: {event.startingTime} - {event.endingTime}
               </div>
             </div>

@@ -13,7 +13,6 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, { payload }) => {
-      // payload should include id, size (optional), etc.
       const idx = findExistingIndex(state.products, payload);
       if (idx !== -1) {
         state.products[idx].quantity += 1;
@@ -21,8 +20,6 @@ const cartSlice = createSlice({
         state.products.push({ ...payload, quantity: 1 });
       }
     },
-
-    // removeItem accepts either id string OR object { id, size }
     removeItem: (state, { payload }) => {
       if (payload && typeof payload === 'object') {
         const { id, size } = payload;
@@ -31,7 +28,6 @@ const cartSlice = createSlice({
           state.tempOrder = null;
         }
       } else {
-        // payload is id string
         const id = payload;
         state.products = state.products.filter(item => item.id !== id);
         if (state.tempOrder && state.tempOrder.id === id) {
@@ -40,7 +36,7 @@ const cartSlice = createSlice({
       }
     },
 
-    // increaseQuantity accepts either id string OR { id, size }
+   
     increaseQuantity: (state, { payload }) => {
       if (payload && typeof payload === 'object') {
         const { id, size } = payload;
@@ -65,7 +61,7 @@ const cartSlice = createSlice({
       }
     },
 
-    // decreaseQuantity accepts either id string OR { id, size }
+   
     decreaseQuantity: (state, { payload }) => {
       if (payload && typeof payload === 'object') {
         const { id, size } = payload;
@@ -97,7 +93,6 @@ const cartSlice = createSlice({
     resetCart: () => initialState,
 
     setTempOrder: (state, { payload }) => {
-      // ensure payload has quantity (default 1)
       state.tempOrder = { ...payload, quantity: payload.quantity || 1 };
     },
 
@@ -110,7 +105,6 @@ const cartSlice = createSlice({
       state.tempOrder = { ...state.tempOrder, ...payload };
     },
 
-    // remove specific id+size (helper)
     removeItemByIdAndSize: (state, { payload }) => {
       const { id, size } = payload;
       state.products = state.products.filter(item => !(item.id === id && item.size === size));

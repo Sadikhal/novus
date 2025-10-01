@@ -18,7 +18,7 @@ const UserCard = ({ type, value = 0, dateType }) => {
         </span>
         <img src="/images/more.png" alt="options" width={20} height={20} />
       </div>
-      <h1 className="md:text-2xl sm:text-xl text-base text-lamaWhite font-roboto  font-semibold my-4">{getDisplayValue()}</h1>
+      <h1 className="md:text-xl sm:text-lg text-base text-lamaWhite font-roboto  font-semibold my-4">{getDisplayValue()}</h1>
       <h2 className="capitalize f text-sm font-medium text-gray-100">{type}</h2>
     </div>
   );

@@ -81,13 +81,15 @@ const SellerDashboard = () => {
           <div className="w-full flex flex-col gap-8">
             {currentUser?.brand?._id && (
               <>
-                <div className="w-full lg:h-[700px] h-[800px]">
+                <div className="w-full h-full">
                   <BrandPerformanceChart brandId={currentUser.brand._id} />
                 </div>
 
-                {stats?.performance && (
-                  <Performance rating={stats.performance.averageRating || 0} />
-                )}
+                <div className="w-full h-full">
+                 <BrandProductRevenuePerformance brandId={currentUser.brand._id} />
+               </div>
+
+               
               </>
             )}
           </div>
@@ -101,10 +103,10 @@ const SellerDashboard = () => {
 
       {currentUser?.brand?._id && (
         <div className="flex flex-col gap-5 mt-8">
-          <div className="w-full h-[700px]">
-            <BrandProductRevenuePerformance brandId={currentUser.brand._id} />
-          </div>
-          <div className="w-full h-[700px]">
+          {stats?.performance && (
+            <Performance rating={stats.performance.averageRating || 0} />
+          )}
+          <div className="w-full h-full">
             <BrandProductsSalesChart brandId={currentUser.brand._id} />
           </div>
         </div>

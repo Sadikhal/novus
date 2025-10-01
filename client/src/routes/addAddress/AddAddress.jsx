@@ -8,11 +8,11 @@ import { toast } from '../../redux/useToast';
 import { Loader } from '../../components/ui/Loaders';
 import { Button } from '../../components/ui/Button';
 
-
 const AddAddress = () => {
     const { addressId } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { tempOrder } = useSelector((state) => state.cart);
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +20,6 @@ const AddAddress = () => {
     useEffect(() => {
         const fetchAddress = async () => {
             if (!addressId) return;
-            
             setIsLoading(true);
             try {
                 const res = await apiRequest.get("/users/profile");
@@ -68,7 +67,8 @@ const AddAddress = () => {
                 description: `Your address has been ${addressId ? 'updated' : 'added'} successfully`
             });
             
-            navigate("/dashboard/checkout");
+            const checkoutPath = tempOrder ? `/dashboard/checkout/${tempOrder.id}` : "/dashboard/checkout";
+            navigate(checkoutPath);
         } catch (err) {
             toast({
                 variant: "destructive",
@@ -108,7 +108,7 @@ const AddAddress = () => {
                                     required: 'Full name is required',
                                     minLength: {
                                         value: 3,
-                                        message: "Name must be at least 3 characters"
+                                        message: "Name must be at least 3 correcteds"
                                     }
                                 })}
                                 className="peer h-10 w-full border border-gray-100 text-sm text-slate-900 p-2 placeholder-transparent bg-white focus:outline-none focus:border-slate-200 font-poppins font-medium shadow-sm rounded-sm"

@@ -19,6 +19,7 @@ const AddressDetails = ({ initialAddress }) => {
     }
   }, [defaultAddress, selectedAddress]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await updateDefaultAddress(selectedAddress);
@@ -26,7 +27,6 @@ const AddressDetails = ({ initialAddress }) => {
       setIsOpen(false);
     }
   };
-
 
   return (
     <Dialog  open={isOpen} onOpenChange={setIsOpen}>
@@ -44,12 +44,13 @@ const AddressDetails = ({ initialAddress }) => {
           </DialogTitle>
         </DialogHeader>
 
-        <Link to="/dashboard/address/new" onClick={() => setIsOpen(false)}>
-          <button className="btn btn-sm px-6 h-10 glass bg-[#485114] text-lamaWhite hover:bg-slate-200 border-gray-300 rounded-md hover:text-[#485114]">
-            Add New Address
-          </button>
-        </Link>
-
+        <div className='w-full'>
+          <Link to="/dashboard/address/new" onClick={() => setIsOpen(false)} className='text-left'>
+            <button className="btn btn-sm px-6 h-10 glass bg-[#485114] text-lamaWhite hover:bg-slate-200 border-gray-300 rounded-md hover:text-[#485114]">
+              Add New Address
+            </button>
+          </Link>
+        </div>
         {loading ? (
           <p className="py-10 text-center"><Loader/></p>
         ) : error ? (

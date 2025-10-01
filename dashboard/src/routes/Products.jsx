@@ -5,7 +5,6 @@ import FormModal from "../components/FormModal";
 import Table from "../components/Table";
 import TableSearch from "../components/TableSearch";
 import ProductsSoldChart from "../components/stats/TotalProductChart";
-import ProductPerformanceChart from "../components/stats/ProductRevenueChart";
 import ProductsSalesPerformanceChart from "../components/stats/ProductSalesPerformance";
 import ProductRevenueTrends from "../components/stats/ProductsRevenueTrends";
 import { GrView } from "react-icons/gr";
@@ -126,7 +125,7 @@ const ProductsList = () => {
   );
 
   return (
-    <div className="bg-white sm:p-3 md:p-4 p-1 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-white sm:p-3 md:p-4 p-1 rounded-md flex-1 m-4 mt-0 flex flex-col h-full">
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Products</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -173,27 +172,24 @@ const ProductsList = () => {
     </div>   
     { currentUser.isAdmin ? (
           
-      <div className="flex flex-col gap-6 mt-6">
-        <div className="w-full h-[600px]">
+      <div className="flex flex-col gap-6 mt-6 h-full">
+        <div className="w-full h-full">
           <ProductsSoldChart />
         </div>
-        <div className="w-full h-[700px]">
+        <div className="w-full h-full">
           <ProductRevenueTrends />
         </div>
-        <div className="w-full h-[700px]">
-          <ProductPerformanceChart />
-        </div>
-        <div className="w-full h-[700px]">
+        <div className="w-full h-full">
           <ProductsSalesPerformanceChart />
         </div>
        
       </div>
        ) : currentUser.isSeller ? (
       <div className="flex flex-col gap-6 mt-6">
-        <div className="w-full h-[700px]">
+        <div className="w-full h-full">
           <BrandProductRevenuePerformance brandId = {currentUser?.brand?._id}/>
           </div>
-          <div className="w-full h-[700px]">
+          <div className="w-full h-full">
             <BrandProductsSalesChart brandId = {currentUser?.brand?._id}/>
           </div>
          </div> 

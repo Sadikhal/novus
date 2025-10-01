@@ -21,11 +21,11 @@ const ProductCard = ({ data, productId, onRemoveImage }) => {
           <Button
             className="bg-white text-teal-800 absolute top-2 right-2 w-16 text-xs font-assistant rounded-sm text-center h-7 py-0 cursor-pointer font-semibold inline-block z-10 text-nowrap"
             onClick={() => setOpen(true)}
+           
           >
             Delete
           </Button>
         )}
-
         <div className="w-full transition duration-0">
           <div className="flex flex-col w-full">
             <div className="w-full relative border-none overflow-hidden">
@@ -34,6 +34,7 @@ const ProductCard = ({ data, productId, onRemoveImage }) => {
                   className="aspect-square object-cover border-none rounded-sm sm:h-full h-32 w-full duration-500 group-hover:scale-150 transition"
                   src={image}
                   alt="Product"
+                   lazy="loading"
                 />
               ) : (
                 <div className="aspect-square h-[250px] w-full flex items-center justify-center bg-gray-100 text-gray-400">

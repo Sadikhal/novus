@@ -1,156 +1,194 @@
-// src/hooks/useAuth.js
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { apiRequest } from '../lib/apiRequest';
-import { loginStart, loginSuccess, loginFailure, logout, updateVerificationStatus } from '../redux/userSlice';
-import { useNavigate } from 'react-router-dom';
-import { toast } from '../redux/useToast';
-
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { apiRequest } from "../lib/apiRequest";
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  updateVerificationStatus,
+} from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "../redux/useToast";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+
+  const { loading } = useSelector((state) => state.user);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   const register = async (formData) => {
     dispatch(loginStart());
     try {
-      const res = await apiRequest.post('/auth/register', formData);
+      const res = await apiRequest.post("/auth/register", formData);
       dispatch(loginSuccess(res.data));
+
       toast({
         variant: "secondary",
         title: "Registration Successful",
-        description: "Account created! Please verify your email to continue.",
+        description:
+          "Account created! Please verify your email to continue.",
       });
-      navigate('/verify-email');
+
+      navigate("/verify-email");
       return res.data;
     } catch (err) {
-      dispatch(loginFailure(err.response?.data?.message || "Registration failed"));
+      dispatch(
+        loginFailure(err.response?.data?.message || "Registration failed")
+      );
       toast({
-      variant: "destructive",
-      title: "Registration Failed",
-      description: err.response?.data?.message || "Unable to register. Please try again.",
-    });
+        variant: "destructive",
+        title: "Registration Failed",
+        description:
+          err.response?.data?.message ||
+          "Unable to register. Please try again.",
+      });
+      return null;
     }
   };
+
 
   const login = async (formData) => {
     dispatch(loginStart());
     try {
-      const res = await apiRequest.post('/auth/login', formData);
+      const res = await apiRequest.post("/auth/login", formData);
       dispatch(loginSuccess(res.data));
+
       toast({
         variant: "secondary",
         title: "Login Successful",
         description: "Welcome back! You have been logged in.",
       });
-      navigate('/');
+
+      navigate("/");
       return res.data;
     } catch (err) {
       dispatch(loginFailure(err.response?.data?.message || "Login failed"));
       toast({
-  variant: "destructive",
-  title: "Login Failed",
-  description: err?.response?.data?.message || "Invalid credentials or server error. Please try again.",
-});
+        variant: "destructive",
+        title: "Login Failed",
+        description:
+          err.response?.data?.message ||
+          "Invalid credentials or server error. Please try again.",
+      });
+      return null;
     }
   };
 
+
   const verifyEmail = async (code) => {
-    setLoading(true);
+    dispatch(loginStart());
     try {
-      const res = await apiRequest.post('/auth/verify-email', { code });
+      const res = await apiRequest.post("/auth/verify-email", { code });
       dispatch(updateVerificationStatus(true));
+
       toast({
         variant: "secondary",
         title: "Email Verified",
         description: "Your email has been successfully verified.",
       });
-      navigate('/');
+
+      navigate("/");
       return res.data;
     } catch (err) {
+      dispatch(loginFailure(err.response?.data?.message || "Verification failed"));
       toast({
         variant: "destructive",
         title: "Verification Failed",
-        description: err.response?.data?.message || "Verification failed",
+        description:
+          err.response?.data?.message || "Verification failed. Try again.",
       });
-      throw err;
-    } finally {
-      setLoading(false);
+      return null;
     }
   };
 
   const logoutUser = async () => {
     try {
-      await apiRequest.post('/auth/logout');
-      dispatch(logout());
-      toast({
-        variant: "secondary",
-        title: "Logout successfully",
-        description: "You Logout successfully",
-      });
-      navigate('/login');
+      await apiRequest.post("/auth/logout");
     } catch (err) {
-      toast({
+     toast({
         variant: "destructive",
         title: "Logout Failed",
         description: err.response?.data?.message || "Unable to logout. Please try again.",
       });
+    } finally {
+      dispatch(logout());
+      toast({
+        variant: "secondary",
+        title: "Logout Successful",
+        description: "You have been logged out.",
+      });
+      navigate("/login");
     }
   };
 
   
-  
-
   const sendResetLink = async (email) => {
-    setLoading(true);
+    dispatch(loginStart());
     try {
       await apiRequest.post("/auth/forgot-password", { email });
       setIsSubmitted(true);
+
       toast({
         variant: "secondary",
         title: "Reset Link Sent",
-        description: "Check your inbox for instructions to reset your password.",
+        description:
+          "Check your inbox for instructions to reset your password.",
       });
+
       return true;
     } catch (err) {
-      console.log(err)
+      dispatch(loginFailure(err.response?.data?.message || "Reset link failed"));
       toast({
         variant: "destructive",
         title: "Failed to Send Reset Link",
-        description: err.response?.data?.message || "Something went wrong. Please try again.",
+        description:
+          err.response?.data?.message ||
+          "Something went wrong. Please try again.",
       });
       return false;
-    } finally {
-      setLoading(false);
     }
   };
 
 
-
   const resetPassword = async (token, password) => {
-    setLoading(true);
+    dispatch(loginStart());
     try {
       await apiRequest.post(`/auth/reset-password/${token}`, { password });
+
       toast({
         variant: "secondary",
         title: "Password Reset Successful",
         description: "Your password has been updated successfully.",
       });
+
       navigate("/login");
       return true;
     } catch (err) {
+      dispatch(
+        loginFailure(err.response?.data?.message || "Password reset failed")
+      );
       toast({
         variant: "destructive",
         title: "Password Reset Failed",
-        description: err.response?.data?.message || "Failed to reset password. Please try again.",
+        description:
+          err.response?.data?.message ||
+          "Failed to reset password. Please try again.",
       });
       return false;
-    } finally {
-      setLoading(false);
     }
   };
 
-  return { register, login,sendResetLink, resetPassword ,loading, isSubmitted, verifyEmail, logoutUser, loading };
+  return {
+    register,
+    login,
+    verifyEmail,
+    logoutUser,
+    sendResetLink,
+    resetPassword,
+    loading,
+    isSubmitted,
+  };
 };

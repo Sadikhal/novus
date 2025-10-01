@@ -5,7 +5,6 @@ import { format, parseISO } from "date-fns";
 import FormModal from "../components/FormModal";
 
 
-
 const BrandDetails = () => {
   const { currentUser } = useSelector((state) => state.user);
   const {

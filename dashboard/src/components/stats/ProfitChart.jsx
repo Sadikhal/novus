@@ -1,52 +1,63 @@
-import { useState, useEffect } from "react";
-import { RiBarChartGroupedLine } from "react-icons/ri";
-import { FaChartArea, FaChartLine } from "react-icons/fa";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
+  LineChart,
+  Line,
   AreaChart,
   Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Legend
+  Cell,
+  Legend,
 } from "recharts";
-import { apiRequest } from "../../lib/apiRequest";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/Select";
 import { ChevronDown } from "lucide-react";
-import { ErrorFallback, Loader } from "../ui/Loaders";
 import { BsGraphUpArrow } from "react-icons/bs";
+import { RiBarChartGroupedLine } from "react-icons/ri";
+import { FaChartArea, FaChartLine } from "react-icons/fa";
+import { ScrollArea } from "../ui/ScrollArea";
+import { apiRequest } from "../../lib/apiRequest";
+import { ErrorFallback } from "../ui/Loaders";
+
+const gradientColors = ["#8aa9cc", "#095ab5"];
+
+const ChartSkeleton = () => (
+  <div className="h-full w-full flex items-center justify-center">
+    <div className="w-11/12 h-80 rounded-lg bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 animate-pulse" />
+  </div>
+);
 
 const ProfitChart = () => {
+  const [chartType, setChartType] = useState("bar"); 
   const [timeFrame, setTimeFrame] = useState("daily");
-  const [chartType, setChartType] = useState("line");
   const [dateRange, setDateRange] = useState([null, null]);
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(900);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const [startDate, endDate] = dateRange;
-        const timeRange = startDate && endDate 
+        const timeRange = startDate && endDate
           ? `${startDate.toISOString()}_${endDate.toISOString()}`
           : undefined;
 
-        const response = await apiRequest.get(`/stats/profits`, {
+        const response = await apiRequest.get("/stats/profits", {
           params: {
             period: timeRange ? undefined : timeFrame,
-            timeRange
-          }
+            timeRange,
+          },
         });
-        
         setChartData(response.data.data);
         setError("");
       } catch (err) {
@@ -56,51 +67,74 @@ const ProfitChart = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [timeFrame, dateRange]);
 
-  const formatDate = (date) => {
-    const dateObj = new Date(date);
-    const isCustomRange = dateRange[0] && dateRange[1];
-    
-    if (isCustomRange) {
-      return dateObj.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      });
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  const safeData = useMemo(() => {
+    if (!Array.isArray(chartData)) return [];
+    return chartData.map(d => ({
+      date: d.date,
+      totalProfit: Number(d.totalProfit ?? 0),
+    }));
+  }, [chartData]);
+
+  const { chartWidth, barSize } = useMemo(() => {
+    const points = safeData.length || 0;
+    const minBarWidth = 38;
+    const defaultGap = 16;
+
+    if (points === 0) return { chartWidth: containerWidth, barSize: minBarWidth };
+
+    const totalLabelWidth = points * minBarWidth;
+    const totalGap = points > 1 ? (points - 1) * defaultGap : 0;
+
+    let calculatedBarSize = minBarWidth;
+    const totalRequiredWidth = totalLabelWidth + totalGap;
+
+    if (totalRequiredWidth <= containerWidth) {
+      const scale = (containerWidth - totalGap) / totalLabelWidth;
+      calculatedBarSize = Math.max(minBarWidth, Math.min(minBarWidth + 10, minBarWidth * scale));
     }
 
-    const options = {
-      daily: { month: 'short', day: 'numeric' },
-      weekly: () => {
-        const start = new Date(dateObj);
-        const end = new Date(dateObj);
-        end.setDate(start.getDate() + 6);
-        return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { day: 'numeric' })}`;
-      },
-      monthly: { year: 'numeric', month: 'short' },
-      yearly: { year: 'numeric' }
+    return {
+      chartWidth: Math.max(containerWidth, totalRequiredWidth + totalGap),
+      barSize: calculatedBarSize,
     };
-    
-    if (timeFrame === 'weekly') {
-      return options.weekly();
-    }
-    return dateObj.toLocaleDateString('en-US', options[timeFrame]);
+  }, [safeData, containerWidth]);
+
+  const isOverflowing = chartWidth > containerWidth;
+
+  // Format X-axis label
+  const formatXAxisLabel = (dateStr) => {
+    const dateObj = new Date(dateStr);
+    const options = { month: "short", day: "numeric" };
+    return dateObj.toLocaleDateString("en-US", options);
   };
 
+  // Tooltip
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const data = payload[0].payload;
+      const d = payload[0].payload;
+      const dateObj = new Date(d.date);
+      const formattedDate = dateObj.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
       return (
-        <div className="bg-white p-4 rounded-lg shadow-xl border border-gray-200">
-          <div className="font-bold text-center text-lg mb-2 text-cyan-800">
-            {formatDate(data.date)}
-          </div>
-          <div className="grid gap-2">
-            <p className="text-sm bg-green-50 p-2 rounded">
-              <span className="font-semibold font-poppins">Total Profit:</span> ${data.totalProfit?.toFixed(2)}
-            </p>
+        <div className="bg-white border-l-4 border-teal-500 p-3 rounded-lg shadow-lg">
+          <div className="font-semibold text-gray-800 text-center mb-1">{formattedDate}</div>
+          <div className="text-sm bg-green-50 p-2 rounded">
+            <span className="font-semibold">Profit:</span> ₹{d.totalProfit?.toFixed(2)}
           </div>
         </div>
       );
@@ -108,165 +142,172 @@ const ProfitChart = () => {
     return null;
   };
 
+  const barGradientsDefs = () =>
+    safeData.map((_, i) => (
+      <linearGradient id={`profitGrad-${i}`} key={i} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor={gradientColors[0]} stopOpacity={0.98} />
+        <stop offset="100%" stopColor={gradientColors[1]} stopOpacity={0.62} />
+      </linearGradient>
+    ));
+
+  const renderChart = () => {
+    if (chartType === "line") {
+      return (
+        <LineChart data={safeData} width={chartWidth} height={400}>
+          <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickFormatter={formatXAxisLabel}
+            interval={0}
+            tick={{ fontSize: 12, fill: "#4b5563", fontWeight: 500 }}
+            axisLine={{ stroke: "#e5e7eb" }}
+            tickLine={{ stroke: "#d1d5db" }}
+            height={60}
+            angle={0}
+            textAnchor="middle"
+          />
+          <YAxis
+            tickFormatter={v => `₹${v}`}
+            width={70}
+            tick={{ fontSize: 13, fill: "#4b5563", fontWeight: 500 }}
+            axisLine={{ stroke: "#e5e7eb" }}
+            tickLine={{ stroke: "#d1d5db" }}
+          />
+          <Tooltip content={<CustomTooltip />} />
+            <Legend iconType="circle" />
+          <Line
+            type="monotone"
+            dataKey="totalProfit"
+            stroke={gradientColors[0]}
+            strokeWidth={2}
+            dot={{ fill: gradientColors[1], strokeWidth: 2 }}
+            activeDot={{ r: 6 }}
+            name="Total Profit"
+          />
+        </LineChart>
+      );
+    } else if (chartType === "area") {
+      return (
+        <AreaChart data={safeData} width={chartWidth} height={400}>
+          <defs>
+            <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={gradientColors[0]} stopOpacity={0.4} />
+              <stop offset="100%" stopColor={gradientColors[1]} stopOpacity={0.2} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickFormatter={formatXAxisLabel}
+            interval={0}
+            tick={{ fontSize: 12, fill: "#4b5563", fontWeight: 500 }}
+            axisLine={{ stroke: "#e5e7eb" }}
+            tickLine={{ stroke: "#d1d5db" }}
+            height={60}
+            angle={0}
+            textAnchor="middle"
+          />
+          <YAxis
+            tickFormatter={v => `₹${v}`}
+            width={70}
+            tick={{ fontSize: 13, fill: "#4b5563", fontWeight: 500 }}
+            axisLine={{ stroke: "#e5e7eb" }}
+            tickLine={{ stroke: "#d1d5db" }}
+          />
+          <Tooltip content={<CustomTooltip />} />
+            <Legend iconType="circle" />
+          <Area
+            type="monotone"
+            dataKey="totalProfit"
+            stroke={gradientColors[0]}
+            strokeWidth={2}
+            fill="url(#colorProfit)"
+            name="Total Profit"
+          />
+        </AreaChart>
+      );
+    } else {
+      return (
+        <BarChart data={safeData} width={chartWidth} height={400}>
+          <defs>{barGradientsDefs()}</defs>
+          <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickFormatter={formatXAxisLabel}
+            interval={0}
+            tick={{ fontSize: 12, fill: "#4b5563", fontWeight: 500 }}
+            axisLine={{ stroke: "#e5e7eb" }}
+            tickLine={{ stroke: "#d1d5db" }}
+            height={60}
+            angle={0}
+            textAnchor="middle"
+          />
+          <YAxis
+            tickFormatter={v => `₹${v}`}
+            width={70}
+            tick={{ fontSize: 13, fill: "#4b5563", fontWeight: 500 }}
+            axisLine={{ stroke: "#e5e7eb" }}
+            tickLine={{ stroke: "#d1d5db" }}
+          />
+          <Tooltip content={<CustomTooltip />} />
+            <Legend iconType="square" />
+          <Bar dataKey="totalProfit" radius={[4, 4, 0, 0]} maxBarSize={barSize} isAnimationActive animationDuration={900}>
+            {safeData.map((entry, idx) => (
+              <Cell
+                key={`cell-${idx}`}
+                fill={`url(#profitGrad-${idx})`}
+                style={{ transition: "transform 0.2s" }}
+                onMouseEnter={e => (e.currentTarget.style.transform = "scaleY(1.05)")}
+                onMouseLeave={e => (e.currentTarget.style.transform = "scaleY(1)")}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      );
+    }
+  };
+
   const ChartTypeButton = ({ type, label, icon }) => (
     <button
       onClick={() => setChartType(type)}
-      className={`sm:px-3 py-1 rounded-lg flex items-center gap-2 px-2 ${
-        chartType === type 
-          ? 'bg-[#5a6e63] text-slate-100'
-          : 'bg-gray-100 hover:bg-gray-200'
+      className={`sm:px-3 py-1 rounded-lg flex items-center gap-2 px-2 cursor-pointer ${
+        chartType === type ? "bg-[#5a6e63] text-slate-100" : "bg-gray-100 hover:bg-gray-200"
       }`}
     >
-      <span className="material-icons">{icon}</span>
+      {icon}
       {label}
     </button>
   );
 
-  const renderChart = () => {
-    const gradientColors = ['#8aa9cc', '#ccb12e'];
-    
-    return (
-      <ResponsiveContainer width="100%" height="100%" >
-        {chartType === 'area' ? (
-          <AreaChart data={chartData}>
-            <defs>
-              <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" className=" font-poppins" stopColor={gradientColors[0]} stopOpacity={0.4}/>
-                <stop offset="95%" className=" font-poppins" stopColor={gradientColors[1]} stopOpacity={0.2}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" className=" font-poppins" />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12 }}
-              interval={0}
-              tickLine={false}
-              height={80}
-            />
-            <YAxis 
-              tickFormatter={value => `$${value}`}
-              tick={{ fill: '#6b7280', fontSize: 11 }}
-              width={50}
-              tickLine={false}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
-            <Area
-              type="monotone"
-              dataKey="totalProfit"
-              stroke={gradientColors[0]}
-              strokeWidth={2}
-              fill="url(#colorProfit)"
-              name="Total Profit"
-            />
-          </AreaChart>
-        ) : chartType === 'line' ? (
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" className=" font-poppins"/>
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12 }}
-              interval={0}
-              tickLine={false}
-              height={80}
-            />
-            <YAxis 
-              tickFormatter={value => `$${value}`}
-              tick={{ fill: '#6b7280', fontSize: 10 }}
-              tickLine={false}
-              width={36}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
-            <Line
-              type="monotone"
-              dataKey="totalProfit"
-              stroke={gradientColors[0]}
-              strokeWidth={2}
-              dot={{ fill: gradientColors[1], strokeWidth: 2 }}
-              activeDot={{ r: 8 }}
-              name="Total Profit"
-            />
-          </LineChart>
-        ) : (
-          <BarChart data={chartData} className=" font-poppins">
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12,fontFamily: "poppins", fontStyle: "bold" }}
-              interval={0}
-              tickLine={false}
-            />
-            <YAxis 
-              tickFormatter={value => `$${value}`}
-              tick={{ fill: '#6b7280', fontSize: 10 }}
-              tickLine={false}
-             width={36}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
-            <Bar
-              dataKey="totalProfit"
-              fill={gradientColors[0]}
-              radius={[4, 4, 0, 0]}
-              name="Total Profit"
-            />
-          </BarChart>
-        )}
-      </ResponsiveContainer>
-    );
-  };
-
   return (
-    <div className="bg-white rounded-xl p-2 sm:p-3 md:p-4 lg:p-6 h-full flex flex-col shadow-sm font-poppins">
+    <div ref={containerRef} className="bg-white rounded-2xl p-6 h-full flex flex-col shadow-md border border-gray-100">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <h1 className="text-xl font-bold text-gray-800 text-nowrap flex items-center gap-2">
-          <BsGraphUpArrow className="text-teal-800" /> 
+        <h1 className="md:text-xl text-lg font-bold text-gray-800 flex items-center gap-2">
+          <BsGraphUpArrow className="text-teal-800" />
           <span>Profit Analysis</span>
         </h1>
-        
-        <div className="flex flex-wrap gap-3 items-center pt-3">
-          <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
-            <ChartTypeButton type="bar" label="Bars" icon={<RiBarChartGroupedLine />}/>
+
+        <div className="flex flex-wrap gap-3 items-center">
+          <div className="flex gap-2 text-sm md:text-base bg-gray-100 p-1 rounded-lg">
+            <ChartTypeButton type="bar" label="Bars" icon={<RiBarChartGroupedLine />} />
+            <ChartTypeButton type="line" label="Line" icon={<FaChartLine />} />
             <ChartTypeButton type="area" label="Area" icon={<FaChartArea />} />
-            <ChartTypeButton type="line" label="Lines" icon={<FaChartLine />} />
           </div>
 
-          <Select
-            value={timeFrame}
-            onValueChange={(value) => setTimeFrame(value)}
-          >
-            <SelectTrigger 
-              className="border-gray-200 rounded-lg px-2 py-2 text-sm bg-white shadow-sm w-44 items-center text-nowrap flex flex-row justify-between" 
+          <Select value={timeFrame} onValueChange={setTimeFrame}>
+            <SelectTrigger
+              className="border-gray-200 rounded-lg px-2 py-2 sm:text-sm bg-white shadow-sm w-36 md:w-44 flex justify-between items-center md:text-sm text-xs"
               disabled={dateRange[0] !== null}
             >
               <SelectValue placeholder="Select timeframe" />
               <ChevronDown className="h-4 w-4" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent className="bg-white w-36 md:w-44">
               <SelectGroup>
-                <SelectItem value="daily">Last 30 Days</SelectItem>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
+                <SelectItem className="md:text-sm text-xs"  value="daily">Last 30 Days</SelectItem>
+                <SelectItem className="md:text-sm text-xs"  value="weekly">Weekly</SelectItem>
+                <SelectItem className="md:text-sm text-xs"  value="monthly">Monthly</SelectItem>
+                <SelectItem className="md:text-sm text-xs"  value="yearly">Yearly</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -277,7 +318,7 @@ const ProfitChart = () => {
             endDate={dateRange[1]}
             onChange={setDateRange}
             placeholderText="Custom Date Range"
-            className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white shadow-sm w-48"
+            className="border border-gray-200 rounded-lg px-3 py-2 w-36 md:w-48 text-xs md:text-sm bg-white shadow-sm"
             isClearable
           />
         </div>
@@ -285,19 +326,27 @@ const ProfitChart = () => {
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
-          <Loader className="w-12 h-12" />
+          <ChartSkeleton />
         </div>
       ) : error ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-          <ErrorFallback message = {error}/>
+          <ErrorFallback message={error} />
         </div>
-      ) : chartData.length === 0 ? (
+      ) : safeData.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <p className="text-gray-500 font-medium  font-poppins">No profit data for selected period</p>
+          <p className="text-gray-500 font-medium">No profit data for selected period</p>
         </div>
       ) : (
-        <div className="flex-1 h-full lg:min-h-[400px]">
-          {renderChart()}
+        <div className="flex-1 h-full min-h-[400px] relative">
+          {isOverflowing && (
+            <>
+              <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-16 bg-gradient-to-r from-white via-white/60 to-transparent" />
+              <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-16 bg-gradient-to-l from-white via-white/60 to-transparent" />
+            </>
+          )}
+          <ScrollArea orientation="horizontal" className="h-full">
+            <div style={{ minWidth: `${chartWidth}px`, height: "100%" }}>{renderChart()}</div>
+          </ScrollArea>
         </div>
       )}
     </div>

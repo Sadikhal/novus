@@ -28,6 +28,7 @@ const ListingCards = ({ data, type }) => {
           className="aspect-square object-cover w-full duration-500 transition-transform group-hover:scale-110 rounded-lg"
           src={data?.image}
           alt={data?.name}
+          lazy="loading"
         />
       </div>
       <div className="text-center w-full px-1 pt-1">

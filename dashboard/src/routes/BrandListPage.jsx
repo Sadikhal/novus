@@ -110,7 +110,7 @@ const BrandListPage = () => {
   if (error) return <ErrorFallback error={error} />;
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-white p-4 rounded-md flex-1 h-full m-4 mt-0 flex flex-col">
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Brands</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -139,10 +139,10 @@ const BrandListPage = () => {
         error={error} 
       />
           
-      <div className="w-full h-[700px] pt-5">
+      <div className="w-full h-full pt-5">
         <BrandsPerformance />
       </div>
-      <div className="w-full h-[700px] pt-3">
+      <div className="w-full h-full pt-5">
         <BrandRevenuePerfomanceChart />
       </div>
     </div>

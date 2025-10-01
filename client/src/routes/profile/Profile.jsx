@@ -144,7 +144,7 @@ const Profile = () => {
         className="w-full bg-center bg-cover bg-no-repeat relative"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.1)), url('/gr9.jpg')",
+            "linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.1)), url('/gr9.webp')",
           height: '470px',
         }}
       >

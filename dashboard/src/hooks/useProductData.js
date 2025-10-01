@@ -64,6 +64,7 @@ export default function useProductData(role) {
     fetchAllProducts();
   }, [fetchAllProducts]);
 
+  
   const fetchProduct = useCallback(async (id) => {
     setSingleLoading(true);
     try {

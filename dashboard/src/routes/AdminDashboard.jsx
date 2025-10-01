@@ -4,19 +4,19 @@ import CountChart from "../components/stats/CountChart";
 import EventCalendar from "../components/EventCalendar";
 import FinanceChart from "../components/stats/FinanceChart";
 import ProfitChart from "../components/stats/ProfitChart";
-import BrandPerformanceChart from "../components/stats/brandsChart";
 import BrandsPerformance from "../components/stats/brandsPerfomanceChart";
 import UserCard from "../components/UserCard";
 import PerformanceChart from "../components/stats/Dailyperfomance";
 import { ErrorFallback, Loader } from "../components/ui/Loaders";
+import BrandRevenuePerformanceChart from "../components/stats/BrandRevenuePerfomance";
 
 const AdminDashboard = () => {
   const { stats, loading, error } = useDashboardStats();
 
   return (
     <div className="w-full h-full p-4 overflow-auto">
-      <div className="flex gap-4 flex-col md:flex-row">
-        <div className="w-full lg:w-2/3 flex flex-col gap-8">
+      <div className="flex gap-4 flex-col xl:flex-row">
+        <div className="w-full xl:w-2/3 flex flex-col gap-8">
           {loading ? (
             <Loader/>
           ) : error ? (
@@ -70,34 +70,34 @@ const AdminDashboard = () => {
               </div>
             </>
           )}
-          <div className="flex gap-4 flex-col lg:flex-row">
-            <div className="w-full lg:w-1/3 h-[450px]">
+          <div className="flex gap-4 flex-col lg:flex-row h-full">
+            <div className="w-full lg:w-1/3 lg:h-auto h-[300px] sm:h-[350px] md:h-[400px]">
               <CountChart />
             </div>
-            <div className="w-full lg:w-2/3 h-[450px]">
+            <div className="w-full lg:w-2/3 h-full">
               <PerformanceChart />
             </div>
           </div>
           
-          <div className="w-full h-[600px]">
+          <div className="w-full h-full">
             <FinanceChart />
           </div>
         </div>
 
-        <div className="w-full lg:w-1/3 flex flex-col gap-8">
+        <div className="w-full xl:w-1/3 flex flex-col gap-8">
           <EventCalendar />
           <Announcements/>
         </div>
       </div>
                   
       <div className="flex flex-col gap-5 mt-8">
-        <div className="w-full h-[500px]">
-          <BrandPerformanceChart/>
+         <div className="w-full h-full">
+          <BrandRevenuePerformanceChart />
         </div>
-        <div className="w-full h-[700px]">
+        <div className="w-full h-full">
           <BrandsPerformance/>
         </div>
-        <div className="w-full h-[500px]">
+        <div className="w-full h-full">
           <ProfitChart />
         </div>
       </div>

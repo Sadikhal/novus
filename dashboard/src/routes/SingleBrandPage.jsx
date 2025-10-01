@@ -83,7 +83,7 @@ const SingleBrandPage = () => {
   if (loading || !brand) return <Loader />;
 
   return (
-    <div className="overflow-x-hidden p-2 sm:p-3 md:p-4  flex-col">
+    <div className="overflow-x-hidden p-2 sm:p-3 md:p-4 flex h-full flex-col">
       {/* LEFT */}
       <div className="flex w-full flex-col gap-4">
         <div className="w-full">
@@ -192,7 +192,7 @@ const SingleBrandPage = () => {
               </div>
             </div>
             
-            <div className="w-full pt-5">
+            <div className="w-full pt-5 h-full">
               <ProductTable 
                 productsData={products} 
                 loading={loading} 
@@ -208,7 +208,7 @@ const SingleBrandPage = () => {
       </div>
       
       {/* RIGHT */}
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full h-full flex flex-col gap-4">
         <Performance rating={rating?.averageRating || 0}/>
         
         <div className="w-full pt-5 xl:hidden">
@@ -225,12 +225,12 @@ const SingleBrandPage = () => {
           /> 
         </div>
         
-        <div className="w-full pt-12 h-[800px]">
+        <div className="w-full h-auto">
           <BrandPerformanceChart brandId={brand._id}/>
         </div>
       </div>
       
-      <div className="w-full pt-5 hidden xl:block">
+      <div className="w-full h-full pt-5 hidden xl:block">
         <OrderTable 
           filteredData={filteredOrders}
           error={error}
@@ -242,15 +242,14 @@ const SingleBrandPage = () => {
           updateOrder={handleUpdateOrder}
           role={role}
         />
-        
-        <div className="w-full h-[700px]">
-          <BrandProductRevenuePerformance brandId={brand._id}/>
+      </div>
+       <div className="w-full h-full">
+          <BrandProductRevenuePerformance brandId={brand._id} brandName={brand?.name}/>
         </div>
 
-        <div className="w-full pt-3 h-[800px]">
+        <div className="w-full pt-3 h-full">
           <BrandProductsSalesChart brandId={brand._id}/>
         </div>
-      </div>
     </div>
   );
 };

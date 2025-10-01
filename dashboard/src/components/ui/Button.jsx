@@ -43,16 +43,59 @@ const buttonVariants = cva(
     },
   }
 )
-
-const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
+const Button = React.forwardRef(({ 
+  className, 
+  variant, 
+  size, 
+  asChild = false, 
+  loading = false,
+  children, 
+  ...props 
+}, ref) => {
   const Comp = asChild ? Slot : "button"
+  
+  const finalSize = variant === "gradient" ? "gradient" : size;
+  
   return (
-    (<Comp
-      className={cn(buttonVariants({ variant, size, className }))}
+    <Comp
+      className={cn(buttonVariants({ variant, size: finalSize, className }))}
       ref={ref}
-      {...props} />)
+      disabled={loading}
+      {...props}
+    >
+      {loading ? (
+        <span className="inline-flex items-center justify-center">
+          <svg
+            className="animate-spin -ml-1 mr-2 h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            role="img"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            />
+          </svg>
+
+          <span className="sr-only">Loading</span>
+            <span className="ml-1">Loading</span>
+          </span>
+      ) : children}
+    </Comp>
   );
-})
+});
+
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

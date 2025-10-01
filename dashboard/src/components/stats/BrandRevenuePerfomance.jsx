@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { RiBarChartGroupedLine } from "react-icons/ri";
-import { FaChartArea, FaChartLine } from "react-icons/fa";
+
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   BarChart,
   Bar,
@@ -12,50 +11,62 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Legend
+  Cell,
+  Legend,
 } from "recharts";
-import {Loader} from "../ui/Loaders";
-import { apiRequest } from "../../lib/apiRequest";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ChartTypeSelector from "../ChartTypeSelector"; 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/Select";
 import { ChevronDown } from "lucide-react";
 import { BsGraphDownArrow, BsGraphUpArrow } from "react-icons/bs";
+import { ScrollArea } from "../ui/ScrollArea";
+import { Loader } from "../ui/Loaders";
+import { apiRequest } from "../../lib/apiRequest";
+
+const gradientColors = {
+  top: ["#326fa8", "#fff"],
+  least: ["#c34a36", "#ffc75f"],
+};
+
+const ChartSkeleton = () => (
+  <div className="h-full w-full flex items-center justify-center">
+    <div className="w-11/12 h-80 rounded-lg bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 animate-pulse" />
+  </div>
+);
 
 const BrandRevenuePerformanceChart = () => {
   const [timeFrame, setTimeFrame] = useState("monthly");
   const [performanceType, setPerformanceType] = useState("top");
   const [dateRange, setDateRange] = useState([null, null]);
-  const [chartType, setChartType] = useState("area");
+  const [chartType, setChartType] = useState("bar");
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(900);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const [startDate, endDate] = dateRange;
-        const timeRange = startDate && endDate 
-          ? `${startDate.toISOString()}_${endDate.toISOString()}`
-          : undefined;
+        const timeRange = startDate && endDate ? `${startDate.toISOString()}_${endDate.toISOString()}` : undefined;
 
-        const response = await apiRequest.get(
-          `/stats/brands-revenue-performance`, {
-            params: {
-              period: timeRange ? undefined : timeFrame,
-              sort: performanceType === 'top' ? 'desc' : 'asc',
-              timeRange
-            }
-          }
-        );
-        
-        setChartData(response.data);
+        const resp = await apiRequest.get("/stats/brands-revenue-performance", {
+          params: {
+            period: timeRange ? undefined : timeFrame,
+            sort: performanceType === "top" ? "desc" : "asc",
+            timeRange,
+          },
+        });
+
+        setChartData(Array.isArray(resp.data) ? resp.data : resp.data?.data ?? []);
         setError("");
       } catch (err) {
-        setError("Failed to load brand performance data");
         console.error(err);
+        setError("Failed to load brand performance data");
       } finally {
         setLoading(false);
       }
@@ -64,20 +75,85 @@ const BrandRevenuePerformanceChart = () => {
     fetchData();
   }, [timeFrame, performanceType, dateRange]);
 
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  const safeData = useMemo(() => {
+    if (!Array.isArray(chartData)) return [];
+    return chartData.map((d) => ({
+      brand: d.brand,
+      logo: d.logo,
+      totalRevenue: Number(d.totalRevenue ?? 0),
+      ...d,
+    }));
+  }, [chartData]);
+
+  const { chartWidth, barSize, gaps } = useMemo(() => {
+    const points = safeData.length || 0;
+    const minBarWidth = 38;
+    const defaultGap = 8;
+
+    if (points === 0) return { chartWidth: containerWidth, barSize: minBarWidth, gaps: defaultGap };
+
+    const labelWidths = safeData.map((d) => Math.max(50, d.brand.length * 7));
+    const totalLabelWidth = labelWidths.reduce((a, b) => a + b, 0);
+    const totalGap = points > 1 ? (points - 1) * defaultGap : 0;
+
+    let calculatedBarSize = minBarWidth;
+    let calculatedGaps = labelWidths.map((w) => (w - minBarWidth) / 2);
+
+    const totalRequiredWidth = totalLabelWidth + totalGap;
+
+    if (totalRequiredWidth <= containerWidth) {
+      const scale = (containerWidth - totalGap) / totalLabelWidth;
+      calculatedBarSize = Math.max(minBarWidth, Math.min(minBarWidth + 10, minBarWidth * scale));
+    }
+
+    return {
+      chartWidth: Math.max(containerWidth, totalRequiredWidth + totalGap),
+      barSize: calculatedBarSize,
+      gaps: calculatedGaps,
+    };
+  }, [safeData, containerWidth]);
+
+  const isOverflowing = chartWidth > containerWidth;
+
+  const colorsForBrands = useMemo(() => {
+    const n = Math.max(1, safeData.length);
+    const step = 137.5;
+    let h = 10;
+    return Array.from({ length: n }).map((_, i) => {
+      h = (h + step) % 360;
+      return `hsl(${Math.round(h)}, 60%, 48%)`;
+    });
+  }, [safeData.length]);
+
+  const barGradientsDefs = () =>
+    safeData.map((_, i) => (
+      <linearGradient id={`brandRevGrad-${i}`} key={i} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor={colorsForBrands[i]} stopOpacity={0.98} />
+        <stop offset="100%" stopColor={colorsForBrands[i]} stopOpacity={0.62} />
+      </linearGradient>
+    ));
+
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
         <div className="bg-white p-4 rounded-lg shadow-xl border border-gray-200">
-          <img 
-            src={data.logo} 
-            alt={data.brand} 
-            className="w-20 h-20 object-contain mb-3 mx-auto rounded-lg"
-          />
+          {data?.image ? (
+            <img src={data?.image[0]} alt={data.brand} className="w-20 h-20 object-contain mb-3 mx-auto rounded-lg" />
+          ) : null}
           <h3 className="font-bold text-center text-lg mb-2">{data.brand}</h3>
           <div className="grid gap-2">
             <p className="text-sm bg-blue-50 p-2 rounded">
-              <span className="font-semibold">Total Revenue:</span> ${data.totalRevenue?.toFixed(2)}
+              <span className="font-semibold">Total Revenue:</span> ₹{data.totalRevenue?.toFixed(2)}
             </p>
           </div>
         </div>
@@ -86,147 +162,120 @@ const BrandRevenuePerformanceChart = () => {
     return null;
   };
 
-  const ChartTypeButton = ({ type, label, icon }) => (
-    <button
-      onClick={() => setChartType(type)}
-      className={`sm:px-3 py-1 rounded-lg flex items-center gap-2 px-[6px] ${
-        chartType === type 
-          ? 'bg-[#3d3209a6] text-slate-100'
-          : 'bg-gray-100 hover:bg-gray-200'
-      }`}
-    >
-      <span className="material-icons">{icon}</span>
-      {label}
-    </button>
-  );
+  const renderXAxisTick = ({ x, y, payload, index }) => {
+    const color = colorsForBrands[index % colorsForBrands.length];
+    return (
+      <text x={x} y={y + 15} textAnchor="middle" fill={color} fontSize={12}>
+        {payload.value}
+      </text>
+    );
+  };
+
+  const chartProps = { data: safeData, margin: { top: 20, right: 20, left: 10, bottom: 5 } };
 
   const renderChart = () => {
-    const chartProps = {
-      data: chartData,
-      margin: { top: 20, right: 10, left: 10, bottom: 5 }
-    };
-
-    const gradientColors = {
-      top: ['#3d3209a6','#f9f871'],
-      least: ['#c34a36', '#ffc75f']
-    };
-
-    switch(chartType) {
-      case 'area':
+    switch (chartType) {
+      case "area":
         return (
-          <AreaChart {...chartProps}>
+          <AreaChart {...chartProps} width={chartWidth} height={400}>
             <defs>
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={gradientColors[performanceType][0]} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={gradientColors[performanceType][1]} stopOpacity={0.2}/>
+              <linearGradient id="brandRevAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={gradientColors[performanceType][0]} stopOpacity={0.8} />
+                <stop offset="95%" stopColor={gradientColors[performanceType][1]} stopOpacity={0.2} />
               </linearGradient>
             </defs>
+
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
             <XAxis
               dataKey="brand"
-              angle={-45}
-              textAnchor="end"
+              angle={0}
+              textAnchor="middle"
               tick={{ fontSize: 12 }}
               interval={0}
               tickLine={false}
+              height={60}
+              ticks={safeData.map((d, i) => (i % Math.max(1, Math.ceil(safeData.length / Math.min(40, safeData.length))) === 0 ? d.brand : null)).filter(Boolean)}
             />
-            <YAxis 
-              tickFormatter={value => `$${value}`}
-              width={60}
-              tick={{ fontSize: 14 }}
-            />
+            <YAxis tickFormatter={(v) => `₹${v}`} width={80} tick={{ fontSize: 14 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
+            <Legend iconType="circle" />
             <Area
               type="monotone"
               dataKey="totalRevenue"
               stroke={gradientColors[performanceType][0]}
+              fill="url(#brandRevAreaGrad)"
               fillOpacity={1}
-              fill="url(#colorUv)"
               strokeWidth={2}
-              name="Total Revenue"
+              isAnimationActive
+              animationDuration={900}
             />
           </AreaChart>
         );
 
-      case 'line':
+      case "line":
         return (
-          <LineChart {...chartProps}>
+          <LineChart {...chartProps} width={chartWidth} height={400}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
             <XAxis
               dataKey="brand"
-              angle={-45}
-              textAnchor="end"
+              angle={0}
+              textAnchor="middle"
               tick={{ fontSize: 12 }}
               interval={0}
               tickLine={false}
+              height={60}
+              ticks={safeData.map((d, i) => (i % Math.max(1, Math.ceil(safeData.length / Math.min(40, safeData.length))) === 0 ? d.brand : null)).filter(Boolean)}
             />
-            <YAxis 
-              tickFormatter={value => `$${value}`}
-              width={60}
-              tick={{ fontSize: 14 }}
-            />
+            <YAxis tickFormatter={(v) => `₹${v}`} width={80} tick={{ fontSize: 14 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
+            <Legend iconType="circle" />
             <Line
               type="monotone"
               dataKey="totalRevenue"
               stroke={gradientColors[performanceType][0]}
               strokeWidth={2}
-              dot={{ fill: gradientColors[performanceType][1], strokeWidth: 2 }}
+              dot={{ r: 4 }}
               activeDot={{ r: 8 }}
-              name="Total Revenue"
+              isAnimationActive
+              animationDuration={900}
             />
           </LineChart>
         );
 
       default:
         return (
-          <BarChart {...chartProps}>
+          <BarChart {...chartProps} width={chartWidth} height={400}>
+            <defs>{barGradientsDefs()}</defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
             <XAxis
               dataKey="brand"
-              angle={-45}
-              textAnchor="end"
-              tick={{ fontSize: 12 }}
+              angle={0}
+              textAnchor="middle"
               interval={0}
               tickLine={false}
+              height={60}
+              tick={renderXAxisTick}
             />
-            <YAxis 
-              tickFormatter={value => `$${value}`}
-              width={60}
-              tick={{ fontSize: 14 }}
-            />
+            <YAxis tickFormatter={(v) => `₹${v}`} width={80} tick={{ fontSize: 14 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              formatter={(value) => <span className="text-gray-600">{value}</span>}
-              iconType="circle"
-            />
-            <Bar
-              dataKey="totalRevenue"
-              fill={gradientColors[performanceType][0]}
-              radius={[4, 4, 0, 0]}
-              name="Total Revenue"
-            />
+            <Bar dataKey="totalRevenue" radius={[4, 4, 0, 0]} maxBarSize={barSize} isAnimationActive animationDuration={900}>
+              {safeData.map((entry, idx) => (
+                <Cell key={`cell-${idx}`} fill={`url(#brandRevGrad-${idx})`} style={{ width: barSize }} />
+              ))}
+            </Bar>
           </BarChart>
         );
     }
   };
 
   return (
-    <div className="bg-white rounded-xl p-1  sm:p-3 md:p-4 lg:p-6 h-full flex flex-col shadow-sm">
+    <div ref={containerRef} className="bg-white rounded-xl p-4 h-full flex flex-col shadow-sm relative">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <h2 className="sm:text-xl text-md font-bold text-gray-800 text-nowrap flex items-center gap-2">
-          {performanceType === 'top' ? (
+        <h2 className="sm:text-xl text-base font-bold text-gray-800 sm:text-nowrap items-start sm:items-center text-wrap flex gap-2">
+          {performanceType === "top" ? (
             <>
-              <BsGraphUpArrow className="text-teal-800" /> 
-              <span>Top Performing Brands</span>
+              <BsGraphUpArrow className="text-teal-800 pt-1 sm:pt-0" />
+              <span>Top Revenue Performing Brands</span>
             </>
           ) : (
             <>
@@ -235,46 +284,49 @@ const BrandRevenuePerformanceChart = () => {
             </>
           )}
         </h2>
-        <div className="flex flex-wrap gap-3 items-center pt-3">
-          <div className="flex gap-1 sm:gap-2 bg-gray-100 p-1 rounded-lg">
-            <ChartTypeButton type="bar" label="Bars" icon={<RiBarChartGroupedLine />}/>
-            <ChartTypeButton type="area" label="Area" icon={<FaChartArea />} />
-            <ChartTypeButton type="line" label="Lines" icon={<FaChartLine />} />
-          </div>
 
-          <Select 
-            value={performanceType}
-            onValueChange={(value) => setPerformanceType(value)}
-          >
-            <SelectTrigger className="border-gray-200 rounded-lg px-2 py-2 text-sm bg-white shadow-sm w-44 items-center text-nowrap flex flex-row justify-between">
-              <SelectValue placeholder="Select performance" />
+        <div className="flex flex-wrap gap-3 items-center">
+          <ChartTypeSelector chartType={chartType} setChartType={setChartType} />
+
+          <Select value={performanceType} onValueChange={setPerformanceType}>
+            <SelectTrigger className="border-gray-200 rounded-lg px-2 py-2 md:text-sm text-xs bg-white shadow-sm w-36 md:w-44 flex justify-between items-center text-nowrap">
+              <SelectValue placeholder="Top or Least" />
               <ChevronDown className="h-4 w-4" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent className="bg-white shadow-sm w-36 md:w-44 ">
               <SelectGroup>
-                <SelectItem value="top">Top Performers</SelectItem>
-                <SelectItem value="least">Low Performers</SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="top">
+                  Top Performers
+                </SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="least">
+                  Low Performers
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
 
-          <Select
-            value={timeFrame}
-            onValueChange={(value) => setTimeFrame(value)}
-          >
-            <SelectTrigger 
-              className="border-gray-200 rounded-lg px-2 py-2 text-sm bg-white shadow-sm w-44 items-center text-nowrap flex flex-row justify-between" 
+          <Select value={timeFrame} onValueChange={setTimeFrame}>
+            <SelectTrigger
+              className="border-gray-200 rounded-lg px-2 py-2  md:text-sm text-xs bg-white shadow-sm w-36 md:w-44  flex justify-between items-center"
               disabled={dateRange[0] !== null}
             >
               <SelectValue placeholder="Select timeframe" />
               <ChevronDown className="h-4 w-4" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent className="bg-white  w-36 md:w-44 ">
               <SelectGroup>
-                <SelectItem value="daily">Today</SelectItem>
-                <SelectItem value="weekly">This Week</SelectItem>
-                <SelectItem value="monthly">This Month</SelectItem>
-                <SelectItem value="yearly">This Year</SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="daily">
+                  Last 30 Days
+                </SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="weekly">
+                  Weekly
+                </SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="monthly">
+                  Monthly
+                </SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="yearly">
+                  Yearly
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -285,7 +337,7 @@ const BrandRevenuePerformanceChart = () => {
             endDate={dateRange[1]}
             onChange={setDateRange}
             placeholderText="Custom Date Range"
-            className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white shadow-sm w-48"
+            className="border border-gray-200 rounded-lg px-3 py-2  w-36 md:w-48 text-xs md:text-sm  bg-white shadow-sm "
             isClearable
           />
         </div>
@@ -293,22 +345,28 @@ const BrandRevenuePerformanceChart = () => {
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
-          <Loader className="w-12 h-12" />
+          <ChartSkeleton />
         </div>
       ) : error ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
           <span className="material-icons text-red-500 text-4xl mb-4">error</span>
           <p className="text-red-500 font-medium">{error}</p>
         </div>
-      ) : chartData.length === 0 ? (
+      ) : !safeData || safeData.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
           <p className="text-gray-500 font-medium">No revenue data for selected period</p>
         </div>
       ) : (
-        <div className="flex-1 h-full flex lg:min-h-[500px]">
-          <ResponsiveContainer width="100%" height="95%">
-            {renderChart()}
-          </ResponsiveContainer>
+        <div className="flex-1 h-full min-h-[400px] relative">
+          {isOverflowing && (
+            <>
+              <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-10 bg-gradient-to-r from-white via-white/60 to-transparent" />
+              <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-10 bg-gradient-to-l from-white via-white/60 to-transparent" />
+            </>
+          )}
+          <ScrollArea orientation="horizontal" className="h-full">
+            <div style={{ minWidth: `${chartWidth}px`, height: "100%" }}>{renderChart()}</div>
+          </ScrollArea>
         </div>
       )}
     </div>

@@ -3,7 +3,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Autoplay, Keyboard, Pagination } from 'swiper/modules';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
 
 const HomeCarousal = ({ loading, banner, transformData }) => {

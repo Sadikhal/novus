@@ -27,7 +27,7 @@ const Orders = () => {
 
   
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-col gap-3 bg-[#F7F8FA]'>
       <div>
         {loading ? <Loader/> : (
           <OrderTable 
@@ -45,20 +45,20 @@ const Orders = () => {
       </div>
         {
           currentUser.isAdmin ? (
-            <div className="flex flex-col gap-3">
-             <div className="w-full h-[700px]">
+            <div className="flex flex-col gap-3 mx-2 md:mx-4">
+             <div className="w-full h-full">
               <BrandsPerformance/>
                 </div>
-                <div className="w-full h-[700px]">
+                <div className="w-full h-full">
                   <BrandRevenuePerfomanceChart/>
                 </div>
-                <div className="w-full h-[700px]">
+                <div className="w-full h-full">
                   <ProductsSoldChart/>
                 </div>
             </div>
           ):
           (
-            <div className="w-full h-[700px]">
+            <div className="w-full h-full">
               <BrandPerformanceChart  brandId = {currentUser?.brand?._id}/>
             </div>
           )

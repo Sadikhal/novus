@@ -24,7 +24,7 @@ const EventListPage = () => {
     {
       header: "Event Title",
       accessor: "title",
-      className: "px-3"
+      className: "px-2"
     },
     {
       header: "Description",
@@ -75,7 +75,7 @@ const EventListPage = () => {
         key={item?._id}
         className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight items-center"
       >
-        <td className="table-cell px-4 py-5 capitalize">{item?.title}</td>
+        <td className="table-cell px-2 py-5 capitalize min-w-60">{item?.title}</td>
         <td className="table-cell px-2 min-w-80">{item?.desc}</td>
         <td className="px-2">
           {item?.startingDate ? new Date(item?.startingDate).toLocaleDateString() : 'N/A'}
@@ -117,7 +117,7 @@ const EventListPage = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0 overflow-scroll">
+    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0 ">
       <div className="flex items-center justify-between">
         <h1 className="block text-lg font-semibold">All Events</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">

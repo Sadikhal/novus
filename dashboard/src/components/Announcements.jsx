@@ -37,8 +37,8 @@ const Announcements = () => {
               className={`${bgColors[index % bgColors.length]} rounded-md p-4`}
             >
               <div className="flex items-center justify-between">
-                <h2 className="font-medium font-poppins">{announcement.title}</h2>
-                <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
+                <h2 className="font-medium">{announcement.title}</h2>
+                <span className="text-xs text-gray-600 bg-white rounded-md px-1 py-1">
                   {new Date(announcement.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',

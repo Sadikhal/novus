@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 export const useCheckout = () => {
-  const { tempOrder, products: cartProducts } = useSelector((state) => state.cart);
+   const { tempOrder, products: cartProducts } = useSelector((state) => state.cart);
   const { currentUser } = useSelector((state) => state.user);
   const { id } = useParams();
 
@@ -16,8 +16,6 @@ export const useCheckout = () => {
     id && tempOrder ? [tempOrder] : cartProducts,
     [id, tempOrder, cartProducts]
   );
-
-
 
   const priceDetails = useMemo(() => {
     const totalPrice = orderProducts.reduce((total, item) => total + item.price * item.quantity, 0);
