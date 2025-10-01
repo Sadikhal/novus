@@ -6,8 +6,6 @@ import Order from "../models/order.model.js";
 import mongoose from "mongoose";
 
 
-
-
 export const createBrand = async (req, res, next) => { 
   try {
     const sellerId = req.userId;
