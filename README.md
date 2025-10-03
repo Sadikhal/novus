@@ -1,314 +1,234 @@
-# Novus — Full‑Stack E‑commerce Platform
+# Novus
 
-> Professional, ready-to-paste `README.md` plus supporting documentation (`.env.example` templates, `CONTRIBUTING.md`, `SECURITY.md`, `DEPLOYMENT.md`) for the Novus repository.
+**Enterprise-grade multi-role e‑commerce platform** — Customer, Seller and Admin interfaces, real-time communication, analytics, Stripe payments, and a full-featured shopping experience.
 
 ---
 
-## 📌 Repository
+## Project Overview
 
-**GitHub:** `https://github.com/Sadikhal/novus.git`
+Novus is a modular, scalable e‑commerce platform built with modern web technologies. It demonstrates a production-minded full‑stack architecture, combining a React + Vite frontend, a React Admin Dashboard, and a Node.js + Express backend with MongoDB. Real‑time features are implemented with Socket.IO and media is handled through Cloudinary. The platform supports role-based access control (Customer, Seller, Admin), a complete product lifecycle, order processing, and analytics.
 
 **Live previews**
 
-* Client: [https://novus-5plg.onrender.com](https://novus-5plg.onrender.com)
-* Admin Dashboard: [https://novuss.onrender.com](https://novuss.onrender.com)
+* Client (storefront): `https://novus-5plg.onrender.com`
+* Dashboard (admin): `https://novuss.onrender.com`
 
-**Demo credentials (examples)**
+**Demo accounts**
 
-* **Admin:** `novus56@gmail.com` / `Novus@123`
-* **Seller (example):** `glowera@gmail.com` / `Glowera@123`
-* **Customer (example):** `sanu@gmail.com` / `Sanu@123`
+* Admin: `novus56@gmail.com` / `Novus@123` (Admin panel)
+* Seller example: `glowera@gmail.com` / `Glowera@123`
+* Customer example: `sanu@gmail.com` / `Sanu@123`
 
-> Note: Account creation uses OTP email verification — check Gmail **Spam** folder for OTPs and order confirmation emails.
+> When creating accounts or orders the app may send verification or order emails — check the Spam folder in Gmail if you do not see them in your inbox.
 
 ---
 
-# README.md
-
-```markdown
-# Novus
-
-**Novus** is a production-grade, multi-role e-commerce platform built with modern web technologies. It includes separate interfaces for **Customers**, **Sellers**, and **Admins**, real-time chat, advanced analytics, and secure payments.
-
-## Demo & Repo
-- GitHub: https://github.com/Sadikhal/novus.git
-- Client preview: https://novus-5plg.onrender.com
-- Admin dashboard preview: https://novuss.onrender.com
-
-## Table of Contents
-1. Project Overview
-2. Key Features
-3. Tech Stack
-4. Repo Structure
-5. Quick Start
-6. Environment Variables
-7. Running Locally
-8. Deploying
-9. Architecture Notes
-10. Security
-11. Troubleshooting
-12. Contributing
-13. License
-14. Contact
-
-## Project Overview
-Novus is a full featured e-commerce platform demonstrating modern full-stack engineering, including real-time features, analytics, and a multi-role architecture supporting Customers, Sellers and Admins.
-
 ## Key Features
-- Multi-role Authentication (Customer / Seller / Admin)
-- Real-time chat with Socket.IO (typing indicators, presence)
-- Product, Category, Brand management and reviews
-- Persistent cart & wishlist (Redux Toolkit + redux-persist)
-- Secure Stripe payment integration
-- Admin analytics dashboard (Recharts)
-- Email (OTP & notifications) via SMTP/SendGrid
-- Cloudinary for media uploads
+
+* Multi‑role user system (Customer, Seller, Admin)
+* Product CRUD with categories & brands
+* Cart, Wishlist, Checkout flow with Stripe integration
+* Order lifecycle and delivery tracking
+* Reviews & ratings
+* Real‑time chat, typing indicators, online presence (Socket.IO)
+* Analytics dashboard (Recharts) and sales reports
+* Image upload & cropping (Cloudinary + react-image-crop)
+* Rich text content (React Quill)
+* Responsive UI with Tailwind CSS, Ant Design for admin
+
+---
 
 ## Tech Stack
-**Frontend (Client)**: React 19 + Vite, Redux Toolkit, Tailwind CSS, React Router v7,
-React Hook Form, Stripe React
 
-**Admin Dashboard**: React 19 + Vite, Ant Design, Recharts
+* **Frontend (Client)**: React 19, Vite, Redux Toolkit, React Hook Form, Tailwind CSS, Framer Motion, React Router v7
+* **Admin Dashboard**: React 19, Vite, Ant Design, Recharts
+* **Backend**: Node.js, Express, MongoDB (Mongoose), Socket.IO
+* **Auth & Security**: JWT, bcrypt
+* **Payments**: Stripe
+* **Email**: Nodemailer (or SendGrid as configured)
+* **Media**: Cloudinary
+* **Dev tooling**: ESLint, Nodemon, Vite
 
-**Backend**: Node.js + Express, MongoDB + Mongoose, Socket.IO, JWT, bcrypt,
-Stripe, Nodemailer
+---
 
-## Repo Structure
+## Repository Structure (high level)
+
+```
+novus/
+├─ client/           # React storefront (Vite)
+├─ dashboard/        # React admin dashboard (Vite + Antd)
+└─ server/           # Express API + Socket.IO
 ```
 
-novus/
-├─ client/         # Customer-facing web app (Vite + React)
-├─ dashboard/      # Admin dashboard (Vite + React + Antd)
-├─ server/         # API server (Express + Socket.IO + Stripe + Mongoose)
-├─ README.md
-└─ .gitignore
+> See the repository for more granular folder structure and component organization.
 
-````
+---
 
-## Quick Start (Local Development)
-### Prerequisites
-- Node.js v18+ and npm
-- MongoDB (Atlas or local)
-- Stripe account (test keys)
-- Cloudinary (optional)
-- Email provider credentials (SendGrid, Mailtrap, or SMTP)
+## Getting Started — Local Development
 
-### Clone
+> These instructions assume you have Node.js (v18+ recommended) and npm installed.
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Sadikhal/novus.git
 cd novus
-````
+```
 
-### Server
+### 2. Install dependencies
+
+Install per-package (client, dashboard, server):
 
 ```bash
-cd server
-npm install
-cp .env.example .env   # edit .env with real values
-npm run dev             # or npm start depending on scripts
+# from repo root (if using workspaces) or from each package folder
+cd client && npm install
+cd ../dashboard && npm install
+cd ../server && npm install
 ```
 
-### Client (Customer)
+### 3. Environment variables
 
-```bash
-cd ../client
-npm install
-cp .env.example .env   # edit values
-npm run dev
-```
+Create `.env` files for each package using the example below. Replace placeholder values with your own credentials.
 
-### Dashboard (Admin)
-
-```bash
-cd ../dashboard
-npm install
-cp .env.example .env
-npm run dev
-```
-
-Visits:
-
-* Client: `http://localhost:5173` (Vite default)
-* Dashboard: check console output for port
-* API: `http://localhost:5000` (server default)
-
-## Environment variables
-
-See `.env.example` files (project root below) and do **not** commit real secrets.
-
-## Running Tests / Lint
-
-* Add or run test scripts if available in each package's `package.json`.
-
-## Production & Deploy
-
-1. Build frontends: `npm run build` in `client` and `dashboard`.
-2. Deploy `server` on Render/Heroku/Railway and serve built static assets or host frontends separately on Vercel/Netlify.
-3. Configure production environment variables (Mongo URI, Stripe keys, Cloudinary, Email credentials).
-
-## Architecture Notes
-
-* RESTful API with Socket.IO for real-time features.
-* Redux Toolkit + redux-persist for client-side state.
-* Modular server structure (controllers/services/models).
-
-## Security
-
-* Keep `.env` secret; use environment variables at host.
-* Use HTTPS and secure cookie settings in production.
-* Validate & sanitize inputs on the server.
-* Use strong `JWT_SECRET` and rotate keys when necessary.
-
-## Troubleshooting
-
-* **Emails not delivered:** check Spam folder or Mailtrap during local dev.
-* **Stripe webhooks:** use `stripe-cli` for local testing or expose a publicly reachable endpoint.
-* **Socket.IO issues:** verify client uses the correct server URL and CORS settings.
-
-## Contributing
-
-See `CONTRIBUTING.md` in repository.
-
-## License
-
-This project is available under the **MIT License**. Add `LICENSE` file at repo root.
-
-## Contact
-
-Maintainer: Sadikhali P.V.
-GitHub: [https://github.com/Sadikhal](https://github.com/Sadikhal)
+**server/.env.example**
 
 ```
-```
-
----
-
-# `.env.example` templates
-
-```text
-# server/.env.example
-PORT=5000
+NODE_ENV=development
+PORT=3002
 MONGO_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/novus?retryWrites=true&w=majority
-JWT_SECRET=your_jwt_secret_here
-JWT_EXPIRES_IN=7d
-COOKIE_SECRET=your_cookie_secret
-STRIPE_SECRET_KEY=sk_test_xxx
-STRIPE_WEBHOOK_SECRET=whsec_xxx
+JWT_KEY=your_jwt_secret_here
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
-EMAIL_SERVICE=sendgrid
-EMAIL_API_KEY=SG.xxxx
-SMTP_HOST=smtp.mailtrap.io
-SMTP_PORT=587
-SMTP_USER=your_user
-SMTP_PASS=your_pass
+CLOUDINARY_UPLOAD_PRESET=unsigned_preset_name
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+EMAIL_HOST=smtp.mailtrap.io
+EMAIL_PORT=2525
+EMAIL_USER=your_email_user
+EMAIL_PASS=your_email_pass
 CLIENT_URL=http://localhost:5173
 ```
 
-```text
-# client/.env.example (Vite vars must be prefixed with VITE_)
-VITE_API_BASE_URL=http://localhost:5000/api
-VITE_STRIPE_PUB_KEY=pk_test_xxx
-VITE_CLIENT_URL=http://localhost:5173
+**client/.env (example)**
+
+```
+VITE_API_URL=http://localhost:3002/api
+VITE_CLOUDINARY_UPLOAD_PRESET=your_preset
+VITE_CLOUDINARY_CLOUD_NAME=your_cloud_name
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
 
-```text
-# dashboard/.env.example
-VITE_API_BASE_URL=http://localhost:5000/api
-VITE_ADMIN_CLIENT_URL=http://localhost:3000
+**dashboard/.env (example)**
+
+```
+VITE_API_URL=http://localhost:3002/api
 ```
 
----
+> Keep secrets out of source control. Use `.env.local` or secret management for production deployments.
 
-# CONTRIBUTING.md
+### 4. Start the apps (development)
 
-```markdown
-# Contributing to Novus
-Thanks for your interest in contributing! Please follow these guidelines to make the process smooth.
+Open three terminals (client, dashboard, server) and run:
 
-## How to contribute
-1. Fork the repository
-2. Create a branch: `git checkout -b feature/your-feature`
-3. Make changes and add tests if applicable
-4. Ensure linting and tests pass
-5. Commit with meaningful message and push
-6. Open a Pull Request describing the change
+```bash
+# server (API)
+cd server
+npm run dev        # runs nodemon or equivalent
 
-## Code style
-- Follow the existing project ESLint rules
-- Use descriptive commit messages
+# client (storefront)
+cd ../client
+npm run dev        # Vite dev server (default: http://localhost:5173)
 
-## Reporting bugs
-Open an issue with steps to reproduce, expected vs actual behavior, and logs if available.
-
-## Feature requests
-Open a discussion or issue with a short proposal and expected benefit.
+# dashboard (admin)
+cd ../dashboard
+npm run dev        # Vite dev server (another port)
 ```
 
----
+### 5. Build / Preview (production)
 
-# SECURITY.md
+```bash
+# Build client & dashboard
+cd client && npm run build
+cd ../dashboard && npm run build
 
-```markdown
-# Security Policy
-If you discover a security vulnerability, please report it privately by opening an issue marked **security** or emailing the maintainer at the address in the repo profile.
-
-## Responsible disclosure
-- Provide a clear, reproducible test case
-- Do not publicly disclose vulnerabilities until a fix is available
-
-## Production recommendations
-- Do not commit secrets
-- Use HTTPS and secure cookies
-- Rotate API keys and secrets periodically
+# Start server in production mode
+cd ../server
+npm start           # or node dist/index.js depending on setup
 ```
 
 ---
 
-# DEPLOYMENT.md (quick guide)
+## Environment & Deployment Notes
 
-```markdown
-# Deployment Guide (Render / Vercel / Netlify)
-
-## Recommended architecture
-- Deploy `server` to Render / Railway / Heroku
-- Deploy `client` and `dashboard` as static frontends to Vercel / Netlify
-
-## Server (Render)
-1. Create a new Web Service on Render
-2. Connect GitHub repo and choose `server` directory
-3. Set build & start commands (e.g. `npm install && npm run build` and `npm run start` or `npm run dev` for dev)
-4. Configure environment variables on Render dashboard (MONGO_URL, STRIPE keys, CLOUDINARY, EMAIL)
-5. If using Stripe webhooks, add `STRIPE_WEBHOOK_SECRET` to Render
-
-## Client / Dashboard (Vercel)
-1. Create new project, point to `client` or `dashboard` directory
-2. Add VITE env vars on Vercel (VITE_API_BASE_URL, VITE_STRIPE_PUB_KEY)
-3. Set build command `npm run build` and output directory `dist`
-
-## Notes
-- Ensure CORS on server allows frontend origins.
-- Use HTTPS in production and set cookie `secure: true`.
-```
+* **MongoDB Atlas**: Recommended for production. Ensure IP whitelist and proper credentials.
+* **Cloudinary**: Set up unsigned upload preset if you use client-side uploads; otherwise use signed server uploads.
+* **Stripe**: Configure webhook endpoints (for order/payment status updates) and set `STRIPE_WEBHOOK_SECRET` for webhook verification.
+* **Emails**: You can configure Mailtrap, SendGrid or another SMTP provider. Test in staging.
+* **Render / Vercel / Heroku**: The app has been previewed on Render — adjust build/start commands per service. Ensure environment variables are set in the deployment dashboard and that the server allows CORS from your client URL.
 
 ---
 
-# Example `README` commit checklist
+## Common Scripts (example)
 
-* [ ] Add `README.md` to repo root
-* [ ] Add `server/.env.example`, `client/.env.example`, `dashboard/.env.example`
-* [ ] Add `CONTRIBUTING.md`, `SECURITY.md`, `DEPLOYMENT.md`
-* [ ] Add `LICENSE` (MIT) if desired
+> Confirm actual scripts in each package's `package.json`. Typical commands:
 
----
-
-# Helpful commit message (example)
-
-```
-chore(docs): add README, env examples, CONTRIBUTING, SECURITY and DEPLOYMENT guides
-```
+* `npm run dev` — start development server
+* `npm run build` — build for production
+* `npm run preview` — preview a build (Vite)
+* `npm start` — start production server
 
 ---
 
-*End of document.*
+## Testing & Quality
+
+* ESLint is configured. Run `npm run lint` if configured in each package.
+* Add unit/integration tests (Jest / React Testing Library) as needed.
+
+---
+
+## Troubleshooting
+
+* **Emails not received**: Check Spam folder. If using Mailtrap, verify credentials.
+* **CORS issues**: Ensure `CLIENT_URL` is included in server CORS allowed origins.
+* **Image uploads failing**: Verify Cloudinary credentials and upload preset.
+* **Stripe webhooks**: When testing locally, use `stripe-cli` or ngrok to forward webhooks to your local server.
+
+---
+
+## Contribution Guidelines
+
+1. Fork the repo and create a feature branch: `git checkout -b feat/your-feature`
+2. Commit changes with clear messages.
+3. Open a pull request describing the change and rationale.
+4. Add tests and ensure ESLint passes.
+
+Please be respectful and include descriptive commit messages. For major architectural changes, open an issue first.
+
+---
+
+## Security & Best Practices
+
+* Do not commit `.env` or secrets. Use `.gitignore`.
+* Rotate API keys if they are compromised.
+* Validate and sanitize user input on both client and server.
+* Use HTTPS in production and secure cookies for JWT tokens.
+
+---
+
+## License
+
+MIT — see `LICENSE` file.
+
+---
+
+## Acknowledgements
+
+Built with ❤️ using React, Node, MongoDB, and many open-source libraries.
+
+---
+
+## Contact
+
+Repository: `https://github.com/Sadikhal/novus.git`
+For questions or help, open an issue in the repository or message the maintainer.
