@@ -32,9 +32,7 @@
 10. [Deployment (production tips)](#deployment-production-tips)
 11. [Security & Best Practices](#security--best-practices)
 12. [Contributing](#contributing)
-13. [CI / Linting (example)](#ci--linting-example)
-14. [Roadmap](#roadmap)
-15. [License & Author](#license--author)
+13. [License & Author](#license--author)
 
 ---
 
@@ -323,12 +321,6 @@ Thanks for your interest in contributing! Please follow the workflow below:
 4. Run linters and tests: `npm run lint`, `npm test` (if configured)
 5. Commit & push: `git commit -m "feat: add awesome feature"` & `git push origin feature/awesome-feature`
 6. Open a Pull Request with a clear description and screenshots if UI changes
-
-Suggested repository files to add:
-
-* `CONTRIBUTING.md` (guidelines)
-* `CODE_OF_CONDUCT.md` (community standards)
-* `SECURITY.md` (reporting security issues)
 
 ---
 
