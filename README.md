@@ -1,360 +1,401 @@
-# Novus - Full-Stack E-commerce Platform 🛍️
+# Novus — Full-Stack E-commerce Platform 🛍️
 
 ![Novus Banner](https://via.placeholder.com/1200x400/2563EB/FFFFFF?text=NOVUS+E-COMMERCE+PLATFORM)
-*A comprehensive, multi-role e-commerce solution built with cutting-edge technologies*
 
-## 🌟 Live Demos
-
-| Platform | Link | Status |
-|----------|------|---------|
-| 🛒 **Client Application** | [https://novus-5plg.onrender.com](https://novus-5plg.onrender.com) | ✅ Live |
-| 📊 **Admin Dashboard** | [https://novuss.onrender.com](https://novuss.onrender.com) | ✅ Live |
-| 🖥️ **GitHub Repository** | [https://github.com/Sadikhal/novus.git](https://github.com/Sadikhal/novus.git) | 🔄 Active |
+**A production-ready, multi-role e-commerce platform** (Customer, Seller, Admin) with real-time chat, analytics, secure payments and modern frontend tooling — built with React, Node.js, MongoDB, Socket.IO and Stripe.
 
 ---
 
-## 🚀 Quick Start
+## 🔗 Live Demos & Repo
 
-### Test Credentials
+| Platform              |                                                                   Link |   Status  |
+| --------------------- | ---------------------------------------------------------------------: | :-------: |
+| Client (Customer app) |     [https://novus-5plg.onrender.com](https://novus-5plg.onrender.com) |   ✅ Live  |
+| Admin Dashboard       |             [https://novuss.onrender.com](https://novuss.onrender.com) |   ✅ Live  |
+| GitHub Repository     | [https://github.com/Sadikhal/novus](https://github.com/Sadikhal/novus) | 🔄 Active |
 
-#### 👑 Admin Access
-```bash
-Email: novus56@gmail.com
-Password: Novus@123
-```
-
-#### 🏪 Seller Access
-```bash
-Email: glowera@gmail.com
-Password: Glowera@123
-```
-
-#### 👤 Customer Access
-```bash
-Email: sanu@gmail.com
-Password: Sanu@123
-```
-
-> **📧 Email Note**: For OTP verification and order confirmations, please check your **SPAM folder** in Gmail as automated emails might be filtered there.
+> **Email note:** OTP / confirmation emails for demo accounts may end up in Gmail's **Spam** folder. Check there if you don't receive email immediately.
 
 ---
 
-## ✨ Key Features
+## 📌 Table of Contents
 
-### 🎯 Multi-Role Architecture
-- **👤 Customers** - Complete shopping experience
-- **🏪 Sellers** - Product management & analytics
-- **👑 Admins** - Platform oversight & management
-
-### 🔄 Real-Time Communication
-- 💬 Live chat with Socket.IO
-- ⏰ Typing indicators
-- 🟢 Online status tracking
-- 🔔 Real-time notifications
-
-### 🛍️ Advanced E-commerce
-- 📦 Product catalog with advanced filtering
-- 🛒 Persistent shopping cart
-- ❤️ Wishlist functionality
-- 📊 Order tracking & history
-- ⭐ Review & rating system
-
-### 💳 Secure Payments
-- 🔒 Stripe payment integration
-- 💳 Multiple payment methods
-- 📋 Transaction history
-- 🛡️ Secure checkout process
-
-### 📊 Analytics & Insights
-- 📈 Sales performance metrics
-- 👥 User behavior analytics
-- 🏪 Brand performance tracking
-- 📊 Real-time data visualization
-
-### 🎨 Modern UI/UX
-- 📱 Mobile-first responsive design
-- 🎭 Smooth animations with Framer Motion
-- 🎯 Professional Ant Design components
-- 🎨 Tailwind CSS with DaisyUI
+1. [Project Overview](#project-overview)
+2. [Demo Credentials (demo-only)](#demo-credentials-demo-only)
+3. [Highlights & Key Features](#highlights--key-features)
+4. [Tech Stack](#tech-stack)
+5. [Repository Structure](#repository-structure)
+6. [Screenshots](#screenshots)
+7. [Getting Started (Local Dev)](#getting-started-local-dev)
+8. [Environment Variables (.env.example)](#environment-variables-envexample)
+9. [Run & Build Commands](#run--build-commands)
+10. [Deployment (production tips)](#deployment-production-tips)
+11. [Security & Best Practices](#security--best-practices)
+12. [Contributing](#contributing)
+13. [CI / Linting (example)](#ci--linting-example)
+14. [Roadmap](#roadmap)
+15. [License & Author](#license--author)
 
 ---
 
-## 🛠️ Technology Stack
+# Project Overview
 
-### Frontend (Client)
-| Technology | Purpose |
-|------------|---------|
-| **React 19** + Vite | Core framework & build tool |
-| **Redux Toolkit** + Persist | State management |
-| **Tailwind CSS v4** + DaisyUI | Styling & components |
-| **React Router v7** | Navigation & routing |
-| **Framer Motion** | Animations & transitions |
-| **Socket.IO Client** | Real-time features |
-| **React Hook Form** | Form management & validation |
-| **Stripe React** | Payment processing |
+**Novus** is a full-featured e-commerce platform demonstrating modern full-stack engineering: separated client and admin frontends, an API server with real-time features, persistent state and Stripe payments. The platform is built for production-readiness, extensibility and good developer DX (Vite, Redux Toolkit, modular server code).
 
-### Admin Dashboard
-| Technology | Purpose |
-|------------|---------|
-| **React 19** + Vite | Core framework |
-| **Ant Design** | UI component library |
-| **Recharts** | Data visualization |
-| **Advanced Analytics** | Performance metrics |
-
-### Backend (Server)
-| Technology | Purpose |
-|------------|---------|
-| **Node.js** + Express.js | Server runtime & framework |
-| **MongoDB** + Mongoose | Database & ODM |
-| **Socket.IO** | Real-time communication |
-| **JWT** + bcrypt | Authentication & security |
-| **Stripe API** | Payment processing |
-| **Nodemailer** | Email services |
-| **Cloudinary** | Media management |
+Use cases: multi-seller marketplace, internal company store, proof-of-concept for production e-commerce apps.
 
 ---
 
-## 🏗️ Project Structure
+# Demo Credentials (demo-only)
+
+> **Important:** These accounts are demo-only and should be rotated or removed before publishing production data.
+
+* **Admin**
+
+  * Email: `novus56@gmail.com`
+  * Password: `Novus@123`
+
+* **Seller (example)**
+
+  * Email: `glowera@gmail.com`
+  * Password: `Glowera@123`
+
+* **Customer (example)**
+
+  * Email: `sanu@gmail.com`
+  * Password: `Sanu@123`
+
+If you plan to publish the repository publicly, remove or clearly mark these credentials as demo-only in a dedicated `DEMO_CREDENTIALS.md` and consider rotating them often.
+
+---
+
+# Highlights & Key Features
+
+* **Multi-Role System**: Customers, Sellers, Admins with role-based access control.
+* **Real-time Communication**: Socket.IO chat, typing indicators, online presence, real-time notifications.
+* **E-commerce Core**: Product CRUD, categories, brands, inventory, reviews & ratings, search & filters.
+* **Shopping Experience**: Persistent cart (redux-persist), wishlist, multi-step checkout, order lifecycle & tracking.
+* **Payments**: Stripe integration (client + server) with secure payment workflow.
+* **Admin Analytics**: Recharts-based dashboards, sales & brand analytics, filtering by date ranges.
+* **Media & Content**: Cloudinary integration, banner management, announcements, events.
+* **Modern UI**: Tailwind CSS (mobile-first), DaisyUI & Ant Design for admin, Framer Motion animations.
+* **Security**: JWT, bcrypt hashing, input validation and CORS protections.
+* **Dev DX**: Vite for fast HMR & builds, ESLint integration, modular code structure.
+
+---
+
+# Tech Stack
+
+**Frontend (Client)**
+
+* React 19 + Vite
+* Redux Toolkit + redux-persist
+* Tailwind CSS v4 + DaisyUI
+* React Router v7, React Hook Form, Zod
+* Socket.IO Client, Stripe React SDK, React Quill
+
+**Admin Dashboard**
+
+* React 19 + Vite
+* Ant Design, Recharts
+
+**Backend**
+
+* Node.js + Express.js
+* MongoDB + Mongoose
+* Socket.IO (real-time)
+* JWT auth, bcrypt password hashing
+* Stripe, Nodemailer (email), Cloudinary (media)
+
+---
+
+# Repository Structure (high-level)
 
 ```
 novus/
-├── 🖥️ client/                 # Customer-facing React application
+├── client/         # Customer React app (Vite)
 │   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   ├── hooks/           # Custom React hooks
-│   │   ├── routes/          # Page components
-│   │   ├── store/           # Redux store configuration
-│   │   └── utils/           # Utility functions
-│
-├── 📊 dashboard/            # Admin dashboard React application
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── routes/
+│   │   ├── store/
+│   │   └── utils/
+├── dashboard/      # Admin React app (Vite + Antd)
 │   ├── src/
-│   │   ├── components/      # Dashboard components
-│   │   ├── pages/           # Admin pages
-│   │   └── charts/          # Analytics & charts
-│
-├── 🔧 server/               # Backend Node.js application
-│   ├── controllers/         # Route controllers
-│   ├── models/             # MongoDB models
-│   ├── routes/             # API routes
-│   ├── middleware/         # Custom middleware
-│   └── utils/              # Utility functions
-│
-└── 📚 Documentation
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── charts/
+├── server/         # API server (Express, Mongoose, Socket.IO)
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   └── utils/
+├── docs/           # screenshots, architecture diagrams (recommended)
+├── .github/        # CI workflows (optional)
+└── README.md
 ```
 
 ---
 
-## ⚡ Installation & Setup
+# Screenshots
 
-### Prerequisites
-- **Node.js** (v18 or higher)
-- **MongoDB** (local or cloud)
-- **Stripe Account**
-- **Cloudinary Account**
+> Add real screenshots to `/docs/screenshots` and replace placeholders below.
 
-### 1. Clone Repository
+* Homepage / Product Listing
+  `docs/screenshots/home.png`
+  ![Home](https://via.placeholder.com/1000x500?text=Homepage+Screenshot)
+
+* Product Details
+  `docs/screenshots/product.png`
+  ![Product](https://via.placeholder.com/1000x500?text=Product+Page)
+
+* Admin Dashboard (Sales Analytics)
+  `docs/screenshots/dashboard.png`
+  ![Dashboard](https://via.placeholder.com/1000x500?text=Admin+Dashboard)
+
+**Tip:** Use `screenshots/` for desktop + mobile variants and include short captions in a `docs/Screenshots.md`.
+
+---
+
+# Getting Started (Local Development)
+
+## Prerequisites
+
+* Node.js v18+
+* npm (or pnpm/yarn)
+* MongoDB (local or Atlas)
+* Stripe account (test keys)
+* Cloudinary account (optional)
+* SMTP/SendGrid/Mailtrap for emails
+
+## Clone repository
+
 ```bash
 git clone https://github.com/Sadikhal/novus.git
 cd novus
 ```
 
-### 2. Backend Setup
+### 1) Backend (server)
+
 ```bash
 cd server
-
-# Install dependencies
 npm install
-
-# Environment setup
 cp .env.example .env
+# edit server/.env with your values (see .env example below)
+npm run dev
+# or for production: npm start
+```
 
-# Configure environment variables
-# MONGODB_URI=your_mongodb_connection_string
-# JWT_SECRET=your_jwt_secret
-# STRIPE_SECRET_KEY=your_stripe_secret_key
-# CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-# CLOUDINARY_API_KEY=your_cloudinary_key
-# CLOUDINARY_API_SECRET=your_cloudinary_secret
-# EMAIL_USER=your_email
-# EMAIL_PASS=your_email_password
+Server default: `http://localhost:5000` (check server console for exact port).
 
-# Start development server
+### 2) Client (customer app)
+
+```bash
+cd ../client
+npm install
+cp .env.example .env
+# edit client/.env with your values
 npm run dev
 ```
 
-### 3. Client Application
+Vite will show the local dev URL (usually `http://localhost:5173`).
+
+### 3) Dashboard (admin)
+
+```bash
+cd ../dashboard
+npm install
+cp .env.example .env
+# edit dashboard/.env with your values
+npm run dev
+```
+
+---
+
+# Environment Variables (`.env.example`)
+
+Create `.env` files by copying the `.env.example` in each package and filling values. Standardize var names across code.
+
+### server/.env.example
+
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb+srv://<USER>:<PASS>@cluster0.mongodb.net/novus?retryWrites=true&w=majority
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES_IN=7d
+COOKIE_SECRET=your_cookie_secret
+
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+EMAIL_SERVICE=smtp
+EMAIL_HOST=smtp.mailtrap.io
+EMAIL_PORT=587
+EMAIL_USER=your_email_user
+EMAIL_PASS=your_email_pass
+
+CLIENT_URL=http://localhost:5173
+DASHBOARD_URL=http://localhost:5174
+```
+
+### client/.env.example (Vite — must start with VITE_)
+
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+VITE_CLIENT_URL=http://localhost:5173
+```
+
+### dashboard/.env.example
+
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_ADMIN_CLIENT_URL=http://localhost:5174
+```
+
+> **Security note:** Never commit `.env` with secrets. Use `.env.example` for placeholders only.
+
+---
+
+# Run & Build Commands
+
+**Server**
+
+```bash
+# dev
+cd server
+npm run dev
+
+# build & start (production)
+npm run build
+npm start
+```
+
+**Client**
+
 ```bash
 cd client
-
-# Install dependencies
-npm install
-
-# Environment setup
-cp .env.example .env
-
-# Configure environment variables
-# VITE_API_URL=your_backend_api_url
-# VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-
-# Start development server
-npm run dev
+npm run dev    # dev
+npm run build  # production build -> dist/
 ```
 
-### 4. Admin Dashboard
+**Dashboard**
+
 ```bash
 cd dashboard
-
-# Install dependencies
-npm install
-
-# Environment setup
-cp .env.example .env
-
-# Configure environment variables
-# VITE_API_URL=your_backend_api_url
-
-# Start development server
 npm run dev
+npm run build
 ```
 
 ---
 
-## 🔧 Core Functionalities
+# Deployment (production tips)
 
-### 👥 User Management
-- ✅ Multi-role registration & authentication
-- ✅ Email verification with OTP
-- ✅ Profile management with addresses
-- ✅ Password reset functionality
-- ✅ Real-time online status
+Recommended hosting patterns:
 
-### 📦 Product System
-- ✅ CRUD operations for products
-- ✅ Category & brand management
-- ✅ Inventory tracking
-- ✅ Advanced search & filtering
-- ✅ Review & rating system
-
-### 🛒 Shopping Experience
-- ✅ Persistent shopping cart
-- ✅ Wishlist functionality
-- ✅ Multi-step checkout process
-- ✅ Order tracking & history
-- ✅ Delivery status updates
-
-### 💬 Real-time Features
-- ✅ Live chat between users & sellers
-- ✅ Typing indicators
-- ✅ Online/offline status
-- ✅ Real-time notifications
-- ✅ Help desk system
-
-### 📊 Analytics
-- ✅ Sales performance metrics
-- ✅ User engagement analytics
-- ✅ Brand performance tracking
-- ✅ Real-time dashboard updates
-- ✅ Comprehensive reporting
+* **Server (API + Socket.IO)**: Deploy on Render / Railway / DigitalOcean / Heroku / AWS Elastic Beanstalk. Ensure web sockets are supported and configure NODE_ENV=production.
+* **Frontend (client & dashboard)**: Deploy as static apps to Vercel / Netlify (point to `client` and `dashboard` builds separately).
+* **Stripe webhooks**: Provide a public URL for the webhook endpoint and set `STRIPE_WEBHOOK_SECRET` in production env.
+* **Environment & secrets**: Configure `MONGODB_URI`, `STRIPE_SECRET_KEY`, `CLOUDINARY_*`, and `EMAIL_*` in host settings.
+* **CORS**: Whitelist your frontend origins in server CORS config (CLIENT_URL, DASHBOARD_URL).
+* **HTTPS**: Always use HTTPS in production and set secure cookies.
 
 ---
 
-## 🛡️ Security Features
+# Security & Best Practices
 
-- 🔐 JWT-based authentication
-- 🔒 Password hashing with bcrypt
-- 🎯 Role-based access control
-- 🌐 CORS protection
-- ✅ Input validation & sanitization
-- 💳 Secure payment processing with Stripe
-
-## ⚡ Performance Optimizations
-
-- 🚀 Vite for fast builds & HMR
-- 💾 Redux with persistence
-- 📦 Lazy loading & code splitting
-- 🖼️ Image optimization with Cloudinary
-- 🗃️ Efficient database queries
-- 🔄 Real-time data synchronization
+* **Secrets:** Never commit `.env` or credentials to Git. Use secret management from your host (Render/Vercel).
+* **Passwords:** Store only salted bcrypt hashes. Use strong `JWT_SECRET` and rotate keys periodically.
+* **Cookies:** Use secure, httpOnly cookies in production with `SameSite` restrictions.
+* **Validation:** Validate and sanitize all user input on server-side (use zod, express-validator or custom middleware).
+* **Rate limiting & brute force protection:** Add rate-limiting for auth endpoints (e.g., `express-rate-limit`).
+* **File uploads:** Limit file size and validate MIME types for uploads to Cloudinary.
+* **Email safety:** Use Mailtrap for local testing; do not send test emails to real users.
 
 ---
 
-## 🚀 Deployment
+# Contributing
 
-The application is configured for deployment on **Render.com**. Each component has its own deployment configuration.
+Thanks for your interest in contributing! Please follow the workflow below:
 
-### Environment Variables
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feature/awesome-feature`
+3. Make changes & add tests where applicable
+4. Run linters and tests: `npm run lint`, `npm test` (if configured)
+5. Commit & push: `git commit -m "feat: add awesome feature"` & `git push origin feature/awesome-feature`
+6. Open a Pull Request with a clear description and screenshots if UI changes
 
-#### Server (.env)
-```env
-NODE_ENV=production
-PORT=5000
-MONGODB_URI=your_production_mongodb_uri
-JWT_SECRET=your_jwt_secret
-STRIPE_SECRET_KEY=your_stripe_secret_key
-CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_key
-CLOUDINARY_API_SECRET=your_cloudinary_secret
-EMAIL_USER=your_email
-EMAIL_PASS=your_email_password
-CLIENT_URL=your_client_url
-DASHBOARD_URL=your_dashboard_url
-```
+Suggested repository files to add:
 
-#### Client (.env)
-```env
-VITE_API_URL=your_backend_api_url
-VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+* `CONTRIBUTING.md` (guidelines)
+* `CODE_OF_CONDUCT.md` (community standards)
+* `SECURITY.md` (reporting security issues)
+
+---
+
+# CI / Linting (example GitHub Actions snippet)
+
+Add this to `.github/workflows/ci.yml` to run lint & build on PRs:
+
+```yaml
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project: [server, client, dashboard]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install & Build ${{ matrix.project }}
+        working-directory: ./${{ matrix.project }}
+        run: |
+          npm ci
+          npm run build --if-present
+      - name: Run ESLint
+        working-directory: ./${{ matrix.project }}
+        run: |
+          npm ci
+          npm run lint --if-present
 ```
 
 ---
 
-## 🤝 Contributing
+# Roadmap (suggested)
 
-We welcome contributions! Please follow these steps:
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. 💾 Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. 📤 Push to the branch (`git push origin feature/AmazingFeature`)
-5. 🔀 Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+* Add automated unit & integration tests (Jest / Supertest).
+* Add CI checks for lint & tests with PR gating.
+* Add multi-tenant support for merchants.
+* Add i18n and accessibility improvements (WCAG).
+* Add seller P&L analytics and exportable reports (CSV/PDF).
+* Improve mobile UX and add native app support (React Native).
 
 ---
 
-## 👨‍💻 Author
+# License & Author
 
-**Sadik Ali** 
-- 📧 Email: novus56@gmail.com
-- 💼 GitHub: [@Sadikhal](https://github.com/Sadikhal)
+**License:** MIT — add `LICENSE` file at repo root.
 
----
+**Author / Maintainer:** Sadik Ali
 
-## 🙏 Acknowledgments
-
-- **React Team** - Amazing framework
-- **Tailwind CSS** - Utility-first CSS framework
-- **Ant Design** - Comprehensive component library
-- **Stripe** - Payment processing API
-- **Socket.IO** - Real-time communication
-- **Vite** - Fast build tool
+* GitHub: [https://github.com/Sadikhal](https://github.com/Sadikhal)
+* Email: [novus56@gmail.com](mailto:novus56@gmail.com)
 
 ---
-
-<div align="center">
-
-### ⭐ **If you find this project helpful, don't forget to give it a star!**
-
-**Built with ❤️ using Modern Web Technologies**
-
----
-![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
-![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=nodedotjs)
-![MongoDB](https://img.shields.io/badge/MongoDB-8.17-47A248?style=for-the-badge&logo=mongodb)
-![Tailwind](https://img.shields.io/badge/Tailwind-4.1-38B2AC?style=for-the-badge&logo=tailwindcss)
-
-</div>
