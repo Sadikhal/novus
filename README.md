@@ -332,7 +332,7 @@ Thanks for your interest in contributing! Please follow the workflow below:
 
 **License:** MIT — add `LICENSE` file at repo root.
 
-**Author / Maintainer:** Sadik Ali
+**Author / Maintainer:** Sadikhali p v
 
 * GitHub: [https://github.com/Sadikhal](https://github.com/Sadikhal)
 * Email: [sadikhalikvr@gmail.com](mailto:sadikhalikvr@gmail.com)
