@@ -1,4 +1,4 @@
-# Novus - Full-Stack E-commerce Platform 🛍️
+[# Novus - Full-Stack E-commerce Platform 🛍️
 
 ![Novus Banner](https://via.placeholder.com/1200x400/2563EB/FFFFFF?text=NOVUS+E-COMMERCE+PLATFORM)
 *A comprehensive, multi-role e-commerce solution built with cutting-edge technologies*
@@ -358,3 +358,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ![Tailwind](https://img.shields.io/badge/Tailwind-4.1-38B2AC?style=for-the-badge&logo=tailwindcss)
 
 </div>
+](https://gitdocs1.s3.amazonaws.com/digests/sadikhal-novus.git/393d4a80-46e1-4e24-bbae-41135399059b.txt)
