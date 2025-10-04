@@ -77,7 +77,7 @@ If you plan to publish the repository publicly, remove or clearly mark these cre
 * **Admin Analytics**: Recharts-based dashboards, sales & brand analytics, filtering by date ranges.
 * **Media & Content**: Cloudinary integration, banner management, announcements, events.
 * **Modern UI**: Tailwind CSS (mobile-first), DaisyUI & Ant Design for admin, Framer Motion animations.
-* **Security**: JWT, bcrypt hashing, input validation and CORS protections.
+* **Security**: JWT, bcrypt hashing, input validation, otp verification and CORS protections.
 * **Dev DX**: Vite for fast HMR & builds, ESLint integration, modular code structure.
 
 ---
@@ -89,7 +89,7 @@ If you plan to publish the repository publicly, remove or clearly mark these cre
 * React 19 + Vite
 * Redux Toolkit + redux-persist
 * Tailwind CSS v4 + DaisyUI
-* React Router v7, React Hook Form, Zod
+* React Router v7, React Hook Form, Zod , cloudinary
 * Socket.IO Client, Stripe React SDK, React Quill
 
 **Admin Dashboard**
@@ -115,20 +115,23 @@ novus/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── hooks/
-│   │   ├── routes/
-│   │   ├── store/
-│   │   └── utils/
+│   │   ├── lib/
+│   │   ├── redux/
+│   │   └── routes/
 ├── dashboard/      # Admin React app (Vite + Antd)
 │   ├── src/
 │   │   ├── components/
-│   │   ├── pages/
-│   │   └── charts/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── redux/
+│   │   └── routes/
 ├── server/         # API server (Express, Mongoose, Socket.IO)
 │   ├── controllers/
+│   ├── lib/
 │   ├── models/
 │   ├── routes/
+│   ├── mailtrap/
 │   ├── middleware/
-│   └── utils/
 ├── docs/           # screenshots, architecture diagrams (recommended)
 ├── .github/        # CI workflows (optional)
 └── README.md
