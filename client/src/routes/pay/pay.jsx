@@ -11,7 +11,7 @@ let stripePromise = null;
 const getStripePromise = () => {
   if (!stripePromise) {
     stripePromise = loadStripe(
-      "pk_test_51QuuTXEYXsCUK9Uw5DUhrX9kzJ7tDaBYR2ZvOcHMx6nHkbKmDkwigcoYGfH3nLFGuQtrqSqptDlS290t3tZ9ynpx00lvXsanWr"
+      import.meta.env.VITE_STRIPE_PUBLISH_KEY
     ).catch(error => {
       console.error('Failed to load Stripe.js:', error);
       throw error;

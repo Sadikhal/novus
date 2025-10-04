@@ -36,7 +36,7 @@ const ChartSkeleton = () => (
 );
 
 const BrandRevenuePerformanceChart = () => {
-  const [timeFrame, setTimeFrame] = useState("monthly");
+  const [timeFrame, setTimeFrame] = useState("weekly");
   const [performanceType, setPerformanceType] = useState("top");
   const [dateRange, setDateRange] = useState([null, null]);
   const [chartType, setChartType] = useState("bar");
@@ -316,7 +316,7 @@ const BrandRevenuePerformanceChart = () => {
             <SelectContent className="bg-white  w-36 md:w-44 ">
               <SelectGroup>
                 <SelectItem className="md:text-sm text-xs" value="daily">
-                  Last 30 Days
+                  Today
                 </SelectItem>
                 <SelectItem className="md:text-sm text-xs" value="weekly">
                   Weekly

@@ -100,14 +100,14 @@ const Footer = () => {
 
         <Link to = "/" className="flex justify-center">
           <img
-            src="/novus9.png"
+            src="/novus14.webp"
             alt="Novus logo"
             className="w-24 h-24 bg-transparent object-contain"
           />
         </Link>
 
         <p className="px-4 sm:px-1 text-slate-900 text-[14px] leading-relaxed font-poppins">
-          © 1995-2024 Novus Inc. All Rights Reserved. Accessibility, User
+          © 1995-2025 Novus Inc. All Rights Reserved. Accessibility, User
           Agreement, Privacy, Payments Terms of Use, Cookies, CA Privacy Notice,
           Your Privacy Choices and AdChoice
         </p>

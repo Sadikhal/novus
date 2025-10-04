@@ -49,7 +49,7 @@ const ChartSkeleton = () => (
 );
 
 const ProductRevenueTrends = () => {
-  const [timeFrame, setTimeFrame] = useState("monthly");
+  const [timeFrame, setTimeFrame] = useState("weekly");
   const [performanceType, setPerformanceType] = useState("top");
   const [chartType, setChartType] = useState("bar");
   const [dateRange, setDateRange] = useState([null, null]);

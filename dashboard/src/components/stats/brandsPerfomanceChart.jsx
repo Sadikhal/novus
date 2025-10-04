@@ -42,7 +42,7 @@ const ChartSkeleton = () => (
 );
 
 const BrandsPerformance = () => {
-  const [timeFrame, setTimeFrame] = useState("monthly");
+  const [timeFrame, setTimeFrame] = useState("weekly");
   const [performanceType, setPerformanceType] = useState("top");
   const [chartType, setChartType] = useState("area");
   const [dateRange, setDateRange] = useState([null, null]);
@@ -310,7 +310,7 @@ const BrandsPerformance = () => {
             </SelectTrigger>
             <SelectContent className="bg-white  w-36 md:w-44 ">
               <SelectGroup>
-                <SelectItem className="md:text-sm text-xs" value="daily">Last 30 Days</SelectItem>
+                <SelectItem className="md:text-sm text-xs" value="daily">Today</SelectItem>
                 <SelectItem  className="md:text-sm text-xs"  value="weekly">Weekly</SelectItem>
                 <SelectItem  className="md:text-sm text-xs"  value="monthly">Monthly</SelectItem>
                 <SelectItem  className="md:text-sm text-xs"  value="yearly">Yearly</SelectItem>

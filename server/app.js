@@ -32,7 +32,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL,process.env.DASHBOARD_URL,process.env.CLIENT_URL2],
+    origin: [process.env.CLIENT_URL,process.env.DASHBOARD_URL],
     credentials: true,
   })
 );
