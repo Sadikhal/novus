@@ -155,7 +155,7 @@ novus/
 
 * Admin Dashboard (Sales Analytics)
   ![Dashboard](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569218/Screenshot_238_d5hj3m.png)
-  ![Dashboard](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569218/Screenshot_238_d5hj3m.png)
+  ![Dashboard](https://res.cloudinary.com/dftleqqgr/image/upload/v1759570038/Screenshot_247_jjogxf.png)
 
 *admin/brands
    ![brand](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569218/Screenshot_243_aqyjbz.png)
