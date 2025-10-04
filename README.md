@@ -1,6 +1,6 @@
 # Novus — Full-Stack E-commerce Platform 🛍️
 
-![Novus Banner](https://via.placeholder.com/1200x400/2563EB/FFFFFF?text=NOVUS+E-COMMERCE+PLATFORM)
+![Novus Banner](https://res.cloudinary.com/dftleqqgr/image/upload/v1759568258/Novus_mtkevp.jpg)
 
 **A production-ready, multi-role e-commerce platform** (Customer, Seller, Admin) with real-time chat, analytics, secure payments and modern frontend tooling — built with React, Node.js, MongoDB, Socket.IO and Stripe.
 
@@ -140,22 +140,24 @@ novus/
 
 # Screenshots
 
-> Add real screenshots to `/docs/screenshots` and replace placeholders below.
+* Homepage
+  ![Home](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569222/Screenshot_239_dkab1f.png)
 
-* Homepage / Product Listing
-  `docs/screenshots/home.png`
-  ![Home](https://via.placeholder.com/1000x500?text=Homepage+Screenshot)
+* Homepage / Products
+  ![products](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569222/Screenshot_240_zlyhzr.png)
 
 * Product Details
-  `docs/screenshots/product.png`
-  ![Product](https://via.placeholder.com/1000x500?text=Product+Page)
+  ![Product](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569221/Screenshot_241_yptazn.png)
+
+*messages
+  ![messages](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569219/Screenshot_242_zwwnst.png)
 
 * Admin Dashboard (Sales Analytics)
-  `docs/screenshots/dashboard.png`
-  ![Dashboard](https://via.placeholder.com/1000x500?text=Admin+Dashboard)
+  ![Dashboard](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569218/Screenshot_238_d5hj3m.png)
+  ![Dashboard](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569218/Screenshot_238_d5hj3m.png)
 
-**Tip:** Use `screenshots/` for desktop + mobile variants and include short captions in a `docs/Screenshots.md`.
-
+*admin/brands
+   ![brand](https://res.cloudinary.com/dftleqqgr/image/upload/v1759569218/Screenshot_243_aqyjbz.png)
 ---
 
 # Getting Started (Local Development)
@@ -220,28 +222,17 @@ Create `.env` files by copying the `.env.example` in each package and filling va
 ### server/.env.example
 
 ```env
-PORT=5000
-NODE_ENV=development
-MONGODB_URI=mongodb+srv://<USER>:<PASS>@cluster0.mongodb.net/novus?retryWrites=true&w=majority
-JWT_SECRET=your_jwt_secret_here
-JWT_EXPIRES_IN=7d
-COOKIE_SECRET=your_cookie_secret
+MONGO_URL = 
+ADMIN_ID = 68a86258dfa0348dcf288c11
+PORT = 3002
+JWT_KEY=
+CLIENT_URL = http://localhost:5173
+DASHBOARD_URL = http://localhost:5174
+STRIPE = 
+NODE_ENV= production
+SMTP_MAIL=
+SENDGRID_API_KEY =
 
-STRIPE_SECRET_KEY=sk_test_xxx
-STRIPE_WEBHOOK_SECRET=whsec_xxx
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-
-EMAIL_SERVICE=smtp
-EMAIL_HOST=smtp.mailtrap.io
-EMAIL_PORT=587
-EMAIL_USER=your_email_user
-EMAIL_PASS=your_email_pass
-
-CLIENT_URL=http://localhost:5173
-DASHBOARD_URL=http://localhost:5174
 ```
 
 ### client/.env.example (Vite — must start with VITE_)
@@ -255,8 +246,11 @@ VITE_CLIENT_URL=http://localhost:5173
 ### dashboard/.env.example
 
 ```env
-VITE_API_URL=http://localhost:5000/api
-VITE_ADMIN_CLIENT_URL=http://localhost:5174
+VITE_UPLOAD_LINK =
+VITE_BASE_URL = http://localhost:3002/api
+VITE_SOCKET_URL = http://localhost:3002
+VITE_ADMIN_ID = 68a86258dfa0348dcf288c11
+VITE_STRIPE_PUBLISH_KEY = 
 ```
 
 > **Security note:** Never commit `.env` with secrets. Use `.env.example` for placeholders only.
@@ -270,7 +264,7 @@ VITE_ADMIN_CLIENT_URL=http://localhost:5174
 ```bash
 # dev
 cd server
-npm run dev
+node app.js
 
 # build & start (production)
 npm run build
@@ -301,8 +295,8 @@ Recommended hosting patterns:
 
 * **Server (API + Socket.IO)**: Deploy on Render / Railway / DigitalOcean / Heroku / AWS Elastic Beanstalk. Ensure web sockets are supported and configure NODE_ENV=production.
 * **Frontend (client & dashboard)**: Deploy as static apps to Vercel / Netlify (point to `client` and `dashboard` builds separately).
-* **Stripe webhooks**: Provide a public URL for the webhook endpoint and set `STRIPE_WEBHOOK_SECRET` in production env.
-* **Environment & secrets**: Configure `MONGODB_URI`, `STRIPE_SECRET_KEY`, `CLOUDINARY_*`, and `EMAIL_*` in host settings.
+* **Stripe **: Provide a public URL for the  endpoint and set `STRIPE` AND `STRIPE_PUBLISH_KEY` in production env.
+* **Environment & secrets**: Configure `MONGODB_URI`, `STRIPE`, `CLOUDINARY_*`, and `EMAIL_*` in host settings.
 * **CORS**: Whitelist your frontend origins in server CORS config (CLIENT_URL, DASHBOARD_URL).
 * **HTTPS**: Always use HTTPS in production and set secure cookies.
 
@@ -311,10 +305,9 @@ Recommended hosting patterns:
 # Security & Best Practices
 
 * **Secrets:** Never commit `.env` or credentials to Git. Use secret management from your host (Render/Vercel).
-* **Passwords:** Store only salted bcrypt hashes. Use strong `JWT_SECRET` and rotate keys periodically.
+* **Passwords:** Store only salted bcrypt hashes. Use strong `JWT_KEY` and rotate keys periodically.
 * **Cookies:** Use secure, httpOnly cookies in production with `SameSite` restrictions.
 * **Validation:** Validate and sanitize all user input on server-side (use zod, express-validator or custom middleware).
-* **Rate limiting & brute force protection:** Add rate-limiting for auth endpoints (e.g., `express-rate-limit`).
 * **File uploads:** Limit file size and validate MIME types for uploads to Cloudinary.
 * **Email safety:** Use Mailtrap for local testing; do not send test emails to real users.
 
@@ -339,55 +332,6 @@ Suggested repository files to add:
 
 ---
 
-# CI / Linting (example GitHub Actions snippet)
-
-Add this to `.github/workflows/ci.yml` to run lint & build on PRs:
-
-```yaml
-name: CI
-
-on:
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        project: [server, client, dashboard]
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install & Build ${{ matrix.project }}
-        working-directory: ./${{ matrix.project }}
-        run: |
-          npm ci
-          npm run build --if-present
-      - name: Run ESLint
-        working-directory: ./${{ matrix.project }}
-        run: |
-          npm ci
-          npm run lint --if-present
-```
-
----
-
-# Roadmap (suggested)
-
-* Add automated unit & integration tests (Jest / Supertest).
-* Add CI checks for lint & tests with PR gating.
-* Add multi-tenant support for merchants.
-* Add i18n and accessibility improvements (WCAG).
-* Add seller P&L analytics and exportable reports (CSV/PDF).
-* Improve mobile UX and add native app support (React Native).
-
----
 
 # License & Author
 
@@ -396,6 +340,6 @@ jobs:
 **Author / Maintainer:** Sadik Ali
 
 * GitHub: [https://github.com/Sadikhal](https://github.com/Sadikhal)
-* Email: [novus56@gmail.com](mailto:novus56@gmail.com)
+* Email: [sadikhalikvr@gmail.com](mailto:sadikhalikvr@gmail.com)
 
 ---
