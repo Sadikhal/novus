@@ -29,7 +29,7 @@ export const useAuth = () => {
         variant: "secondary",
         title: "Registration Successful",
         description:
-          "Account created! Please verify your email to continue.",
+          "Account created! Please verify your email. Check your inbox or spam.",
       });
 
       navigate("/verify-email");
@@ -135,7 +135,7 @@ export const useAuth = () => {
         variant: "secondary",
         title: "Reset Link Sent",
         description:
-          "Check your inbox for instructions to reset your password.",
+          "Check your inbox or spam for instructions to reset your password.",
       });
 
       return true;
