@@ -1,4 +1,4 @@
-# Novus — Full-Stack E-commerce Platform 🛍️
+# Novus — Full-Stack E-commerce Platform
 
 ![Novus Banner](https://res.cloudinary.com/dftleqqgr/image/upload/v1759568258/Novus_mtkevp.jpg)
 
