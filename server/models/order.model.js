@@ -20,8 +20,8 @@ const OrderSchema = new Schema(
     payment_intent: { type: String, required: true },
     total: { type: Number, required: true },
     customerName: { type: String, required: true },
-    number: { type: Number, required: true },
-    pincode: { type: Number, required: true },
+    number: { type: String, required: true },
+    pincode: { type: String, required: true },
     address: { type: String, required: true },
     status: {
       type: String,

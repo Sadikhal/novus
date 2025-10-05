@@ -13,13 +13,12 @@ const orderSchema = z.object({
   customerName: z
     .string()
     .min(3, { message: "Customer name must be at least 3 characters long!" })
-    .max(10, { message: "Customer name must be at most 10 characters long!" }),
-  number: z.string().min(10, { message: "Valid mobile number is required" }),
+    .max(30, { message: "Customer name must be at most 30 characters long!" }),
+  number: z.string().regex(/^[0-9]{10}$/, 'Invalid phone number (10 digits required)'),
   status: z.enum(["processing", "shipped", "delivered"], {
     message: "Status is required!"
   }),
-  pincode: z.string()
-    .length(6, { message: "Pincode must be 6 digits long!" }),
+  pincode: z.string().regex(/^\d{6}$/, 'Invalid pin code (must be 6 digits)'),
   address: z.string().min(1, { message: "Address is required!" }),
 });
 
