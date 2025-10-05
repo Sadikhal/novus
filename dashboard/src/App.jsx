@@ -31,6 +31,7 @@ import ChangePassword from './routes/ChangePassword';
 import Login from './routes/Login';
 import BecomeSeller from './routes/BecomeSeller';
 import CreateBrand from './routes/CreateBrand';
+import NotFound from './routes/NotFound';
 
 function App() {
   const router = createBrowserRouter([
@@ -64,6 +65,10 @@ function App() {
         {
           path: "unauthorized",
           element: <UnauthorizedPage />,
+        },
+         {
+          path: "*",
+          element: <NotFound />,
         },
       ]
     },

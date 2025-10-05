@@ -24,6 +24,7 @@ import ProtectedRoute from './lib/protectedRoute';
 import HelpDesk from './routes/HelpDesk/HelpDesk';
 import Terms from './routes/terms/Terms';
 import Privacy from './routes/privacy/Privacy';
+import NotFound from './routes/notFound/NotFound';
 
 function App() {
   const router = createBrowserRouter([
@@ -49,6 +50,10 @@ function App() {
             {
               path: "reset-password/:token",
               element: <ChangePassword />
+            },
+            {
+              path: "*",
+              element: <NotFound />,
             },
           ]
         },
