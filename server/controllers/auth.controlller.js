@@ -12,9 +12,9 @@ import crypto from "crypto";
 
 export const register = async (req, res, next) => {
   try {
-    const { email, password, name  } = req.body;
-    const existingUser = await User.findOne({ email });
+    const { email, password, name } = req.body;
 
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       if (existingUser.isVerified) {
         return next(createError(400, "Email already registered"));
@@ -30,18 +30,19 @@ export const register = async (req, res, next) => {
       existingUser.verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000;
 
       await existingUser.save();
-    const token =  generateTokenAndSetCookie(res, existingUser);
+
+      generateTokenAndSetCookie(res, existingUser);
+
       await sendVerificationEmail(existingUser.email, verificationToken);
 
-      return res.status(200).json({
-        success: true,
-        message: "New verification email sent",
-        user: {
-          ...existingUser._doc,
-          password: undefined,
-        },
-      });
+      const userPayload = {
+        ...existingUser._doc,
+        password: undefined,
+      };
+
+      return res.status(200).json(userPayload);
     }
+
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
@@ -55,26 +56,26 @@ export const register = async (req, res, next) => {
     });
 
     await user.save();
-    const token = generateTokenAndSetCookie(res, user);
+
+    generateTokenAndSetCookie(res, user);
+
     await sendVerificationEmail(user.email, verificationToken);
 
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      user: {
-        ...user._doc,
-        password: undefined,
-      },
-    });
+    const userPayload = {
+      ...user._doc,
+      password: undefined,
+    };
+
+    return res.status(201).json(userPayload);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     next(err);
   }
 };
 
 export const verifyEmail = async (req, res, next) => {
   const { code } = req.body;
-  const userId = req.userId; 
+  const userId = req.userId;
 
   try {
     const user = await User.findOne({
@@ -82,30 +83,38 @@ export const verifyEmail = async (req, res, next) => {
       verificationToken: code,
       verificationTokenExpiresAt: { $gt: Date.now() },
     });
+
     if (!user) {
       return next(createError(400, "Invalid or expired verification code"));
     }
+
     if (user._id.toString() !== userId) {
       return next(createError(403, "Forbidden: Cannot verify another user"));
     }
+
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
     await user.save();
+
     await sendWelcomeEmail(user.email, user.name);
 
-    res.status(200).json({
-      success: true,
-      message: "Email verified successfully",
-      user: {
-        ...user._doc,
-        password: undefined,
-      },
-    });
+    // Return flat user object
+    const userPayload = {
+      ...user._doc,
+      password: undefined,
+    };
+
+    return res.status(200).json(userPayload);
   } catch (error) {
+    console.error("verifyEmail error:", error);
     next(createError(500, "Server error during verification"));
   }
 };
+
+
+
+
 
 export const login = async (req,res ,next) => {
   try {
