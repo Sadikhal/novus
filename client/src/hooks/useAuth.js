@@ -65,6 +65,8 @@ export const useAuth = () => {
       navigate("/");
       return res.data;
     } catch (err) {
+      console.log(err)
+
       dispatch(loginFailure(err.response?.data?.message || "Login failed"));
       toast({
         variant: "destructive",

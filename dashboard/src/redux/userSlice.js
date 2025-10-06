@@ -1,14 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 
-
 const initialState = {
   currentUser : null,
   loading : false,
   error : false
 }
-
-
 
 export const userSlice = createSlice({
   name : 'user',
@@ -27,9 +24,9 @@ export const userSlice = createSlice({
         isAdmin: action.payload.role === 'admin' && isActualAdmin ,
         isSeller: action.payload.role === 'seller',
         isCustomer: action.payload.role === 'user',
-        brand: action.payload.brand || null
+        brand: action.payload.brand || null,
       };
-      state.loading = false;
+       state.loading = false;
        state.error = null;
     },
     loginFailure : (state,action) => {
@@ -40,6 +37,7 @@ export const userSlice = createSlice({
      state.currentUser = null;
      state.loading = false;
      state.error = null;
+     state.token = null;
     },
     updateUser: (state, action) => {
      state.currentUser = {

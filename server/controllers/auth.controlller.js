@@ -1,5 +1,3 @@
-
-
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import Brand from "../models/brand.model.js";
@@ -31,7 +29,7 @@ export const register = async (req, res, next) => {
 
       await existingUser.save();
 
-      generateTokenAndSetCookie(res, existingUser);
+      const token = generateTokenAndSetCookie(res, existingUser);
 
       await sendVerificationEmail(existingUser.email, verificationToken);
 
@@ -57,13 +55,14 @@ export const register = async (req, res, next) => {
 
     await user.save();
 
-    generateTokenAndSetCookie(res, user);
+    const token = generateTokenAndSetCookie(res, user);
 
     await sendVerificationEmail(user.email, verificationToken);
 
     const userPayload = {
       ...user._doc,
       password: undefined,
+      token
     };
 
     return res.status(201).json(userPayload);
@@ -125,7 +124,7 @@ export const login = async (req,res ,next) => {
       const isCorrect = bcrypt.compareSync(req.body.password , user.password);
       if(!isCorrect) return next(createError(404,"wrong password!"));
 
-      generateTokenAndSetCookie(res, user);
+      const token = generateTokenAndSetCookie(res, user);
       user.lastLogin = new Date();
       await user.save();
 
@@ -188,7 +187,7 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
 	try {
 		const { token } = req.params;
-		const { password,confirmPassword } = req.body;
+		const { password } = req.body;
 		const user = await User.findOne({
 			resetPasswordToken: token,
 			resetPasswordExpiresAt: { $gt: Date.now() },
