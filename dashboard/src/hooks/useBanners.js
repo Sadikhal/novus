@@ -25,7 +25,7 @@ export const useBanners = () => {
         products: productsBanner.data || [],
         categories: categoryBanner.data || [],
       }));
-    } catch (error) {
+    } catch (err) {
       setState(prev => ({
         ...prev,
         error: err.response?.data?.message || "Error fetching data"
@@ -58,7 +58,7 @@ export const useBanners = () => {
         variant : "success",
         title : "Success",
        description : `${type} banner deleted successfully!`});
-    } catch (error) {
+    } catch (err) {
       toast({
         variant: "destructive",
         title: `Failed to delete ${type} banner`,
@@ -93,7 +93,7 @@ export const useBanners = () => {
       toast({
         variant : "success",
        description : `Banner ${!currentStatus ? 'activated' : 'deactivated'} successfully!`});
-    } catch (error) {
+    } catch (err) {
       toast({
         variant: "destructive",
         title: "Failed to update banner status",
@@ -117,4 +117,3 @@ export const useBanners = () => {
     handleToggleActive
   };
 };
-err.response?.data?.message
