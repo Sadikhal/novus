@@ -21,18 +21,21 @@ import bannerRoute from "./routes/banner.route.js";
 
 import { app, server } from "./lib/socket.js";
 import { connect } from './lib/db.js';
+import { globalLimiter } from './lib/rateLimiter.js';
+import { autoRefresh } from './middleware/autoRefresh.js';
 
+app.set("trust proxy", 1);
 dotenv.config();
-
 app.use(cookieParser());
 app.use(express.json());
-
 app.use(
   cors({
     origin: [process.env.CLIENT_URL,process.env.DASHBOARD_URL],
     credentials: true,
   })
 );
+app.use(globalLimiter);
+app.use(autoRefresh)
 
 mongoose.set("strictQuery", true);
 

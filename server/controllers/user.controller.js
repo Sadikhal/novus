@@ -5,7 +5,6 @@ import Order from "../models/order.model.js";
 
 
 export const updateUser = async (req, res, next) => {
-  
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -131,41 +130,6 @@ export const getUserDetails = async (req, res, next) => {
   }
 };
 
-
-
-// export const addAddress = async (req, res, next) => {
-//   const { name, city, address1, address2, pincode, state, number } = req.body;
-
-//   try {
-//     const user = await User.findById(req.userId);
-//     if (!user) return next(createError(404, "User not found"));
-
-//     const newAddress = {
-//       name,
-//       city,
-//       address1,
-//       address2,
-//       pincode,
-//       state,
-//       number,
-//     };
-//     user.addresses.push(newAddress);
-
-//     user.defaultAddress = user.addresses[user.addresses.length - 1]._id;
-//     await user.save();
-//     res.status(201).json({
-//       addresses: user.addresses,
-//       defaultAddress: user.defaultAddress,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-
-
-
-// Corrected backend addAddress function
 export const addAddress = async (req, res, next) => {
   const { name, city, address1, address2, pincode, state, number } = req.body;
   try {

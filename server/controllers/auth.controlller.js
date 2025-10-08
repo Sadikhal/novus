@@ -1,10 +1,18 @@
+
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import Brand from "../models/brand.model.js";
 import { createError } from "../lib/createError.js";
-import { generateTokenAndSetCookie } from "../lib/generateTokenAndSetCookie.js";
-import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
+import generateTokenAndSetCookie  from "../lib/generateTokenAndSetCookie.js";
+import {
+  sendPasswordResetEmail,
+  sendResetSuccessEmail,
+  sendVerificationEmail,
+  sendWelcomeEmail,
+} from "../mailtrap/emails.js";
 import crypto from "crypto";
+import { hashPassword, hashToken } from "../lib/helper.js";
+import jwt from "jsonwebtoken";
 
 
 
@@ -18,9 +26,8 @@ export const register = async (req, res, next) => {
         return next(createError(400, "Email already registered"));
       }
 
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(password, salt);
-      const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+      const hash = await hashPassword(password);
+      const verificationToken = crypto.randomInt(100000, 1000000).toString();
 
       existingUser.name = name;
       existingUser.password = hash;
@@ -29,21 +36,15 @@ export const register = async (req, res, next) => {
 
       await existingUser.save();
 
-      const token = generateTokenAndSetCookie(res, existingUser);
-
+      await generateTokenAndSetCookie(res, existingUser);
       await sendVerificationEmail(existingUser.email, verificationToken);
 
-      const userPayload = {
-        ...existingUser._doc,
-        password: undefined,
-      };
-
+      const userPayload = { ...existingUser._doc, password: undefined };
       return res.status(200).json(userPayload);
     }
 
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
-    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+     const hash = await hashPassword(password);
+    const verificationToken = crypto.randomInt(100000, 1000000).toString();
 
     const user = new User({
       email,
@@ -51,26 +52,21 @@ export const register = async (req, res, next) => {
       name,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
+      refreshTokens: [],
     });
 
     await user.save();
 
-    const token = generateTokenAndSetCookie(res, user);
-
     await sendVerificationEmail(user.email, verificationToken);
+    await generateTokenAndSetCookie(res, user);
 
-    const userPayload = {
-      ...user._doc,
-      password: undefined,
-      token
-    };
-
+    const userPayload = { ...user._doc, password: undefined };
     return res.status(201).json(userPayload);
   } catch (err) {
-    console.log(err);
-    next(err);
+    next(createError(500, "Registration failed"));
   }
 };
+
 
 export const verifyEmail = async (req, res, next) => {
   const { code } = req.body;
@@ -83,130 +79,182 @@ export const verifyEmail = async (req, res, next) => {
       verificationTokenExpiresAt: { $gt: Date.now() },
     });
 
-    if (!user) {
-      return next(createError(400, "Invalid or expired verification code"));
-    }
-
-    if (user._id.toString() !== userId) {
+    if (!user) return next(createError(400, "Invalid or expired verification code"));
+    if (user._id.toString() !== userId)
       return next(createError(403, "Forbidden: Cannot verify another user"));
-    }
 
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
+    
     await user.save();
-
+    await generateTokenAndSetCookie(res, user);
     await sendWelcomeEmail(user.email, user.name);
 
-    // Return flat user object
-    const userPayload = {
-      ...user._doc,
-      password: undefined,
-    };
-
+    const userPayload = { ...user._doc, password: undefined };
     return res.status(200).json(userPayload);
   } catch (error) {
-    console.error("verifyEmail error:", error);
     next(createError(500, "Server error during verification"));
   }
 };
 
 
 
-
-
-export const login = async (req,res ,next) => {
+export const login = async (req, res, next) => {
   try {
-    const user = await User.findOne({
-      email : req.body.email });
-    
-      if (!user) return next(createError(404,"User not found"));
-      const isCorrect = bcrypt.compareSync(req.body.password , user.password);
-      if(!isCorrect) return next(createError(404,"wrong password!"));
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return next(createError(404, "User not found"));
 
-      const token = generateTokenAndSetCookie(res, user);
-      user.lastLogin = new Date();
-      await user.save();
+   const isCorrect = await bcrypt.compare(req.body.password, user.password);
 
-      let brand = null;
-      if (user.role === 'seller') {
-        brand = await Brand.findOne({ sellerId: user._id });
+    if (!isCorrect) return next(createError(401, "Incorrect password"));
+
+    user.lastLogin = new Date();
+    await user.save();
+
+
+    await generateTokenAndSetCookie(res, user);
+    let brand = null;
+    if (user.role === "seller") {
+      brand = await Brand.findOne({ sellerId: user._id });
     }
-     const {password, ...info } = user._doc;
-     res
-     .status(200)
-     .send({
-        ...info,
-        brand,
-      isVerified: user.isVerified
-     });
+
+    const { password, ...info } = user._doc;
+    return res.status(200).json({
+      ...info,
+      brand,
+      isVerified: user.isVerified,
+    });
   } catch (error) {
-    console.log(error);
-    next(error);
+    next(createError(500, "Login failed"));
   }
 };
 
-export const logOut = async(req, res, next) => {
+
+export const logOut = async (req, res, next) => {
   try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (refreshToken) {
+      try {
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const user = await User.findById(decoded.id);
+
+        if (user) {
+          const hashed = hashToken(refreshToken);
+          user.refreshTokens = (user.refreshTokens || []).filter((t) => t !== hashed);
+          await user.save();
+        }
+      } catch (err) {
+         console.warn("Logout: refresh token verify failed:", err?.message || err);
+      }
+    }
+
     res
       .clearCookie("token", {
-        sameSite: "none",
-        secure: true,
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/",
       })
-      .status(200)
-      .json({ message: "User has been logged out" });
+      .clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/",
+      });
+
+    return res.status(200).json({ success: true, message: "User has been logged out successfully" });
   } catch (err) {
-    next(createError(500, "Failed to log out"));
+    return next(createError(500, "Failed to log out"));
   }
 };
 
 
-export const forgotPassword = async (req, res) => {
-  const { email } = req.body;
+export const forgotPassword = async (req, res, next) => {
   try {
-      const user = await User.findOne({ email });
-      if (!user) {
-          return res.status(400).json({ success: false, message: "User not found" });
-      }
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return next(createError(404, "User not found"));
 
-      const resetToken = crypto.randomBytes(20).toString("hex");
-      const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
-      user.resetPasswordToken = resetToken;
-      user.resetPasswordExpiresAt = resetTokenExpiresAt;
-      await user.save();
-      const resetURL = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
-      await sendPasswordResetEmail(user.email, resetURL);
-      res.status(200).json({ success: true, message: "Password reset link sent to your email" });
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashed = hashToken(resetToken);
+
+    user.resetPasswordToken = hashed;
+    user.resetPasswordExpiresAt = Date.now() + 60 * 60 * 1000; 
+
+    await user.save();
+
+    const resetURL = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    await sendPasswordResetEmail(user.email, resetURL);
+
+    res.status(200).json({ success: true, message: "Password reset link sent to your email" });
   } catch (error) {
-    console.log(error)
-      res.status(400).json({ success: false, message: error.message });
+    next(createError(500, error.message || "Error sending password reset email"));
   }
 };
 
-export const resetPassword = async (req, res) => {
-	try {
-		const { token } = req.params;
-		const { password } = req.body;
-		const user = await User.findOne({
-			resetPasswordToken: token,
-			resetPasswordExpiresAt: { $gt: Date.now() },
-		});
 
-		if (!user) {
-			return res.status(400).json({ success: false, message: "Invalid or expired reset token" });
-		}
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
-   
-		user.password = hashedPassword;
-		user.resetPasswordToken = undefined;
-		user.resetPasswordExpiresAt = undefined;
-		await user.save();
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
 
-		await sendResetSuccessEmail(user.email);
-		res.status(200).json({ success: true, message: "Password reset successful" });
-	} catch (error) {
-		res.status(400).json({ success: false, message: error.message });
-	}
+       const hashed = hashToken(token);
+
+
+    const user = await User.findOne({
+      resetPasswordToken: hashed,
+      resetPasswordExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) return next(createError(400, "Invalid or expired reset token"));
+
+     const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiresAt = undefined;
+    user.refreshTokens = [];
+    await user.save();
+
+    await sendResetSuccessEmail(user.email);
+
+    res.status(200).json({ success: true, message: "Password reset successful" });
+  } catch (error) {
+    next(createError(500, error.message || "Error resetting password"));
+  }
+};
+
+
+export const refreshAccessToken = async (req, res, next) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) return next(createError(401, "No refresh token found"));
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const userId = decoded.id;
+
+    const hashed = hashToken(refreshToken);
+
+    const user = await User.findOneAndUpdate(
+      { _id: userId, refreshTokens: hashed },
+      { $pull: { refreshTokens: hashed } }, 
+      { new: true }
+    );
+
+    if (!user) {
+      return next(createError(403, "Invalid or revoked refresh token"));
+    }
+
+    await generateTokenAndSetCookie(res, user);
+
+    const { password, ...userData } = user._doc;
+    return res.status(200).json({ ...userData, refreshed: true });
+  } catch (err) {
+    if (err.name === "TokenExpiredError") return next(createError(403, "Refresh token expired"));
+    return next(createError(403, "Invalid refresh token"));
+  }
 };

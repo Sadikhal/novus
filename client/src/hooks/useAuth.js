@@ -84,7 +84,7 @@ export const useAuth = () => {
     dispatch(loginStart());
     try {
       const res = await apiRequest.post("/auth/verify-email", { code });
-      dispatch(updateVerificationStatus(true));
+       dispatch(loginSuccess(res.data));
 
       toast({
         variant: "secondary",

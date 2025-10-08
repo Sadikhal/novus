@@ -37,7 +37,6 @@ export const userSlice = createSlice({
      state.currentUser = null;
      state.loading = false;
      state.error = null;
-     state.token = null;
     },
     updateUser: (state, action) => {
      state.currentUser = {
