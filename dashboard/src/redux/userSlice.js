@@ -4,7 +4,7 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
   currentUser : null,
   loading : false,
-  error : false
+  error : null
 }
 
 export const userSlice = createSlice({
@@ -13,7 +13,7 @@ export const userSlice = createSlice({
   reducers : {
     loginStart : (state) => {
       state.loading = true;
-      state.error = false;
+      state.error = null;
     },
     loginSuccess : (state , action) => {
        const isActualAdmin = action.payload._id === import.meta.env.VITE_ADMIN_ID;
