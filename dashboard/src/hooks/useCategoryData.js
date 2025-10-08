@@ -15,7 +15,7 @@ export default function useCategoryData() {
         const res = await apiRequest.get('/category');
         setCategoryData(res.data.categories || []);
       } catch (err) {
-        setError(err.message || "Error fetching category data");
+        setError(err.response?.data?.message || "Error fetching category data");
       } finally {
         setLoading(false);
       }
@@ -35,7 +35,7 @@ export default function useCategoryData() {
       });
       return true;
     } catch (err) {
-      setError(err.message || "Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Something went wrong",

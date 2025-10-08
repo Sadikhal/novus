@@ -13,7 +13,7 @@ export const useDashboardStats = () => {
         const response = await apiRequest.get("/stats/dashboard");
         setStats(response.data);
       } catch (err) {
-        setError("Failed to load dashboard data");
+        setError(err.response?.data?.message || "Failed to load dashboard data");
       } finally {
         setLoading(false);
       }

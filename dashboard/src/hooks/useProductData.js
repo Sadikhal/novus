@@ -49,11 +49,11 @@ export default function useProductData(role) {
       setProductData(formattedProducts);
       setFilteredData(formattedProducts);
     } catch (err) {
-      setError(err.message || "Error fetching product data");
+      setError(err.response?.data?.message || "Error fetching product data");
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to load products"
+        description: err.response?.data?.message || "Failed to load products"
       });
     } finally {
       setLoading(false);
@@ -73,8 +73,7 @@ export default function useProductData(role) {
       setSingleProduct(formattedProduct);
       return formattedProduct;
     } catch (err) {
-      setSingleError(err.message || "Error fetching product");
-      throw err;
+      setSingleError(err.response?.data?.message || "Error fetching product");
     } finally {
       setSingleLoading(false);
     }
@@ -156,11 +155,11 @@ export default function useProductData(role) {
       });
       return true;
     } catch (err) {
-      setError(err.message || "Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to delete product"
+        description:err.response?.data?.message || "Failed to delete product"
       });
       return false;
     }
@@ -215,7 +214,7 @@ export default function useProductData(role) {
       }
       return formattedProduct;
     } catch (err) {
-      setError(err.message || "Update failed");
+      setError(err.response?.data?.message || "Update failed");
       throw err;
     } finally {
       setLoading(false);

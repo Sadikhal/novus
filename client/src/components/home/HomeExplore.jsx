@@ -48,7 +48,7 @@ const HomeExplore = () => {
         {categories?.map((category) => (
           <Link 
             to={`/products?category=${category?.name}`}
-            key={category?.id} 
+            key={category?._id} 
             className="carousel-item border-none outline-none md:w-28 md:h-36 h-32 w-20 flex flex-col items-center justify-center group rounded-lg cursor-pointer"
           >
             <div className='bg-transparent rounded-full w-full h-full flex items-center justify-center duration-500 group-hover:rotate-180 group-hover:-scale-100 transition-transform'>

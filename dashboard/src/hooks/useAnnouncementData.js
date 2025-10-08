@@ -21,7 +21,7 @@ export default function useAnnouncementData() {
         setAnnouncementData(res.data.announcements || []);
         setFilteredData(res.data.announcements || []);
       } catch (err) {
-        setError(err.message || "Error fetching announcements");
+        setError(err.response?.data?.message || "Error fetching announcements");
       } finally {
         setLoading(false);
       }
@@ -55,8 +55,7 @@ export default function useAnnouncementData() {
       });
       return res.data?.announcement;
     } catch (err) {
-      setError(err.message || "Failed to create announcement");
-      throw err;
+      setError(err.response?.data?.message|| "Failed to create announcement");
     } finally {
       setLoading(false);
     }
@@ -84,8 +83,7 @@ export default function useAnnouncementData() {
       
       return res.data?.announcement;
     } catch (err) {
-      setError(err.message || "Update failed");
-      throw err;
+      setError(err.response?.data?.message || "Update failed");
     } finally {
       setLoading(false);
     }
@@ -105,7 +103,7 @@ export default function useAnnouncementData() {
       });
       return true;
     } catch (err) {
-      setError(err.message || "Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Something went wrong",

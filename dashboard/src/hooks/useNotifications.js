@@ -30,7 +30,7 @@ export const useNotifications = () => {
         const res = await apiRequest.get('/notification');
         dispatch(setNotifications(res.data));
       } catch (error) {
-        setError(error.message || "Error fetching notifications");
+        setError(error.response?.data?.message || "Error fetching notifications");
         console.error('Error fetching notifications:', error);
       } finally {
         setLoading(false);

@@ -25,7 +25,7 @@ export default function useCustomerData() {
         setCustomers(res.data || []);
         setFilteredCustomers(res.data || []);
       } catch (err) {
-        setError(err.message || "Error fetching customer data");
+        setError(err.response?.data?.message || "Error fetching customer data");
       } finally {
         setLoading(false);
       }
@@ -34,10 +34,6 @@ export default function useCustomerData() {
   }, [sortOrder]);
 
 
-
-
-
-  // Fetch single customer with all related data
   const fetchCustomer = async (id) => {
     setLoading(true);
     try {
@@ -52,7 +48,7 @@ export default function useCustomerData() {
       setFilteredOrders(ordersData);
       setStats(statsRes.data?.data || null);
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Error fetching customer data");
+      setError(err.response?.data?.message || "Error fetching customer data");
     } finally {
       setLoading(false);
     }
@@ -73,10 +69,6 @@ export default function useCustomerData() {
     setSortOrder(prev => prev === "newest" ? "oldest" : "newest");
   };
 
-
-  
-  
-  // Update order in local state
   const updateLocalOrder = (orderId, updatedData) => {
     setOrders(prev => 
       prev.map(order => order._id === orderId ? { ...order, ...updatedData } : order)
@@ -92,10 +84,6 @@ export default function useCustomerData() {
     setFilteredOrders(prev => prev.filter(order => order._id !== orderId));
   };
 
-
-
-
-  // Update customer
   const updateCustomer = async (id, updatedData) => {
     try {
       setLoading(true);
@@ -111,13 +99,12 @@ export default function useCustomerData() {
       
       return res.data;
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Update failed");
+      setError(err.response?.data?.message  || "Update failed");
       toast({
         variant: "destructive",
         title: "Error",
-        description: err.response?.data?.message || err.message
+        description: err.response?.data?.message
       });
-      throw err;
     } finally {
       setLoading(false);
     }
@@ -137,7 +124,7 @@ export default function useCustomerData() {
       });
       return true;
     }catch(err){
-     setError(err.response?.data?.message || err.message || "Delete failed");
+     setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Error",

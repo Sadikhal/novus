@@ -20,7 +20,7 @@ export default function useEventData() {
         setEventData(res.data.events || []);
         setFilteredData(res.data.events || []);
       } catch (err) {
-        setError(err.message || "Error fetching event data");
+        setError(err.response?.data?.message || "Error fetching event data");
       } finally {
         setLoading(false);
       }
@@ -58,7 +58,7 @@ export default function useEventData() {
       });
       return res.data?.event;
     } catch (err) {
-      setError(err.message || "Failed to create event");
+      setError(err.response?.data?.message || "Failed to create event");
       throw err;
     } finally {
       setLoading(false);
@@ -87,7 +87,7 @@ export default function useEventData() {
       
       return res.data?.event;
     } catch (err) {
-      setError(err.message || "Update failed");
+      setError(err.response?.data?.message || "Update failed");
       throw err;
     } finally {
       setLoading(false);
@@ -110,7 +110,7 @@ export default function useEventData() {
       });
       return true;
     } catch (err) {
-      setError(err.message || "Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Something went wrong",

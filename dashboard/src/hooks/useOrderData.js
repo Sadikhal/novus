@@ -26,7 +26,7 @@ export default function useOrderData(role) {
         setFilteredData(res.data.orders || []);
         console.log('fvdxbvfcxbv',res?.data?.orders)
       } catch (err) {
-        setError(err.message || "Error fetching order data");
+        setError(err.response?.data?.message || "Error fetching order data");
       } finally {
         setLoading(false);
       }
@@ -64,7 +64,7 @@ export default function useOrderData(role) {
       
       return res.data?.order;
     } catch (err) {
-      setError(err.message || "Update failed");
+      setError(err.response?.data?.message || "Update failed");
       throw err;
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ export default function useOrderData(role) {
       });
       return true;
     } catch (err) {
-      setError(err.message || "Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Something went wrong",

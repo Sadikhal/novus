@@ -48,7 +48,6 @@ export const usePayment = () => {
       });
     } catch (err) {
       setError(err.response?.data?.message || "Payment error. Please try again.");
-      console.log(err.response?.data?.message)
       toast({
         variant: "destructive",
         title: "Payment Failed",

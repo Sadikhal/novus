@@ -105,7 +105,7 @@ export const useUserActions = (product = null) => {
         toast({
           variant: "destructive",
           title: "Failed to start conversation",
-          description: error.response?.data?.message || error.message || "Please try again later.",
+          description: error.response?.data?.message || "Please try again later.",
         });
       }
     };

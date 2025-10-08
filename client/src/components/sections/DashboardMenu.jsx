@@ -24,7 +24,7 @@ const DashboardMenu = () => {
     {
       icon: <RiLockPasswordLine />,
       text: 'Change Password',
-      path: '/dashboard/change-password',
+      path: '/forgot-password',
       className: 'hidden sm:block',
     },
     { icon: <ImProfile />, text: 'Profile', path: '/dashboard/profile' },

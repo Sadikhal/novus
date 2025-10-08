@@ -1,7 +1,7 @@
 import { Navigate, useLocation, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { loginSuccess } from "../../redux/userSlice";
+import { loginSuccess,loginStart,loginFailure } from "../../redux/userSlice";
 import { toast } from "../../redux/useToast";
 import { Loader } from "../../components/ui/Loaders";
 import { apiRequest } from "../../lib/apiRequest";
@@ -22,13 +22,14 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
         const res = await apiRequest.get("/users/profile");
         if (mounted && res?.data) {
           dispatch(loginSuccess(res.data));
+        console.log("data ",res.data)
         }
       } catch (err) {
         if (mounted) {
-          dispatch(loginFailure("Session check failed. Please login again.")); 
+          dispatch(loginFailure(err.response.data.message ||"Session check failed. Please login again.")); 
           toast({
             variant: "destructive",
-            title: "Session expired",
+            title: err.response.data.message || "Session expired",
             description: "Please login again",
           });
         }

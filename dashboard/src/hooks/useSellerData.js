@@ -31,16 +31,14 @@ export default function useSellerData() {
    useEffect(() => {
   const fetchBrands = async () => {
     setLoading(true);
-    setError("");
     try {
       const res = await apiRequest.get("/brand", { 
         params: { sort: sortOrder } 
       });
       setBrands(res.data?.brands || []);
       setFilteredBrands(res.data?.brands || []);
-      console.log(res.data.brands)
     } catch (err) {
-      setError("Error fetching brands data");
+      setError(err.response?.data?.message || "Error fetching brands data");
     } finally {
       setLoading(false);
     }
@@ -65,7 +63,7 @@ export default function useSellerData() {
       console.log("brand details",brandRes.data.brand)
       setStats(statsRes.data || null);
     } catch (err) {
-      setError("Failed to load brand stats");
+      setError(err.response?.data?.message || "Failed to load brand stats");
     } finally {
       setLoading(false);
     }
@@ -81,7 +79,7 @@ export default function useSellerData() {
           setSellerBrand(response.data.brand);
           console.log('brand',response.data.brand)
         } catch (err) {
-          setError(err.message);
+          setError(err.response?.data?.message);
           console.error("Failed to load brand stats");
         }finally{
           setLoading(false)
@@ -146,7 +144,7 @@ export default function useSellerData() {
       
       return res.data?.brand;
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Create failed");
+      setError(err.response?.data?.message || "Create failed");
       toast({
         variant: "destructive",
         title: "Error",
@@ -182,13 +180,12 @@ export default function useSellerData() {
       
       return res.data?.brand;
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Update failed");
+      setError(err.response?.data?.message ||  "Update failed");
       toast({
         variant: "destructive",
         title: "Error",
-        description: err.response?.data?.message || err.message
+        description: err.response?.data?.message || "update failed"
       });
-      throw err;
     } finally {
       setLoading(false);
     }
@@ -215,11 +212,11 @@ export default function useSellerData() {
       
       return true;
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
       toast({
         variant: "destructive",
         title: "Error",
-        description: err.response?.data?.message || err.message
+        description: err.response?.data?.message || "Delete failed"
       });
       return false;
     } finally {

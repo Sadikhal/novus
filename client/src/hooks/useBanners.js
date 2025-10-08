@@ -26,7 +26,7 @@ export default function useBanners() {
       } catch (error) {
         setBanners(prev => ({
           ...prev,
-          error: error?.message || "Error fetching data",
+          error: err.response?.data?.message || "Error fetching data",
           loading: false
         }));
         console.log(error)

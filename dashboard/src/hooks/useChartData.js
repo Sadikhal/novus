@@ -14,7 +14,7 @@ export const useChartData = (endpoint, params = {}, dependencies = []) => {
         const response = await apiRequest.get(endpoint, { params });
         setData(response.data.data || response.data);
       } catch (err) {
-        setError(`Failed to load ${endpoint.split('/').pop()} data`);
+        setError(err.response?.data?.message || `Failed to load ${endpoint.split('/').pop()} data`);
       } finally {
         setLoading(false);
       }

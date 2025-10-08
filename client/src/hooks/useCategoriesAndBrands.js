@@ -20,7 +20,7 @@ export const useFetchCategoriesAndBrands = () => {
         setBrands(brandResponse.data.brands || []);
         setCategories(categoryResponse.data.categories || []);
       } catch (err) {
-        setError(err?.response?.data?.message || err.message || "Error fetching data");
+        setError(err?.response?.data?.message || "Error fetching data");
         console.log(err)
       } finally {
         setIsLoading(false);

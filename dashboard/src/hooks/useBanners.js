@@ -28,7 +28,7 @@ export const useBanners = () => {
     } catch (error) {
       setState(prev => ({
         ...prev,
-        error: error?.message || "Error fetching data"
+        error: err.response?.data?.message || "Error fetching data"
       }));
     } finally {
       setState(prev => ({ ...prev, loading: false }));
@@ -59,8 +59,13 @@ export const useBanners = () => {
         title : "Success",
        description : `${type} banner deleted successfully!`});
     } catch (error) {
-      toast.error(`Failed to delete ${type} banner`);
-      throw error;
+      toast({
+        variant: "destructive",
+        title: `Failed to delete ${type} banner`,
+        description:
+          err.response?.data?.message ||
+         "Please try again.",
+      });
     } finally {
       setState(prev => ({
         ...prev,
@@ -89,8 +94,13 @@ export const useBanners = () => {
         variant : "success",
        description : `Banner ${!currentStatus ? 'activated' : 'deactivated'} successfully!`});
     } catch (error) {
-      toast(`Failed to update banner status`);
-      throw error;
+      toast({
+        variant: "destructive",
+        title: "Failed to update banner status",
+        description:
+          err.response?.data?.message ||
+         "Please try again.",
+      });
     } finally {
       setState(prev => ({ ...prev, toggleLoading: false }));
     }
@@ -107,3 +117,4 @@ export const useBanners = () => {
     handleToggleActive
   };
 };
+err.response?.data?.message

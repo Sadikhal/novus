@@ -73,7 +73,7 @@ export const useChatData = (conversationId, currentUserId,targetRole) => {
         ...prev,
         loading: false,
         chatsLoading: false,
-        error: err.message || "Failed to load chat data"
+        error: err.response?.data?.message || "Failed to load chat data"
       }));
       console.error("Chat data error:", err);
     }
