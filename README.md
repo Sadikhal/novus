@@ -60,8 +60,8 @@ Use cases: multi-seller marketplace, internal company store, proof-of-concept fo
 
 * **Customer (example)**
 
-  * Email: `sanu@gmail.com`
-  * Password: `Sanu@123`
+  * Email: `sadikhalikvr@gmail.com`
+  * Password: `sadikh@123`
 
 If you plan to publish the repository publicly, remove or clearly mark these credentials as demo-only in a dedicated `DEMO_CREDENTIALS.md` and consider rotating them often.
 
