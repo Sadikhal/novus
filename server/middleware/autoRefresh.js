@@ -47,5 +47,4 @@ export const autoRefresh = async (req, res, next) => {
   }
 };
 
-export default autoRefresh;
 

@@ -23,7 +23,7 @@ export default function useBanners() {
           loading: false,
           error: null
         });
-      } catch (error) {
+      } catch (err) {
         setBanners(prev => ({
           ...prev,
           error: err.response?.data?.message || "Error fetching data",

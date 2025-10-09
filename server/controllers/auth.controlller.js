@@ -226,35 +226,3 @@ export const resetPassword = async (req, res, next) => {
     next(createError(500, error.message || "Error resetting password"));
   }
 };
-
-
-export const refreshAccessToken = async (req, res, next) => {
-  const refreshToken = req.cookies?.refreshToken;
-
-  if (!refreshToken) return next(createError(401, "No refresh token found"));
-
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    const userId = decoded.id;
-
-    const hashed = hashToken(refreshToken);
-
-    const user = await User.findOneAndUpdate(
-      { _id: userId, refreshTokens: hashed },
-      { $pull: { refreshTokens: hashed } }, 
-      { new: true }
-    );
-
-    if (!user) {
-      return next(createError(403, "Invalid or revoked refresh token"));
-    }
-
-    await generateTokenAndSetCookie(res, user);
-
-    const { password, ...userData } = user._doc;
-    return res.status(200).json({ ...userData, refreshed: true });
-  } catch (err) {
-    if (err.name === "TokenExpiredError") return next(createError(403, "Refresh token expired"));
-    return next(createError(403, "Invalid refresh token"));
-  }
-};
