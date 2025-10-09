@@ -70,14 +70,14 @@ If you plan to publish the repository publicly, remove or clearly mark these cre
 # Highlights & Key Features
 
 * **Multi-Role System**: Customers, Sellers, Admins with role-based access control.
-* **Real-time Communication**: Socket.IO chat, typing indicators, online presence, real-time notifications.
-* **E-commerce Core**: Product CRUD, categories, brands, inventory, reviews & ratings, search & filters.
-* **Shopping Experience**: Persistent cart (redux-persist), wishlist, multi-step checkout, order lifecycle & tracking.
+* **Real-time Communication**: Socket.IO-based chat with image sharing, real-time notifications, last seen status, latest messages, typing indicators, and online presence tracking.
+* **E-commerce Core**: Product CRUD, categories, brands, inventory, reviews & ratings, Advanced search & filters.
+* **Shopping Experience**: Persistent cart (Redux-Persist), wishlist, multi-step checkout, order lifecycle & tracking, with advanced product search (keyword based), dynamic filtering (by category, brand, price, and color), and intuitive sorting (by newest, oldest, and price).
 * **Payments**: Stripe integration (client + server) with secure payment workflow.
 * **Admin Analytics**: Recharts-based dashboards, sales & brand analytics, filtering by date ranges.
 * **Media & Content**: Cloudinary integration, banner management, announcements, events.
 * **Modern UI**: Tailwind CSS (mobile-first), DaisyUI & Ant Design for admin, Framer Motion animations.
-* **Security**: JWT, bcrypt hashing, input validation, otp verification and CORS protections.
+* **Security**: JWT-based access control, bcrypt password hashing, robust input validation, OTP email verification, auto-refresh token middleware, rate limiting, and CORS protection
 * **Dev DX**: Vite for fast HMR & builds, ESLint integration, modular code structure.
 
 ---
@@ -90,20 +90,24 @@ If you plan to publish the repository publicly, remove or clearly mark these cre
 * Redux Toolkit + redux-persist
 * Tailwind CSS v4 + DaisyUI
 * React Router v7, React Hook Form, Zod , cloudinary
-* Socket.IO Client, Stripe React SDK, React Quill
+* Socket.IO Client, Stripe React SDK
 
-**Admin Dashboard**
+**Dashboard**
 
 * React 19 + Vite
 * Ant Design, Recharts
+* Redux Toolkit + redux-persist
+* Tailwind CSS v4
+* React Router v7, React Hook Form, Zod , cloudinary
+* Socket.IO Client, Stripe React SDK, React Quill
 
 **Backend**
 
 * Node.js + Express.js
 * MongoDB + Mongoose
-* Socket.IO (real-time)
-* JWT auth, bcrypt password hashing
-* Stripe, Nodemailer (email), Cloudinary (media)
+* Socket.IO (real-time) 
+* JWT auth, bcrypt password hashing ,rate limiter ,cors
+* Stripe, Nodemailer (email),Sendgrid, Cloudinary (media)
 
 ---
 
@@ -227,6 +231,7 @@ MONGO_URL =
 ADMIN_ID = 68a86258dfa0348dcf288c11
 PORT = 3002
 JWT_KEY=
+REFRESH_TOKEN_SECRET=
 CLIENT_URL = http://localhost:5173
 DASHBOARD_URL = http://localhost:5174
 STRIPE = 
@@ -310,7 +315,7 @@ Recommended hosting patterns:
 * **Cookies:** Use secure, httpOnly cookies in production with `SameSite` restrictions.
 * **Validation:** Validate and sanitize all user input on server-side (use zod, express-validator or custom middleware).
 * **File uploads:** Limit file size and validate MIME types for uploads to Cloudinary.
-* **Email safety:** Use Mailtrap for local testing; do not send test emails to real users.
+* **Email safety:** Use Sendgrid for local testing; do not send test emails to real users.
 
 ---
 
