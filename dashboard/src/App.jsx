@@ -134,7 +134,7 @@ function App() {
       ]
     },
     {
-      element: <ProtectedRoute allowedRoles={['seller']} />,
+      element: <ProtectedRoute allowedRoles={['seller',]} />,
       children: [
         {
           path: "seller",

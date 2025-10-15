@@ -10,7 +10,7 @@ export const createBrand = async (req, res, next) => {
   try {
     const sellerId = req.userId;
 
-    const user = await User.findById(sellerId)
+    const user = await User.findById(sellerId).select('-password -refreshTokens -verificationToken -verificationTokenExpiresAt -resetPasswordToken -resetPasswordExpiresAt');
     const existingNameBrand = await Brand.findOne({ name: req.body.name });
     if (existingNameBrand) {
       return next(createError(400, "Brand name is already taken"));
@@ -29,10 +29,11 @@ export const createBrand = async (req, res, next) => {
 
     const savedBrand = await brand.save();
 
-    if (user.role !== "seller") {
+    if (user.role !== "seller" && user.role !== "admin") {
       user.role = "seller";
       await user.save();
-    }
+    } 
+   console.log(user)
     res.status(201).json({ brand: savedBrand, user });
   } catch(error) {
     console.log(error)
@@ -40,7 +41,6 @@ export const createBrand = async (req, res, next) => {
   }
 };
 
-// get all categories
 export const getBrands = async (req, res, next) => {
  try {
   const { sort = 'newest' } = req.query;

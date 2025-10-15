@@ -76,7 +76,7 @@ const ChatSidebar = ({
                   <img 
                     src={chat.receiver?.image || '/avatar.png'}
                     alt={chat.receiver?.name || 'User avatar'} 
-                    className='object-content rounded-full w-8 h-8' 
+                    className='object-cover rounded-full w-8 h-8' 
                   />
                   {onlineUsers.includes(chat.receiver._id) && (
                     <div className="absolute bottom-0 right-0 w-[10px] h-[10px] bg-[#af8415] rounded-full border-2 border-white"></div>

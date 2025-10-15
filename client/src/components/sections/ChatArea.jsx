@@ -227,7 +227,7 @@ const ChatArea = ({ isTyping, messageEndRef, conversationId, receiver, loading, 
                     <img 
                       src={receiver?.image || '/avatar.png'} 
                       alt={receiver?.name || 'Receiver avatar'} 
-                      className='object-content rounded-full w-8 h-8' 
+                      className='object-cover rounded-full w-8 h-8' 
                     />
                   </div>
                   <div className='flex flex-col'>

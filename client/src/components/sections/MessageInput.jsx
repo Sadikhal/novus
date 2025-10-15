@@ -180,7 +180,7 @@ const MessageInput = ({
     >
       {!isEditing && (
         <div className="w-[40px] h-[40px] border p-2 flex justify-center items-center rounded-full shadow-xl bg-white">
-          <label htmlFor="fileInput" className="font-bold text-black cursor-pointer h-full w-full">
+          <label htmlFor="fileInput" className="font-bold text-black cursor-pointer h-full w-full flex items-center justify-center">
             <AiOutlinePlus />
           </label>
           <input
