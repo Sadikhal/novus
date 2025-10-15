@@ -226,3 +226,60 @@ export const resetPassword = async (req, res, next) => {
     next(createError(500, error.message || "Error resetting password"));
   }
 };
+
+
+
+export const refreshToken = async (req, res, next) => {
+  try {
+    const incoming = req.cookies?.refreshToken || req.body?.refreshToken;
+    if (!incoming) return next(createError(401, "No refresh token provided"));
+
+    let decoded;
+    try {
+      decoded = jwt.verify(incoming, process.env.REFRESH_TOKEN_SECRET);
+    } catch (err) {
+      return next(createError(403, "Invalid or expired refresh token"));
+    }
+
+    const userId = decoded.id;
+    const hashedIncoming = hashToken(incoming);
+
+    const user = await User.findOneAndUpdate(
+      { _id: userId, refreshTokens: hashedIncoming },
+      { $pull: { refreshTokens: hashedIncoming } },
+      { new: true }
+    ).select("-password");
+
+    if (!user) {
+      await User.updateOne({ _id: userId }, { $set: { refreshTokens: [] } });
+
+      res
+        .clearCookie("token", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+          path: "/",
+        })
+        .clearCookie("refreshToken", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+          path: "/",
+        });
+
+      console.warn(`[SECURITY] Refresh token reuse detected for user ${userId}. All tokens revoked.`);
+      return next(createError(403, "Refresh token reuse detected — all sessions revoked"));
+    }
+    const { accessToken, refreshToken } = await generateTokenAndSetCookie(res, user);
+
+    return res.status(200).json({
+      success: true,
+      message: "Token refreshed",
+      accessToken,
+      user: { ...user._doc, isVerified: !!user.isVerified },
+    });
+  } catch (err) {
+    console.error("Refresh token error:", err);
+    return next(createError(500, "Failed to refresh token"));
+  }
+};

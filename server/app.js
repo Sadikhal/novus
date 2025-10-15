@@ -22,7 +22,6 @@ import bannerRoute from "./routes/banner.route.js";
 import { app, server } from "./lib/socket.js";
 import { connect } from './lib/db.js';
 import { globalLimiter } from './lib/rateLimiter.js';
-import { autoRefresh } from './middleware/autoRefresh.js';
 
 app.set("trust proxy", 1);
 dotenv.config();
@@ -35,7 +34,6 @@ app.use(
   })
 );
 app.use(globalLimiter);
-app.use(autoRefresh)
 
 mongoose.set("strictQuery", true);
 

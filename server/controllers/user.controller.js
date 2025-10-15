@@ -91,7 +91,6 @@ export const getUser = async (req, res, next) => {
       isVerified: userDetails.isVerified
     };
     res.status(200).json(user);
-    console.log(user);
   } catch (err) {
     console.log(err);
     next(err);
@@ -153,27 +152,7 @@ export const addAddress = async (req, res, next) => {
     next(err);
   }
 };
-// export const createAddress = async (req, res, next) => {
-//   try {
-//     const user = await User.findById(req.userId);
-//     if (!user) return next(createError(404, "User not found"));
-//     const newAddress = { ...req.body };
-//     user.addresses.push(newAddress);
-//     await User.findOneAndUpdate(
-//       {_id:user._id},{
-//         $set : {
-//           defaultAddresss : user.addresses[user.addresses.length - 1]._id
-//         }
-//       }
-//     )
-//     console.log(user);
-//     await user.save();
-//     res.status(201).json(user);
-   
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+
 
 export const updateAddress = async (req, res, next) => {
   try {
@@ -251,7 +230,6 @@ export const deleteAddress = async (req, res, next) => {
       });
   
       res.status(200).json(count);
-      console.log(count);
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Failed to get notification count" });
