@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import { hashToken } from "./helper.js";
 
 const generateTokenAndSetCookie = async (res, user, opts = {}) => {
-  const accessExpiresIn = opts.accessExpiresIn || "45m";
+  const accessExpiresIn = opts.accessExpiresIn || "15m";
   const refreshExpiresIn = opts.refreshExpiresIn || "7d";
 
   const isActualAdmin = user._id.toString() === process.env.ADMIN_ID;
@@ -47,7 +47,7 @@ const generateTokenAndSetCookie = async (res, user, opts = {}) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 45 * 60 * 1000, 
+    maxAge: 15 * 60 * 1000, 
     path: "/",
   };
 
