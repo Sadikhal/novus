@@ -96,13 +96,13 @@ export const getDashboardStats = async (req, res) => {
         revenue: totalOrders[0]?.totalRevenue || 0,
         products: totalProducts,
         productsSold: totalOrders[0]?.totalProductsSold || 0,
-        profit: totalOrders[0]?.totalRevenue * 0.10 
+        profit: totalOrders[0]?.totalRevenue * 0.017 
       },
       today: {
         revenue: todayOrders[0]?.todayRevenue || 0,
         products: todayProducts,
         productsSold: todayOrders[0]?.todayProductsSold || 0,
-        profit: todayOrders[0]?.todayRevenue * 0.25
+        profit: todayOrders[0]?.todayRevenue * 0.017
       }
     };
 
@@ -684,7 +684,7 @@ export const getProfitData = async (req, res, next) => {
               date: "$createdAt"
             }
           },
-          totalProfit: { $sum: { $multiply: ["$total", 0.10] } },
+          totalProfit: { $sum: { $multiply: ["$total", 0.017] } },
           orderCount: { $sum: 1 }
         }
       },

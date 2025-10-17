@@ -32,9 +32,12 @@ export const intent = async (req, res, next) => {
       return sum + (product.sellingPrice * product.quantity * 100);
     }, 0);
 
+    if ( totalAmount >= 1000000000 ){
+      return res.status(400).json({ message : "Please limit the total price"})
+    }
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount,
-      currency: "usd",
+      currency: "inr",
       automatic_payment_methods: { enabled: true },
     });
 

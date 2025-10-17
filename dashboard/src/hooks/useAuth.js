@@ -1,20 +1,19 @@
-// src/hooks/useAuth.js
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiRequest } from '../lib/apiRequest';
-import { loginStart, loginSuccess, loginFailure, logout, updateVerificationStatus } from '../redux/userSlice';
+import { loginStart, loginSuccess, loginFailure, logout } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '../redux/useToast';
-
 
 
 export const useAuth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading } = useSelector((state) => state.user);
+  const {loading } = useSelector((state) => state.user);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const path = (role) =>  role === "admin" ? "/admin/dashboard" : role === "seller" ? "/seller/dashboard" : "/";
 
   const register = async (formData) => {
     dispatch(loginStart());
@@ -58,8 +57,7 @@ export const useAuth = () => {
         title: "Login Successful",
         description: "Welcome back! You have been logged in.",
       });
-
-      navigate("/");
+     navigate(path(res.data.role));
       return res.data;
     } catch (err) {
       dispatch(loginFailure(err.response?.data?.message || "Login failed"));

@@ -119,7 +119,7 @@ export const login = async (req, res, next) => {
       brand = await Brand.findOne({ sellerId: user._id });
     }
 
-    const { password, ...info } = user._doc;
+    const { password,refreshTokens, ...info } = user._doc;
     return res.status(200).json({
       ...info,
       brand,
@@ -255,7 +255,7 @@ export const refreshToken = async (req, res, next) => {
       return next(createError(403, "Refresh token reuse detected — all sessions revoked"));
     }
 
-    const { accessToken, refreshToken } = await generateTokenAndSetCookie(res, user);
+    const { accessToken } = await generateTokenAndSetCookie(res, user);
 
     let brand = null;
     if (user.role === "seller") {

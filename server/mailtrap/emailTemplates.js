@@ -130,11 +130,11 @@ export const ORDERSUCCESSTEMPLATE = (ordersArray) => {
           </tr>
           <tr>
             <th>Price per unit</th>
-            <td>$${order.productPrice?.toFixed(2) || '0.00'}</td>
+            <td>₹${order.productPrice?.toFixed(2) || '0.00'}</td>
           </tr>
           <tr>
             <th>Total</th>
-            <td>$${order.total?.toFixed(2) || '0.00'}</td>
+            <td>₹${order.total?.toFixed(2) || '0.00'}</td>
           </tr>
         </table>
         <hr class="order-divider">
