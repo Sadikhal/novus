@@ -61,7 +61,7 @@ const AddressDetails = ({ initialAddress }) => {
           <form onSubmit={handleSubmit} className="flex flex-col h-[400px]">
             <ScrollArea className="flex-1">
               {addresses.map((address) => (
-                <div key={address._id} className="flex items-center justify-between md:p-4 sm:p-2 p-1 border rounded-lg w-full hover:bg-gray-50 cursor-pointer">
+                <div key={address._id} className="flex items-center justify-between md:p-4 sm:p-2 p-1 border rounded-lg w-full hover:bg-gray-50 cursor-pointer border-borderSlate">
                   <label 
                     htmlFor={address._id} 
                     className="flex items-center gap-4 flex-1 cursor-pointer"

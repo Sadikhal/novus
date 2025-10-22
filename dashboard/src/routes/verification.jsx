@@ -63,9 +63,9 @@ const EmailVerificationPage = () => {
           </h2>
           <img src='/images/novus10.png' className='w-32  h-32 text-center rounded-full pt-3 bg-transparent object-contain' alt='logo' />
           <p className='text-center -mt-2 text-gray-500 '>
-            Enter the 6-digit code sent to your email address.
+            Enter the 6-digit code sent to your email (check your spam folder if you don’t see it).
           </p>
-          <form onSubmit={handleSubmit} className='space-y-6'>
+          <form onSubmit={handleSubmit} className='space-y-6 mt-3'>
             <div className='flex justify-between gap-2'>
               {code.map((digit, index) => (
                 <input

@@ -32,7 +32,7 @@ function Product() {
           <Loader />
         </div>
       ) : !product ? (
-        <div className='flex justify-center items-center h-[56vh] md:h-[80vh]'>
+        <div className='flex justify-center items-center h-[56vh] text-slate-500 md:h-[80vh]'>
           Product not found
         </div>
       ) : error ? (

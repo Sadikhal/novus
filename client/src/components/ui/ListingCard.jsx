@@ -64,7 +64,7 @@ const ListingCard = ({ data, showWishlist, type }) => {
     <motion.div variants={itemVariants}> 
       <Link 
         to={`/product/${data?._id}`}  
-        className="col-span-1 cursor-pointer w-full group relative border rounded-xl flex flex-col pb-1"
+        className="col-span-1 cursor-pointer w-full group relative border rounded-xl flex flex-col pb-1 border-borderSlate"
       >
         <div className="w-full transition duration-0">
           <div className="flex flex-col w-full">
@@ -125,10 +125,10 @@ const ListingCard = ({ data, showWishlist, type }) => {
           </div>
 
           {showWishlist && (
-            <div className="w-full h-20 bg-white absolute bottom-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="w-full h-20 bg-white absolute bottom-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
               <button
                 onClick={handleWishlist}
-                className="border flex flex-row gap-2 mt-2 justify-center items-center w-[95%] p-1 px-4 mx-auto"
+                className="border border-borderSlate flex flex-row gap-2 mt-2 justify-center items-center w-[95%] p-1 px-4 mx-auto cursor-pointer"
               >
                 <AiFillHeart
                   size={20}

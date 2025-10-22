@@ -1,7 +1,7 @@
 const ProductSpecs = ({ features, product }) => {
   return (
-    <div className="xl:max-w-2xl w-full py-6 mt-8 bg-lamaWhite rounded-lg shadow-md font-poppins border-t">
-      <div className="border-b flex items-center shadow-sm">
+    <div className="xl:max-w-2xl w-full py-6 mt-8 bg-lamaWhite rounded-lg shadow-md font-poppins border-t border-borderSlate">
+      <div className="border-b border-borderSlate flex items-center shadow-sm ">
         <h2 className="text-2xl font-poppins font-semibold mb-4 mx-6 text-gray-800">Specifications</h2>
       </div>
       <div className="mb-6 pt-4 px-6">

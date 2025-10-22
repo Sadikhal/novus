@@ -13,7 +13,7 @@ const Account = () => {
 
   return (
     <div>
-       <HoverCard className="z-100">
+     <HoverCard className="z-100">
       <HoverCardTrigger className="md:w-[130px] xl:w-[180px] flex flex-row gap-2 items-center text-slate-800 cursor-pointer z-100">
         {currentUser ? (
           <>

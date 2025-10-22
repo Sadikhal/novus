@@ -22,7 +22,7 @@ const OrderCard = ({ data }) => {
   return (
     <Link 
       to={`/dashboard/order/${_id}`}
-      className="col-span-1 cursor-pointer group relative border flex flex-col bg-lamaWhite"
+      className="col-span-1 cursor-pointer group relative border border-borderSlate  flex flex-col bg-lamaWhite"
     >
       <span className="bg-white text-green-700 absolute left-2 top-3 right-0 w-20 text-xs font-assistant text-center py-1 font-semibold inline-block z-10 text-nowrap ">
         {status}

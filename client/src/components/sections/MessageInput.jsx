@@ -179,7 +179,7 @@ const MessageInput = ({
       className="w-full flex p-2 justify-between items-center relative"
     >
       {!isEditing && (
-        <div className="w-[40px] h-[40px] border p-2 flex justify-center items-center rounded-full shadow-xl bg-white">
+        <div className="w-[40px] h-[40px] border border-borderSlate p-2 flex justify-center items-center rounded-full shadow-xl bg-white">
           <label htmlFor="fileInput" className="font-bold text-black cursor-pointer h-full w-full flex items-center justify-center">
             <AiOutlinePlus />
           </label>
@@ -197,7 +197,7 @@ const MessageInput = ({
       )}
 
       <div className={cn(
-        "border rounded-[20px] relative flex items-center bg-[#fff]",
+        "border border-borderSlate rounded-[20px] relative flex items-center bg-[#fff]",
         isEditing ? "w-full" : "ml-2 w-[calc(100%-90px)]"
       )}>
         <textarea
@@ -219,7 +219,7 @@ const MessageInput = ({
         <div className="relative mr-2">
           <button
             type="button"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
             onClick={() => setIsEmojiPickerOpen(prev => !prev)}
           >
             <AiOutlineSmile className="w-5 h-5" />
@@ -242,6 +242,7 @@ const MessageInput = ({
                   backgroundColor: 'transparent',
                   border: 'none',
                   boxShadow: 'none',
+                
                 }}
                 categories={[
                   { name: 'Smileys & People', category: 'smileys_people' },

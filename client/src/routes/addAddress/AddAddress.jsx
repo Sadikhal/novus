@@ -89,7 +89,7 @@ const AddAddress = () => {
             ) : (
                 <div 
                     style={{ animation: 'slideInFromLeft 1s ease-out' }} 
-                    className="max-w-2xl w-full bg-white rounded-lg shadow-md overflow-hidden p-8 space-y-8 md:px-12 lg:px-16 lg:min-w-[500px] border z-50 mb-12 font-poppins mx-2"
+                    className="max-w-2xl w-full bg-white rounded-lg shadow-md overflow-hidden p-8 space-y-8 md:px-12 lg:px-16 lg:min-w-[500px] border border-borderSlate z-50 mb-12 font-poppins mx-2"
                 >
                     <div className='flex flex-col gap-1 items-center justify-center group'>
                         <h5

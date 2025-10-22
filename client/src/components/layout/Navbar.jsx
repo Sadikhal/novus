@@ -37,7 +37,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className='w-full py-4 items-center h-[100px] xl:pl-8 lg:pl-6 px-1 md:pl-4 bg-[#ffff] border-b shadow-sm shadow-gray-200'>
+    <div className='w-full py-4 items-center h-[100px] xl:pl-8 lg:pl-6 px-1 md:pl-4 bg-[#ffff] border-b border-borderSlate shadow-sm shadow-gray-200'>
       <div className='flex flex-row items-center w-full justify-between'>
         <div className='flex-row flex items-center gap-5'> 
           <Link to="/" className='md:w-[150px] md:h-[50px] sm:w-[125px] sm:h-[38px] xs:w-[80px] xs:h-[25px] w-[70px] h-[20px] items-center justify-center flex'>
@@ -46,7 +46,7 @@ const Navbar = () => {
         </div>
       
         <div className='flex flex-row gap-5 items-center py-4 xs:min-w-[260px] w-[70%] min-w-[240px] sm:min-w-80 md:w-[40%]'>
-          <form onSubmit={handleSearchSubmit} className='flex w-full max-w-xl border h-[32px] rounded-sm bg-[#feffff] sm:h-[38px] hover:bg-white focus:bg-white active:bg-white font-poppins'>
+          <form onSubmit={handleSearchSubmit} className='flex w-full max-w-xl border border-borderSlate h-[32px] rounded-sm bg-[#feffff] sm:h-[38px] hover:bg-white focus:bg-white active:bg-white font-poppins'>
             <button type='submit' className='px-3 bg-inherit h-full rounded-sm text-[14px] leading-[24px]'>
               <IoSearchOutline className='bg-inherit h-full w-full py-1 text-gray-300'/>
             </button>

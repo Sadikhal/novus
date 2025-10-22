@@ -73,8 +73,7 @@ const ForgotPasswordPage = () => {
               </h3>
               
               <p className="text-gray-600 font-poppins">
-                We've sent a password reset link to your email address. 
-                Please check your inbox and follow the instructions.
+                We’ve sent a password reset link to your email address. Please check your inbox (and spam folder) and follow the instructions.
               </p>
             </div>
           )}
