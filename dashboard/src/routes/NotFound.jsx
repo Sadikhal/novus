@@ -6,7 +6,7 @@ export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="min-h-screen flex items-center justify-center bg-gray-50">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="min-h-screen flex items-center justify-center bg-gray-50 font-poppins">
       <div className="max-w-3xl w-full bg-white rounded-2xl shadow-md p-8 md:p-12 text-center">
         <div className="flex items-center justify-center mb-4">
           <div className="h-16 w-16 rounded-full bg-slate-50 flex items-center justify-center">
